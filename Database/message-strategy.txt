@@ -1,0 +1,7 @@
+
+every File stores all outbound messages sent from this user
+
+ID
+
+File per person which has a to: tag indicating who the message is sent to
+
