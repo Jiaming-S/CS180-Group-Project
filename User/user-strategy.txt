@@ -1,0 +1,15 @@
+
+every user is a File
+
+ID 
+
+login info
+
+blocked users ID
+
+friended users ID
+
+profile picture
+bio 
+contact into
+region
