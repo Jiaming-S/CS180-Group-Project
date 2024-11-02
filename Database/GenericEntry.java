@@ -24,6 +24,7 @@ public abstract class GenericEntry {
   }
 
   protected abstract void handleXML(String content, String curTag, String parentTag) throws ParseExceptionXML;
+  
   public abstract String toString();
 
   protected void parseXMLDocument(String s) throws ParseExceptionXML {

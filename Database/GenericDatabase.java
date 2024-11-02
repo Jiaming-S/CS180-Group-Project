@@ -1,6 +1,9 @@
 package Database;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This abstract class represents a generic database that implements some features of Database interface. 
@@ -9,6 +12,8 @@ import java.io.*;
  * @version 11/02/2024
  */
 public abstract class GenericDatabase implements Database {
+  public final Pattern REGEX_XML_TOP_LEVEL = Pattern.compile("<(\\w+)>(.*?)</\\1>");
+
   protected File file;
   protected BufferedReader bfr;
   protected PrintWriter pw;
@@ -19,5 +24,31 @@ public abstract class GenericDatabase implements Database {
 
     this.bfr = new BufferedReader(new FileReader(this.file));
     this.pw = new PrintWriter(new FileOutputStream(this.file));
+  }
+
+  public void writeStringsToFile(ArrayList<GenericEntry> db) {
+    for (GenericEntry ge : db) {
+      pw.println(ge.toString());
+    }
+  }
+
+  public ArrayList<String> readStringsFromFile() throws IOException {
+    String fileContents = "";
+
+    String line = bfr.readLine();
+    while (line != null) fileContents += line;
+
+    Matcher toplevelXMLMatcher = REGEX_XML_TOP_LEVEL.matcher(fileContents);
+
+    ArrayList<String> entries = new ArrayList<>();
+    int curPosition = 0;
+    while (curPosition < fileContents.length()) {
+      if (toplevelXMLMatcher.find(curPosition) && toplevelXMLMatcher.start() == curPosition) {
+        entries.add(toplevelXMLMatcher.group(2));
+        curPosition = toplevelXMLMatcher.end();
+      }
+    }
+
+    return entries;
   }
 }
