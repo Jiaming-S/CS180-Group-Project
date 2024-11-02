@@ -8,6 +8,8 @@ import java.util.ArrayList;
  * @version 11/02/2024
  */
 public class UserEntry extends GenericEntry {
+  private String username;
+  private String password;
   private int ID;
   private ArrayList<Integer> friendList;
   private ArrayList<Integer> blockList;
@@ -15,8 +17,10 @@ public class UserEntry extends GenericEntry {
   private String region;
 
   // Create entry given fields
-  public UserEntry(int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
+  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
     super();
+    this.username = username;
+    this.password = password;
     this.ID = ID;
     this.friendList = friendList;
     this.blockList = blockList;
@@ -33,6 +37,10 @@ public class UserEntry extends GenericEntry {
   protected void handleXML(String content, String curTag, String parentTag) {
     if (curTag.equals("ID") && parentTag.equals("User")) {
       this.ID = Integer.parseInt(content);
+    } else if (curTag.equals("Username")) {
+      this.username = content;
+    } else if (curTag.equals("Password")) {
+      this.password = content;
     } else if (curTag.equals("ID") && parentTag.equals("FriendList")) {
       if (this.friendList == null) this.friendList = new ArrayList<>();
       this.friendList.add(Integer.parseInt(content));
@@ -50,6 +58,10 @@ public class UserEntry extends GenericEntry {
   public String toString() {
     String result = "";
     result += "<User>\n";
+
+    result += String.format("\t<Username>%s</Username>\n", this.username);
+
+    result += String.format("\t<Password>%s</Password>\n", this.password);
 
     result += String.format("\t<ID>%d</ID>\n", this.ID);
 
@@ -70,6 +82,12 @@ public class UserEntry extends GenericEntry {
     return result;
   }
 
+  public String getUsername() {
+    return this.username;
+  }
+  public String getPassword() {
+    return this.password;
+  }
   public int getID() {
     return this.ID;
   }
@@ -87,6 +105,6 @@ public class UserEntry extends GenericEntry {
   }
 
   public static void main(String[] args) throws ParseExceptionXML {
-    System.out.println(new UserEntry("<User><ID>77889900</ID><FriendList><ID>11223344</ID><ID>55667788</ID><ID>12345678</ID></FriendList><BlockList><ID>10101010</ID><ID>44444444</ID></BlockList><ProfilePicture>/path/to/image.png</ProfilePicture><Region>USA/Midwest</Region></User>"));
+    System.out.println(new UserEntry("<User>\t<Username>joebiden</Username>\n\t<Password>password123</Password><ID>77889900</ID><FriendList><ID>11223344</ID><ID>55667788</ID><ID>12345678</ID></FriendList><BlockList><ID>10101010</ID><ID>44444444</ID></BlockList><ProfilePicture>/path/to/image.png</ProfilePicture><Region>USA/Midwest</Region></User>"));
   }
 }
