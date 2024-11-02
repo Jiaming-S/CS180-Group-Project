@@ -104,6 +104,12 @@ public class UserEntry extends GenericEntry {
     return this.region;
   }
 
+  public boolean equals(Object o) {
+    if (!(o instanceof UserEntry)) return false;
+    UserEntry compare = (UserEntry) o;
+    return (ID == compare.getID());
+  }
+
   public static void main(String[] args) throws ParseExceptionXML {
     System.out.println(new UserEntry("<User>\t<Username>joebiden</Username>\n\t<Password>password123</Password><ID>77889900</ID><FriendList><ID>11223344</ID><ID>55667788</ID><ID>12345678</ID></FriendList><BlockList><ID>10101010</ID><ID>44444444</ID></BlockList><ProfilePicture>/path/to/image.png</ProfilePicture><Region>USA/Midwest</Region></User>"));
   }
