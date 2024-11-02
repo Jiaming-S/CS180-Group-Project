@@ -14,9 +14,19 @@ public class UserEntry extends GenericEntry {
   private String profilePicture;
   private String region;
 
+  // Create entry given fields
+  public UserEntry(int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
+    super();
+    this.ID = ID;
+    this.friendList = friendList;
+    this.blockList = blockList;
+    this.profilePicture = profilePicture;
+    this.region = region;
+  }
 
-  public UserEntry(String s) throws ParseExceptionXML {
-    super(s);
+  // Create entry given XML
+  public UserEntry(String xml) throws ParseExceptionXML {
+    super(xml);
   }
 
   @Override

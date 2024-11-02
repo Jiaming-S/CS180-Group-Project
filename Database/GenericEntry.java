@@ -14,11 +14,13 @@ public abstract class GenericEntry {
   public final Pattern REGEX_XML_END   = Pattern.compile("</(\\w+)>");
   public final Pattern REGEX_XML_FULL_TAG = Pattern.compile("<(\\w+)>([^<>]*)</\\1>");
 
-  public GenericEntry(String s) throws ParseExceptionXML{
-    s = s.replaceAll(" ", "");
-    s = s.replaceAll("\n", "");
-    s = s.replaceAll("\t", "");
-    this.parseXMLDocument(s);
+  public GenericEntry() {}
+
+  public GenericEntry(String xml) throws ParseExceptionXML{
+    xml = xml.replaceAll(" ", "");
+    xml = xml.replaceAll("\n", "");
+    xml = xml.replaceAll("\t", "");
+    this.parseXMLDocument(xml);
   }
 
   protected abstract void handleXML(String content, String curTag, String parentTag) throws ParseExceptionXML;
