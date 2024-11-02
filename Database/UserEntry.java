@@ -2,6 +2,11 @@ package Database;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a UserEntry for use in the UserDatabase.
+ * @author Jiaming Situ
+ * @version 11/02/2024
+ */
 public class UserEntry extends GenericEntry {
   private int ID;
   private ArrayList<Integer> friendList;
@@ -12,11 +17,6 @@ public class UserEntry extends GenericEntry {
 
   public UserEntry(String s) throws ParseExceptionXML {
     super(s);
-    this.ID = 0;
-    this.friendList = new ArrayList<>();
-    this.blockList = new ArrayList<>();
-    this.profilePicture = null;
-    this.region = null;
   }
 
   @Override
@@ -24,14 +24,40 @@ public class UserEntry extends GenericEntry {
     if (curTag.equals("ID") && parentTag.equals("User")) {
       this.ID = Integer.parseInt(content);
     } else if (curTag.equals("ID") && parentTag.equals("FriendList")) {
+      if (this.friendList == null) this.friendList = new ArrayList<>();
       this.friendList.add(Integer.parseInt(content));
     } else if (curTag.equals("ID") && parentTag.equals("BlockList")) {
+      if (this.blockList == null) this.blockList = new ArrayList<>();
       this.blockList.add(Integer.parseInt(content));
     } else if (curTag.equals("ProfilePicture")) {
       this.profilePicture = content;
     } else if (curTag.equals("Region")) {
       this.region = content;
     }
+  }
+
+  @Override
+  public String toString() {
+    String result = "";
+    result += "<User>\n";
+
+    result += String.format("\t<ID>%d</ID>\n", this.ID);
+
+    result += "\t<FriendList>\n";
+    for (int ID : this.friendList) result += String.format("\t\t<ID>%d</ID>\n", ID);
+    result += "\t</FriendList>\n";
+    
+    result += "\t<BlockList>\n";
+    for (int ID : this.blockList) result += String.format("\t\t<ID>%d</ID>\n", ID);
+    result += "\t</BlockList>\n";
+
+    result += String.format("\t<ProfilePicture>%s</ProfilePicture>\n", this.profilePicture);
+
+    result += String.format("\t<Region>%s</Region>\n", this.region);
+
+    result += "</User>\n";
+
+    return result;
   }
 
   public int getID() {
@@ -48,5 +74,9 @@ public class UserEntry extends GenericEntry {
   }
   public String getRegion() {
     return this.region;
+  }
+
+  public static void main(String[] args) throws ParseExceptionXML {
+    System.out.println(new UserEntry("<User><ID>77889900</ID><FriendList><ID>11223344</ID><ID>55667788</ID><ID>12345678</ID></FriendList><BlockList><ID>10101010</ID><ID>44444444</ID></BlockList><ProfilePicture>/path/to/image.png</ProfilePicture><Region>USA/Midwest</Region></User>"));
   }
 }

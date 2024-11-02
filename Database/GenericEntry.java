@@ -12,7 +12,7 @@ import java.util.regex.*;
 public abstract class GenericEntry {
   public final Pattern REGEX_XML_BEGIN = Pattern.compile("<(\\w+)>");
   public final Pattern REGEX_XML_END   = Pattern.compile("</(\\w+)>");
-  public final Pattern REGEX_XML_FULL_TAG = Pattern.compile("<(\\w+)>[^<>]*<\\/\\1>");
+  public final Pattern REGEX_XML_FULL_TAG = Pattern.compile("<(\\w+)>([^<>]*)</\\1>");
 
   public GenericEntry(String s) throws ParseExceptionXML{
     s = s.replaceAll(" ", "");
@@ -22,6 +22,7 @@ public abstract class GenericEntry {
   }
 
   protected abstract void handleXML(String content, String curTag, String parentTag) throws ParseExceptionXML;
+  public abstract String toString();
 
   protected void parseXMLDocument(String s) throws ParseExceptionXML {
     Stack<String> tagStack = new Stack<>();
@@ -32,7 +33,8 @@ public abstract class GenericEntry {
 
     int curPosition  = 0;
     while (curPosition < s.length()) {
-      // When there's a tag containing content
+      // Process content between two tags
+      // - Only fires when there's a tag containing content
       if (fullTagMatcher.find(curPosition) && fullTagMatcher.start() == curPosition) {
         String curTag = fullTagMatcher.group(1);
         String curContent = fullTagMatcher.group(2);
@@ -53,14 +55,15 @@ public abstract class GenericEntry {
 
       // Push a tag to stack
       // - Only fires when tag is nesting something else
-      if (beginMatcher.find(curPosition) && beginMatcher.start() == curPosition) {
+      else if (beginMatcher.find(curPosition) && beginMatcher.start() == curPosition) {
         String curTag = beginMatcher.group(1);
         tagStack.push(curTag);
         curPosition = beginMatcher.end();
       }
 
       // Pop stack
-      if (endMatcher.find(curPosition) && endMatcher.start() == curPosition) {
+      // - Only fires when there's an end tag for a tag nesting something else
+      else if (endMatcher.find(curPosition) && endMatcher.start() == curPosition) {
         String curTag = endMatcher.group(1);
 
         if (!tagStack.peek().equals(curTag)) {
