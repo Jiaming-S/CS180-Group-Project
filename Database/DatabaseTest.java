@@ -112,4 +112,18 @@ public class DatabaseTest {
         assertEquals("getProfilePicture returns wrong string!", profilePicture, ue.getProfilePicture());
         assertEquals("getRegion returns wrong value!", region, ue.getRegion());
     }
+
+    @Test
+    public void testSearchers() {
+        UserDatabase ud;
+        try {
+            ud = new UserDatabase("./Database/DatabaseTestFile.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Exception occured while reading test file: ", e.getMessage());
+            return;
+        }
+        assertEquals("searchByName returns wrong user!", 1, ud.searchByName("joebiden").getID());
+        assertEquals("searchByID returns wrong user!", "name3", ud.searchByID(4).getUsername());
+    }
 }
