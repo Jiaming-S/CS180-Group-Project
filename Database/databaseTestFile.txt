@@ -1,0 +1,64 @@
+<User>
+  <Username>joebiden</Username>
+  <Password>password123</Password>
+  <ID>00000001</ID>
+  <FriendList>
+    <ID>11223344</ID>
+    <ID>55667788</ID>
+    <ID>12345678</ID>
+  </FriendList>
+  <BlockList>
+    <ID>10101010</ID>
+    <ID>44444444</ID>
+  </BlockList>
+  <ProfilePicture>/path/to/image.png</ProfilePicture>
+  <Region>USA/Midwest</Region>
+</User>
+<User>
+  <Username>name1</Username>
+  <Password>password123</Password>
+  <ID>00000002</ID>
+  <FriendList>
+    <ID>11223344</ID>
+    <ID>55667788</ID>
+    <ID>12345678</ID>
+  </FriendList>
+  <BlockList>
+    <ID>10101010</ID>
+    <ID>44444444</ID>
+  </BlockList>
+  <ProfilePicture>/path/to/image.png</ProfilePicture>
+  <Region>USA/Midwest</Region>
+</User>
+<User>
+  <Username>name2</Username>
+  <Password>password123</Password>
+  <ID>00000003</ID>
+  <FriendList>
+    <ID>11223344</ID>
+    <ID>55667788</ID>
+    <ID>12345678</ID>
+  </FriendList>
+  <BlockList>
+    <ID>10101010</ID>
+    <ID>44444444</ID>
+  </BlockList>
+  <ProfilePicture>/path/to/image.png</ProfilePicture>
+  <Region>USA/Midwest</Region>
+</User>
+<User>
+  <Username>name3</Username>
+  <Password>password123</Password>
+  <ID>00000004</ID>
+  <FriendList>
+    <ID>11223344</ID>
+    <ID>55667788</ID>
+    <ID>12345678</ID>
+  </FriendList>
+  <BlockList>
+    <ID>10101010</ID>
+    <ID>44444444</ID>
+  </BlockList>
+  <ProfilePicture>/path/to/image.png</ProfilePicture>
+  <Region>USA/Midwest</Region>
+</User>
