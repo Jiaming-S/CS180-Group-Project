@@ -4,14 +4,14 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * This class represents a UserDatabase storing user information.
+ * This class represents a MessageDatabase storing user information.
  * @author Jiaming Situ
  * @version 11/02/2024
  */
-public class UserDatabase extends GenericDatabase {
-  private ArrayList<UserEntry> db;
+public class MessageDatabase extends GenericDatabase {
+  private ArrayList<MessageEntry> db;
 
-  public UserDatabase(String filepath) throws IOException {
+  public MessageDatabase(String filepath) throws IOException {
     super(filepath);
   }
 
@@ -22,6 +22,6 @@ public class UserDatabase extends GenericDatabase {
 
   @Override
   public void insertEntry(Object entry) {
-    db.add((UserEntry) entry);
+    db.add((MessageEntry) entry);
   }
 }
