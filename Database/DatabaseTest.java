@@ -3,7 +3,9 @@ package Database;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
+
 import java.util.ArrayList;
+import java.io.*;
 
 /**
  * A set of JUnit tests testing everything surrounding Database
@@ -117,10 +119,10 @@ public class DatabaseTest {
     public void testSearchers() {
         UserDatabase ud;
         try {
-            ud = new UserDatabase("./Database/DatabaseTestFile.txt");
+            ud = new UserDatabase("./Database/databaseTestFile.txt");
         } catch (IOException e) {
             e.printStackTrace();
-            fail("Exception occured while reading test file: ", e.getMessage());
+            fail("Exception occured while reading test file: " + e.getMessage());
             return;
         }
         assertEquals("searchByName returns wrong user!", 1, ud.searchByName("joebiden").getID());

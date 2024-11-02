@@ -20,10 +20,10 @@ public abstract class GenericDatabase implements Database {
 
   public GenericDatabase(String filepath) throws IOException {
     this.file = new File(filepath);
-    file.createNewFile();
+    if (!file.exists()) file.createNewFile();
 
     this.bfr = new BufferedReader(new FileReader(this.file));
-    this.pw = new PrintWriter(new FileOutputStream(this.file));
+    this.pw = new PrintWriter(new FileOutputStream(this.file, true));
   }
 
   public void writeStringsToFile(ArrayList<GenericEntry> db) {
@@ -36,7 +36,10 @@ public abstract class GenericDatabase implements Database {
     String fileContents = "";
 
     String line = bfr.readLine();
-    while (line != null) fileContents += line;
+    while (line != null) {
+      fileContents += line;
+      line = bfr.readLine();
+    }
 
     Matcher toplevelXMLMatcher = REGEX_XML_TOP_LEVEL.matcher(fileContents);
 
@@ -44,7 +47,7 @@ public abstract class GenericDatabase implements Database {
     int curPosition = 0;
     while (curPosition < fileContents.length()) {
       if (toplevelXMLMatcher.find(curPosition) && toplevelXMLMatcher.start() == curPosition) {
-        entries.add(toplevelXMLMatcher.group(2));
+        entries.add(toplevelXMLMatcher.group());
         curPosition = toplevelXMLMatcher.end();
       }
     }
