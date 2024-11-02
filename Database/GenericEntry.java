@@ -4,7 +4,7 @@ import java.util.Stack;
 import java.util.regex.*;
 
 /**
- * This abstract class represents a generic database entry that depend on `parseXMLDocument` to be implemented.
+ * This abstract class represents a generic database entry that depend on `handleXML` to be implemented.
  * Not intended for direct use.
  * @author Jiaming Situ
  * @version 11/02/2024
@@ -14,13 +14,14 @@ public abstract class GenericEntry {
   public final Pattern REGEX_XML_END   = Pattern.compile("</(\\w+)>");
   public final Pattern REGEX_XML_FULL_TAG = Pattern.compile("<(\\w+)>[^<>]*<\\/\\1>");
 
-  public GenericEntry() {}
-
   public GenericEntry(String s) throws ParseExceptionXML{
+    s = s.replaceAll(" ", "");
+    s = s.replaceAll("\n", "");
+    s = s.replaceAll("\t", "");
     this.parseXMLDocument(s);
   }
 
-  protected abstract void handleXML(String content, String curTag, String parentTag);
+  protected abstract void handleXML(String content, String curTag, String parentTag) throws ParseExceptionXML;
 
   protected void parseXMLDocument(String s) throws ParseExceptionXML {
     Stack<String> tagStack = new Stack<>();
@@ -36,7 +37,16 @@ public abstract class GenericEntry {
         String curTag = fullTagMatcher.group(1);
         String curContent = fullTagMatcher.group(2);
         
-        handleXML(curContent, curTag, tagStack.empty() ? null : tagStack.peek());
+        try {
+          handleXML(curContent, curTag, tagStack.empty() ? null : tagStack.peek());
+        } catch (Exception e) {
+          throw new ParseExceptionXML(
+            String.format(
+              "Problem with handling XML: %s", 
+              e.getMessage()
+            )
+          );
+        }
 
         curPosition = fullTagMatcher.end();
       }

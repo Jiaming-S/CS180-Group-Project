@@ -5,7 +5,7 @@ package Database;
  * @author Jiaming Situ
  * @version 11/02/2024
  */
-public class ParseExceptionXML extends RuntimeException{
+public class ParseExceptionXML extends Exception {
   public ParseExceptionXML() {
     super();
   }

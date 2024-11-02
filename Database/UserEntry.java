@@ -10,7 +10,7 @@ public class UserEntry extends GenericEntry {
   private String region;
 
 
-  public UserEntry(String s) {
+  public UserEntry(String s) throws ParseExceptionXML {
     super(s);
     this.ID = 0;
     this.friendList = new ArrayList<>();
