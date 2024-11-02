@@ -15,6 +15,24 @@ public class UserDatabase extends GenericDatabase {
     super(filepath);
   }
 
+  public UserEntry searchByName (int id) {
+    for (UserEntry ue : db) {
+      if (ue.getID() == id) {
+        return ue;
+      }
+    }
+    return null;
+  }
+
+  public UserEntry searchByID (int id) {
+    for (UserEntry ue : db) {
+      if (ue.getID() == id) {
+        return ue;
+      }
+    }
+    return null;
+  }
+
   @Override
   public Object getEntry(int rowNum) {
     return db.get(rowNum);

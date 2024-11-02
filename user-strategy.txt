@@ -17,6 +17,8 @@ region
 
 example:
 <User>
+  <Username>joebiden</Username>
+  <Password>password123</Password>
   <ID>77889900</ID>
   <FriendList>
     <ID>11223344</ID>
