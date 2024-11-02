@@ -7,5 +7,5 @@ package Database;
  */
 public interface Database {
   Object getEntry(int rowNum);
-  boolean insertEntry(Object entry);
+  void insertEntry(Object entry);
 }

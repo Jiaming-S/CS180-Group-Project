@@ -1,7 +1,6 @@
 package Database;
 
 import java.io.*;
-import java.util.ArrayList;
 
 /**
  * This abstract class represents a generic database that implements some features of Database interface. 
@@ -11,10 +10,14 @@ import java.util.ArrayList;
  */
 public abstract class GenericDatabase implements Database {
   protected File file;
-  protected ArrayList<GenericEntry> db;
+  protected BufferedReader bfr;
+  protected PrintWriter pw;
 
   public GenericDatabase(String filepath) throws IOException {
     this.file = new File(filepath);
     file.createNewFile();
+
+    this.bfr = new BufferedReader(new FileReader(this.file));
+    this.pw = new PrintWriter(new FileOutputStream(this.file));
   }
 }
