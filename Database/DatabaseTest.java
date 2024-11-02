@@ -16,7 +16,7 @@ public class DatabaseTest {
 
     // Test for message content by itself
     @Test
-    public void initialTestContent() {
+    public void initialTestContentUser() {
         String userStr = """
             <User>
                 <Username>joebiden</Username>
@@ -47,7 +47,7 @@ public class DatabaseTest {
 
     // Test for formatting
     @Test
-    public void initialTestFormat() {
+    public void initialTestFormatUser() {
         String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n</User>\n";
         UserEntry ue;
         try {
@@ -60,8 +60,9 @@ public class DatabaseTest {
         assertEquals("ToString should return the XML used to initiate UserEntry", userStr, ue.toString());
     }
 
+    //test getter methods
     @Test
-    public void testGetters() {
+    public void testGettersUser() {
         String userStr = """
             <User>
                 <Username>joebiden</Username>
@@ -115,8 +116,9 @@ public class DatabaseTest {
         assertEquals("getRegion returns wrong value!", region, ue.getRegion());
     }
 
+    //test searchers;
     @Test
-    public void testSearchers() {
+    public void testSearchersUser() {
         UserDatabase ud;
         try {
             ud = new UserDatabase("./Database/databaseTestFile.txt");
@@ -128,4 +130,81 @@ public class DatabaseTest {
         assertEquals("searchByName returns wrong user!", 1, ud.searchByName("joebiden").getID());
         assertEquals("searchByID returns wrong user!", "name3", ud.searchByID(4).getUsername());
     }
+
+    // Test for message content by itself
+    @Test
+    public void initialTestContentMessages() {
+        String messageStr = """
+            <Message>
+                <Timestamp>02/11/2024</Timestamp>
+                <Sender>
+                    <ID>12345678</ID>
+                </Sender>
+                <Recipient>
+                    <ID>77889900</ID>
+                </Recipient>
+                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+            </Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry me;
+        try {
+            me = new MessageEntry(messageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+        assertEquals("ToString should return the content used to initiate MessageEntry", messageStr, me.toString().replaceAll("\n", "").replace("\t", ""));
+    }
+
+    // Test for formatting
+    @Test
+    public void initialTestFormatMessages() {
+        String messageStr = "<Message>\n\t<Timestamp>02/11/2024</Timestamp>\n\t<Sender>\n\t\t<ID>12345678</ID>\n\t</Sender>\n\t<Recipient>\n\t\t<ID>77889900</ID>\n\t</Recipient>\n\t<Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>\n</Message>\n";
+        MessageEntry me;
+        try {
+            me = new MessageEntry(messageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+        assertEquals("ToString should return the correct format used to initiate MessageEntry", messageStr, me.toString());
+    }
+
+    @Test
+    public void testGettersMessages() {
+        String messageStr = """
+            <Message>
+                <Timestamp>02/11/2024</Timestamp>
+                <Sender>
+                    <ID>12345678</ID>
+                </Sender>
+                <Recipient>
+                    <ID>77889900</ID>
+                </Recipient>
+                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+            </Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry me;
+        try {
+            me = new MessageEntry(messageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        String timestamp = "02/11/2024";
+
+        int sender = 12345678;
+
+        int recipient = 77889900;
+
+        String content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+        assertEquals("getTimestamp returns the wrong string!", timestamp, me.getTimestamp());
+        assertEquals("getSender returns the wrong ID!", sender, me.getSender());
+        assertEquals("getRecipient returns the wrong ID!", recipient, me.getRecipient());
+        assertEquals("getContent returns the wrong string!", content, me.getContent());
+    }
+
 }
