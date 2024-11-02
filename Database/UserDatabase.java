@@ -15,9 +15,9 @@ public class UserDatabase extends GenericDatabase {
     super(filepath);
   }
 
-  public UserEntry searchByName (int id) {
+  public UserEntry searchByName (String name) {
     for (UserEntry ue : db) {
-      if (ue.getID() == id) {
+      if (ue.getUsername().equals(name)) {
         return ue;
       }
     }
