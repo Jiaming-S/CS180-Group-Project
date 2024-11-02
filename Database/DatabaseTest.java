@@ -17,6 +17,8 @@ public class DatabaseTest {
     public void initialTestContent() {
         String userStr = """
             <User>
+                <Username>joebiden</Username>
+                <Password>password123</Password>
                 <ID>77889900</ID>
                 <FriendList>
                     <ID>11223344</ID>
@@ -44,7 +46,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormat() {
-        String userStr = "<User>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n</User>\n";
+        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n</User>\n";
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -60,6 +62,8 @@ public class DatabaseTest {
     public void testGetters() {
         String userStr = """
             <User>
+                <Username>joebiden</Username>
+                <Password>password123</Password>
                 <ID>77889900</ID>
                 <FriendList>
                     <ID>11223344</ID>
@@ -73,6 +77,9 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
+        String username = "joebiden";
+
+        String password = "password123";
 
         int userID = 77889900;
 
@@ -97,7 +104,9 @@ public class DatabaseTest {
             fail("Exception occurred while parsing XML: " + e.getMessage());
             return;
         }
-        assertEquals("GetID returns wrong value!", userID, ue.getID());
+        assertEquals("getUsername returns wrong string!", username, ue.getUsername());
+        assertEquals("getPassword returns wrong string!", password, ue.getPassword());
+        assertEquals("getID returns wrong value!", userID, ue.getID());
         assertEquals("getFriendList returns wrong values!", friendList, ue.getFriendList());
         assertEquals("getBlockList returns wrong values!", blockList, ue.getBlockList());
         assertEquals("getProfilePicture returns wrong string!", profilePicture, ue.getProfilePicture());
