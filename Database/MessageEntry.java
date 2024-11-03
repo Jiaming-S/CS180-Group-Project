@@ -40,7 +40,7 @@ public class MessageEntry extends GenericEntry {
   @Override
   public String toString() {
     String result = "";
-    result += "<Message>\n";
+    result += "<Message.Message>\n";
 
     result += String.format("\t<Timestamp>%s</Timestamp>\n", this.timestamp);
 
@@ -50,7 +50,7 @@ public class MessageEntry extends GenericEntry {
 
     result += String.format("\t<Content>%s</Content>\n", this.content);
 
-    result += "</Message>\n";
+    result += "</Message.Message>\n";
 
     return result;
   }
@@ -69,6 +69,6 @@ public class MessageEntry extends GenericEntry {
   }
 
   public static void main(String[] args) throws ParseExceptionXML {
-    System.out.println(new MessageEntry("<Message><Timestamp>02/11/2024</Timestamp><Sender><ID>12345678</ID></Sender><Recipient><ID>77889900</ID></Recipient><Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content></Message>"));
+    System.out.println(new MessageEntry("<Message.Message><Timestamp>02/11/2024</Timestamp><Sender><ID>12345678</ID></Sender><Recipient><ID>77889900</ID></Recipient><Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content></Message.Message>"));
   }
 }

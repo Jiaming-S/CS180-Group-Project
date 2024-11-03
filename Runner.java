@@ -1,3 +1,8 @@
+import Database.MessageDatabase;
+import Database.UserDatabase;
+import User.User;
+
+import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -25,29 +30,45 @@ public class Runner {
         }
     }
 
-    public static boolean logIn(String username, String pwInput) {
-        //UserDB.checkLogin(username, pwInput);
-        return true;
+    public static boolean logIn(String username, String pwInput, UserDatabase database) {
+        User user = new User(database.searchByName(username));
+        if (pwInput.equals(user.getPassword())) {
+            return true;
+        } return false;
     }
 
     public void openGUI() {
 
     }
 
-    public static void attemptLogin(Scanner scanner) {
+    public static User attemptLogin(Scanner scanner, UserDatabase database) {
         System.out.println("Enter username: ");
         String username = scanner.next();
         System.out.println("Enter password: ");
         String pw = scanner.next();
-        if (!logIn(username, pw)) {
+        if (!logIn(username, pw, database)) {
             System.out.println("Incorrect!");
-            attemptLogin(scanner);
+            attemptLogin(scanner, database);
         } else {
             System.out.println("Welcome " + username);
+            return new User (database.searchByName(username));
         }
+        return null;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+
+        UserDatabase userDatabase;
+        MessageDatabase messageDatabase;
+        User currentUser = null;
+
+        try {
+            userDatabase = new UserDatabase("filepath");
+            messageDatabase = new MessageDatabase("filepath");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
 
         Scanner scanner = new Scanner(System.in);
         boolean loggedIn = false;
@@ -59,16 +80,17 @@ public class Runner {
             System.out.println("1 - Create New User\n2 - Log In");
             try {
                 selection = scanner.nextInt();
-                scanner.next();
             } catch (InputMismatchException e) {
                 System.out.println("Please enter 1 or 2.");
                 break;
             } switch (selection) {
                 case 1:
+                    addUser(scanner);
                     System.out.println("User created");
                     break;
                 case 2:
-                    attemptLogin(scanner);
+                    currentUser = attemptLogin(scanner, userDatabase);
+                    //where we will, in phase 2, start a new thread for this login session.
                     loggedIn = true;
                     break;
                 default:
@@ -78,7 +100,7 @@ public class Runner {
         }
         while (loggedIn) {
             selection = 0;
-            System.out.println("1 - View conversations\n2 - Search users\n3 - Edit profile\n4 - Log out");
+            System.out.println("1 - Search users\n2 - Log out");
             try {
                 selection = scanner.nextInt();
                 scanner.next();
@@ -87,15 +109,21 @@ public class Runner {
                 break;
             }
             switch (selection) {
-                case 1: // TODO: View Conversations capability
-                case 2: // TODO: User search capability
-                case 3: // TODO: Edit profile capability
-                case 4:
-                    loggedIn = false; //will probably have to implement a more complex solution with threads later
+                case 1: // TODO: User search capability
+                    System.out.println("Enter username to search");
+                    String username = scanner.next();
+                    User user = new User(userDatabase.searchByName(username));
+                    System.out.println("Username: " + user.getUsername());
+                    System.out.println("ID: " + user.getID());
+                    System.out.println("Region: " + user.getRegion());
+                    break;
+                case 2:
+                    loggedIn = false;
+                    break; //will probably have to implement a more complex solution with threads later
                 default:
                     System.out.println("Please select a valid option.");
                     break;
-            }
+            } break;
         }
     }
 
