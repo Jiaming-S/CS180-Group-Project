@@ -15,19 +15,19 @@ public class Runner {
      * @version 11/02/2024
      */
 
-    public static void addUser(Scanner scanner) {
+    public static void addUser(Scanner scanner, UserDatabase userDatabase) {
         System.out.println("Please enter your new username");
         String username = scanner.next();
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
-            addUser(scanner);
+            addUser(scanner, userDatabase);
         }
         System.out.println("Please enter your new password");
         String password = scanner.next();
         if (password.length() < 3) {
             System.out.println("Please increase password length");
-            addUser(scanner);
-        }
+            addUser(scanner, userDatabase);
+        } userDatabase.insertEntry((new User(username, password)).userToEntry());
     }
 
     public static boolean logIn(String username, String pwInput, UserDatabase database) {
@@ -85,7 +85,7 @@ public class Runner {
                 break;
             } switch (selection) {
                 case 1:
-                    addUser(scanner);
+                    addUser(scanner, userDatabase);
                     System.out.println("User created");
                     break;
                 case 2:
@@ -109,7 +109,7 @@ public class Runner {
                 break;
             }
             switch (selection) {
-                case 1: // TODO: User search capability
+                case 1:
                     System.out.println("Enter username to search");
                     String username = scanner.next();
                     User user = new User(userDatabase.searchByName(username));

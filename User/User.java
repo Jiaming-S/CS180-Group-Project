@@ -54,6 +54,10 @@ public class User {
         this.password = "test";
     }
 
+    public UserEntry userToEntry() {
+        return new UserEntry(username, password, ID, friendList, blockList, profilePicture, region);
+    }
+
     public String getUsername() {
         return username;
     }
