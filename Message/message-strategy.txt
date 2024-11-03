@@ -7,7 +7,7 @@ File per person which has a to: tag indicating who the message is sent to
 
 
 example:
-<Message>
+<Message.Message>
   <Timestamp>02/11/2024</Timestamp>
   <Sender>
     <ID>12345678</ID>
@@ -16,4 +16,4 @@ example:
     <ID>77889900</ID>
   </Recipient>
   <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
-</Message>
+</Message.Message>

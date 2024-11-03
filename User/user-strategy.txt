@@ -16,7 +16,7 @@ region
 
 
 example:
-<User>
+<Message.Message>
   <Username>joebiden</Username>
   <Password>password123</Password>
   <ID>77889900</ID>
@@ -31,6 +31,6 @@ example:
   </BlockList>
   <ProfilePicture>/path/to/image.png</ProfilePicture>
   <Region>USA/Midwest</Region>
-</User>
+</Message.Message>
 
 
