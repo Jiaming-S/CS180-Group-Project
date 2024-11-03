@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 /**
- * This class represents a MessageDatabase storing user information.
+ * This class represents a MessageDatabase storing message information.
  * @author Jiaming Situ
  * @version 11/02/2024
  */
@@ -13,6 +13,16 @@ public class MessageDatabase extends GenericDatabase {
 
   public MessageDatabase(String filepath) throws IOException {
     super(filepath);
+
+    this.db = new ArrayList<>();
+    ArrayList<String> lines = readStringsFromFile();
+    for (String s : lines) {
+      try {
+        db.add(new MessageEntry(s));
+      } catch (ParseExceptionXML e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   @Override

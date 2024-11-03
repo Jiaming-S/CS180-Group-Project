@@ -13,6 +13,16 @@ public class UserDatabase extends GenericDatabase {
 
   public UserDatabase(String filepath) throws IOException {
     super(filepath);
+
+    this.db = new ArrayList<>();
+    ArrayList<String> lines = readStringsFromFile();
+    for (String s : lines) {
+      try {
+        db.add(new UserEntry(s));
+      } catch (ParseExceptionXML e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   public UserEntry searchByName (String name) {
