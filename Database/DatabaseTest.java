@@ -159,7 +159,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormatMessages() {
-        String messageStr = "<Message>\n\t<Timestamp>02/11/2024</Timestamp>\n\t<Sender>\n\t\t<ID>12345678</ID>\n\t</Sender>\n\t<Recipient>\n\t\t<ID>77889900</ID>\n\t</Recipient>\n\t<Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>\n</Message>\n";
+        String messageStr = "<Message>\n\t<Timestamp>02/11/2024</Timestamp>\n\t<Sender>\n\t\t<ID>12345678</ID>\n\t</Sender>\n\t<Recipient>\n\t\t<ID>77889900</ID>\n\t</Recipient>\n\t<Content>frfrsotrueong.</Content>\n</Message>\n";
         MessageEntry me;
         try {
             me = new MessageEntry(messageStr);
@@ -182,7 +182,7 @@ public class DatabaseTest {
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+                <Content>frfrsotrueong.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -199,7 +199,7 @@ public class DatabaseTest {
 
         int recipient = 77889900;
 
-        String content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        String content = "frfrsotrueong.";
 
         assertEquals("getTimestamp returns the wrong string!", timestamp, me.getTimestamp());
         assertEquals("getSender returns the wrong ID!", sender, me.getSender());
