@@ -1,3 +1,4 @@
+Nikita Sirandasu - Submitted Vocareum workspace.
 Database Classes:
 - Both `UserDatabase` and `MessageDatabase` extend `GenericDatabase` which implements `Database`. 
 - Both `UserEntry` and `MessageEntry` implement `GenericEntry`.
