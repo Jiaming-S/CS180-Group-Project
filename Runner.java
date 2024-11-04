@@ -63,8 +63,9 @@ public class Runner {
         User currentUser = null;
 
         try {
-            userDatabase = new UserDatabase("filepath");
-            messageDatabase = new MessageDatabase("filepath");
+            //TODO: Update filepath names
+            userDatabase = new UserDatabase("user_db.txt");
+            messageDatabase = new MessageDatabase("message_db.txt");
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
@@ -83,7 +84,8 @@ public class Runner {
             } catch (InputMismatchException e) {
                 System.out.println("Please enter 1 or 2.");
                 break;
-            } switch (selection) {
+            }
+            switch (selection) {
                 case 1:
                     addUser(scanner, userDatabase);
                     System.out.println("User created");
@@ -103,7 +105,6 @@ public class Runner {
             System.out.println("1 - Search users\n2 - Log out");
             try {
                 selection = scanner.nextInt();
-                scanner.next();
             } catch (InputMismatchException e) {
                 System.out.println("Please enter 1 or 2.");
                 break;
@@ -113,9 +114,11 @@ public class Runner {
                     System.out.println("Enter username to search");
                     String username = scanner.next();
                     User user = new User(userDatabase.searchByName(username));
-                    System.out.println("Username: " + user.getUsername());
-                    System.out.println("ID: " + user.getID());
-                    System.out.println("Region: " + user.getRegion());
+                    if (!(user.userToEntry() == null)) {
+                        System.out.println("Username: " + user.getUsername());
+                        System.out.println("ID: " + user.getID());
+                        System.out.println("Region: " + user.getRegion());
+                    }
                     break;
                 case 2:
                     loggedIn = false;
