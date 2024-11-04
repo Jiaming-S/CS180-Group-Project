@@ -131,7 +131,7 @@ public class UserThread extends Thread implements UserThreadInt {
         System.out.print("Enter your message: ");
         String messageContent = scanner.nextLine();
         Message message = new TextMessage(messageContent, currentUser.getID());
-
+        //assumed implementation of TextMessage
         messageDatabase.insertEntry(message.getTimeStamp(), currentUser.getID(), recipient.getID(), message);
 
         System.out.println("Text message sent to " + recipientUsername);
@@ -151,9 +151,10 @@ public class UserThread extends Thread implements UserThreadInt {
         String photoPath = scanner.nextLine();
 
         Message photoMessage = new PhotoMessage(photoPath, currentUser.getID());
-
+        //assumed implementation of PhotoMessage
         messageDatabase.insertEntry(photoMessage.getTimeStamp(), currentUser.getID(), recipient.getID(), photoMessage);
 
         System.out.println("Photo message was sent to " + recipientUsername);
     }
+
 }
