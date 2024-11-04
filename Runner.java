@@ -63,7 +63,6 @@ public class Runner {
         User currentUser = null;
 
         try {
-            //TODO: Update filepath names
             userDatabase = new UserDatabase("user_db.txt");
             messageDatabase = new MessageDatabase("message_db.txt");
         } catch (IOException e) {
