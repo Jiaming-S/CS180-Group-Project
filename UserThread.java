@@ -18,6 +18,7 @@ public class UserThread extends Thread implements UserThreadInt {
     private UserDatabase userDB;
     private MessageDatabase msgDB;
     private Scanner scanner;
+    private final Object lock = new Object();
 
     public UserThread(User currUser, UserDatabase userDB, MessageDatabase msgDB) {
         this.currUser = currUser;
@@ -69,48 +70,56 @@ public class UserThread extends Thread implements UserThreadInt {
     }
 
     public void searchUser() {
-        System.out.print("Enter username you want to search: ");
-        String username = scanner.nextLine();
-        User userToFind = userDatabase.searchByName(username);
+        synchronized (lock) {
+            System.out.print("Enter username you want to search: ");
+            String username = scanner.nextLine();
+            User userToFind = userDatabase.searchByName(username);
 
-        if (userToFind != null) {
-            System.out.println("User found: " + userToFind.getUsername());
-            System.out.println("ID: " + userToFind.getID());
-            System.out.println("Region: " + userToFind.getRegion());
-        } else {
-            System.out.println("User not found.");
+            if (userToFind != null) {
+                System.out.println("User found: " + userToFind.getUsername());
+                System.out.println("ID: " + userToFind.getID());
+                System.out.println("Region: " + userToFind.getRegion());
+            } else {
+                System.out.println("User not found.");
+            }
         }
     }
 
     public void viewProfile() {
-        System.out.println(currentUser.getUsername() + "'s Profile:");
-        System.out.println("Username: " + currentUser.getUsername());
-        System.out.println("ID: " + currentUser.getID());
-        System.out.println("Region: " + currentUser.getRegion());
+        synchronized (lock) {
+            System.out.println(currentUser.getUsername() + "'s Profile:");
+            System.out.println("Username: " + currentUser.getUsername());
+            System.out.println("ID: " + currentUser.getID());
+            System.out.println("Region: " + currentUser.getRegion());
+        }
     }
 
     public void blockUser() {
-        System.out.print("Enter username to block: ");
-        String blockedUsername = scanner.nextLine();
-        User userToBlock = userDatabase.searchByName(blockedUsername);
+        synchronized (lock) {
+            System.out.print("Enter username to block: ");
+            String blockedUsername = scanner.nextLine();
+            User userToBlock = userDatabase.searchByName(blockedUsername);
 
-        if (userToBlock != null) {
-            currentUser.getBlockList().add(userToBlock.getID());
-            System.out.println("Blocked user is: " + userToBlock.getUsername());
-        } else {
-            System.out.println("User not found.");
+            if (userToBlock != null) {
+                currentUser.getBlockList().add(userToBlock.getID());
+                System.out.println("Blocked user is: " + userToBlock.getUsername());
+            } else {
+                System.out.println("User not found.");
+            }
         }
     }
 
     public void newConvo() {
-        System.out.print("Enter username to start a conversation with: ");
-        String username = scanner.nextLine();
-        User recipient = userDatabase.searchByName(username);
+        synchronized (lock) {
+            System.out.print("Enter username to start a conversation with: ");
+            String username = scanner.nextLine();
+            User recipient = userDatabase.searchByName(username);
 
-        if (recipient != null) {
-            System.out.println("Starting a conversation with " + recipient.getUsername());
-        } else {
-            System.out.println("User not found.");
+            if (recipient != null) {
+                System.out.println("Starting a conversation with " + recipient.getUsername());
+            } else {
+                System.out.println("User not found.");
+            }
         }
     }
 
@@ -119,42 +128,46 @@ public class UserThread extends Thread implements UserThreadInt {
     }
 
     public void sendTextMsg() {
-        System.out.print("Enter recipient's username: ");
-        String recipientUsername = scanner.nextLine();
-        User recipient = userDatabase.searchByName(recipientUsername);
+        synchronized (lock) {
+            System.out.print("Enter recipient's username: ");
+            String recipientUsername = scanner.nextLine();
+            User recipient = userDatabase.searchByName(recipientUsername);
 
-        if (recipient == null) {
-            System.out.println("User not found.");
-            return;
+            if (recipient == null) {
+                System.out.println("User not found.");
+                return;
+            }
+
+            System.out.print("Enter your message: ");
+            String messageContent = scanner.nextLine();
+            Message message = new TextMessage(messageContent, currentUser.getID());
+            //assumed implementation of TextMessage
+            messageDatabase.insertEntry(message.getTimeStamp(), currentUser.getID(), recipient.getID(), message);
+
+            System.out.println("Text message sent to " + recipientUsername);
         }
-
-        System.out.print("Enter your message: ");
-        String messageContent = scanner.nextLine();
-        Message message = new TextMessage(messageContent, currentUser.getID());
-        //assumed implementation of TextMessage
-        messageDatabase.insertEntry(message.getTimeStamp(), currentUser.getID(), recipient.getID(), message);
-
-        System.out.println("Text message sent to " + recipientUsername);
     }
 
     public void sendPhotoMsg() {
-        System.out.print("Enter recipient's username: ");
-        String recipientUsername = scanner.nextLine();
-        User recipient = userDatabase.searchByName(recipientUsername);
+        synchronized (lock) {
+            System.out.print("Enter recipient's username: ");
+            String recipientUsername = scanner.nextLine();
+            User recipient = userDatabase.searchByName(recipientUsername);
 
-        if (recipient == null) {
-            System.out.println("User not found.");
-            return;
+            if (recipient == null) {
+                System.out.println("User not found.");
+                return;
+            }
+
+            System.out.print("Enter the path of the photo: ");
+            String photoPath = scanner.nextLine();
+
+            Message photoMessage = new PhotoMessage(photoPath, currentUser.getID());
+            //assumed implementation of PhotoMessage
+            messageDatabase.insertEntry(photoMessage.getTimeStamp(), currentUser.getID(), recipient.getID(), photoMessage);
+
+            System.out.println("Photo message was sent to " + recipientUsername);
         }
-
-        System.out.print("Enter the path of the photo: ");
-        String photoPath = scanner.nextLine();
-
-        Message photoMessage = new PhotoMessage(photoPath, currentUser.getID());
-        //assumed implementation of PhotoMessage
-        messageDatabase.insertEntry(photoMessage.getTimeStamp(), currentUser.getID(), recipient.getID(), photoMessage);
-
-        System.out.println("Photo message was sent to " + recipientUsername);
     }
 
 }
