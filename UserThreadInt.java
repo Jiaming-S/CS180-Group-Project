@@ -1,6 +1,14 @@
+/**
+ * UserThreadInt is interface for UserThread class and details methods for it
+ * @author Nikita Sirandasu
+ * @version 11/03/2024
+ */
 public interface UserThreadInt {
-    UserEntry searchUser(UserEntry user);
-    void blockUser(UserEntry user);
-    MessageEntry newConvo(UserEntry user, String content);
-    void sendMessage(MessageEntry message);
+    void searchUser();
+    void viewProfile();
+    void blockUser();
+    void newConvo();
+    void viewMsg();
+    void sendTextMsg();
+    void sendPhotoMsg();
 }
