@@ -25,7 +25,7 @@ public class MessageDatabase extends GenericDatabase {
     }
   }
 
-  public MessageEntry searchBySenderID(int id) {
+  synchronized public MessageEntry searchBySenderID(int id) {
     for (MessageEntry me : db) {
       if (me.getSender() == id) {
         return me;
@@ -34,7 +34,7 @@ public class MessageDatabase extends GenericDatabase {
     return null;
   }
 
-  public MessageEntry searchByRecipientID(int id) {
+  synchronized public MessageEntry searchByRecipientID(int id) {
     for (MessageEntry me : db) {
       if (me.getRecipient() == id) {
         return me;
@@ -44,12 +44,12 @@ public class MessageDatabase extends GenericDatabase {
   }
 
   @Override
-  public Object getEntry(int rowNum) {
+  synchronized public Object getEntry(int rowNum) {
     return db.get(rowNum);
   }
 
   @Override
-  public void insertEntry(Object entry) {
+  synchronized public void insertEntry(Object entry) {
     db.add((MessageEntry) entry);
   }
 }
