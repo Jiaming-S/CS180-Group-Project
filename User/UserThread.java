@@ -3,9 +3,9 @@ package User;
 import Database.MessageDatabase;
 import Database.UserDatabase;
 import Database.UserEntry;
-import Message.Message;
-import Message.PhotoMessage;
-import Message.TextMessage;
+//import Message.Message;
+//import Message.PhotoMessage;
+//import Message.TextMessage;
 import java.util.Scanner;
 
 /**
