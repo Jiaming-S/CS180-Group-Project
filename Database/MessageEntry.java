@@ -40,7 +40,7 @@ public class MessageEntry extends GenericEntry {
   @Override
   public String toString() {
     String result = "";
-    result += "<Message.Message>\n";
+    result += "<Message>\n";
 
     result += String.format("\t<Timestamp>%s</Timestamp>\n", this.timestamp);
 
@@ -50,7 +50,7 @@ public class MessageEntry extends GenericEntry {
 
     result += String.format("\t<Content>%s</Content>\n", this.content);
 
-    result += "</Message.Message>\n";
+    result += "</Message>\n";
 
     return result;
   }
