@@ -4,12 +4,41 @@ import java.net.*;
 import Database.*;
 
 public class UserDatabaseServer extends GenericDatabaseServer {
-  public UserDatabaseServer(Socket client, GenericDatabase db) {
+  public UserDatabaseServer(Socket client, UserDatabase db) {
     super(client, db);
   }
 
   @Override
   public Packet handlePacket(Packet p) {
-    return null;
+    UserDatabase udb = (UserDatabase) this.db;
+    Packet response = null;
+
+    try {
+      switch (p.query) {
+        case "searchByName":
+          String name = (String) p.content;
+          response = new Packet("success", udb.searchByName(name), null);
+          break;
+        case "searchByID":
+          int userId = (Integer) p.content;
+          response = new Packet("success", udb.searchByID(userId), null);
+          break;
+        case "getEntry":
+          int getRowNum = (Integer) p.content;
+          response = new Packet("success", udb.getEntry(getRowNum), null);
+          break;
+        case "insertEntry":
+          udb.insertEntry((UserEntry) p.content);
+          response = new Packet("success", true, null);
+          break;
+        default:
+          response = new Packet("forbidden", null, null);
+          break;
+      }
+    } catch (Exception e) {
+      return new Packet("error", null, null);
+    }
+
+    return response;
   }
 }

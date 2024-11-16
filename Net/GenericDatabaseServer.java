@@ -14,7 +14,6 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
   }
 
   @Override
-  @SuppressWarnings("unused")
   public void run() {
     ObjectOutputStream oos;
 		ObjectInputStream  ois;
@@ -31,9 +30,12 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
     try {
       while (true) {
         Packet p = (Packet) ois.readObject();
-        System.out.println(p);
+
+        System.out.println("Received Packet:\n" + p);
+        if (p == null || p.query == null) break;
+        
         Packet response = handlePacket(p);
-        if (response != null && response.content != null && !response.query.isEmpty()) oos.writeObject(response);
+        if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
       }
     } catch (Exception e) {
       e.printStackTrace();

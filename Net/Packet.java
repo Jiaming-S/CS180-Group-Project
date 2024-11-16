@@ -1,9 +1,9 @@
 package Net;
 
 public class Packet {
-  public String query;
-  public Object content; // must always be non-null unless this is a "end connection" packet
-  public Object recipient; // might always be null depending on use case
+  public String query; // ALWAYS non-null; if this is null then something has gone horribly wrong
+  public Object content; // usually non-null; except when this is an error packet or "end of connection" packet
+  public Object recipient; // usually null; only used in some niche api calls
   
   public Packet(String query, Object content, Object recipient) {
     this.query = query;
