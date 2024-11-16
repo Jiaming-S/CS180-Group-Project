@@ -2,6 +2,7 @@ package User;
 
 import Database.MessageDatabase;
 import Database.UserDatabase;
+import Database.UserEntry;
 import Message.Message;
 import Message.PhotoMessage;
 import Message.TextMessage;
@@ -73,7 +74,7 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username you want to search: ");
             String username = scanner.nextLine();
-            User userToFind = userDatabase.searchByName(username);
+            UserEntry userToFind = userDB.searchByName(username);
 
             if (userToFind != null) {
                 System.out.println("User found: " + userToFind.getUsername());
@@ -87,10 +88,10 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void viewProfile() {
         synchronized (lock) {
-            System.out.println(currentUser.getUsername() + "'s Profile:");
-            System.out.println("Username: " + currentUser.getUsername());
-            System.out.println("ID: " + currentUser.getID());
-            System.out.println("Region: " + currentUser.getRegion());
+            System.out.println(currUser.getUsername() + "'s Profile:");
+            System.out.println("Username: " + currUser.getUsername());
+            System.out.println("ID: " + currUser.getID());
+            System.out.println("Region: " + currUser.getRegion());
         }
     }
 
@@ -98,10 +99,10 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username to block: ");
             String blockedUsername = scanner.nextLine();
-            User userToBlock = userDatabase.searchByName(blockedUsername);
-
+            UserEntry blocked = userDB.searchByName(blockedUsername);
+            User userToBlock = new User(blocked);
             if (userToBlock != null) {
-                currentUser.getBlockList().add(userToBlock.getID());
+                currUser.getBlockList().add(userToBlock.getID());
                 System.out.println("Blocked user is: " + userToBlock.getUsername());
             } else {
                 System.out.println("User not found.");
@@ -113,8 +114,8 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username to start a conversation with: ");
             String username = scanner.nextLine();
-            User recipient = userDatabase.searchByName(username);
-
+            UserEntry receive = userDB.searchByName(username);
+            User recipient = new User(receive);
             if (recipient != null) {
                 System.out.println("Starting a conversation with " + recipient.getUsername());
             } else {
@@ -131,8 +132,8 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
             String recipientUsername = scanner.nextLine();
-            User recipient = userDatabase.searchByName(recipientUsername);
-
+            UserEntry receive = userDB.searchByName(recipientUsername);
+            User recipient = new User(receive);
             if (recipient == null) {
                 System.out.println("User not found.");
                 return;
@@ -140,9 +141,9 @@ public class UserThread extends Thread implements UserThreadInt {
 
             System.out.print("Enter your message: ");
             String messageContent = scanner.nextLine();
-            Message message = new TextMessage(messageContent, currentUser.getID());
+            //Message message = new TextMessage(messageContent, currUser.getID());
             //assumed implementation of TextMessage
-            messageDatabase.insertEntry(message.getTimeStamp(), currentUser.getID(), recipient.getID(), message);
+            //msgDB.insertEntry(message.getTimeStamp(), currUser.getID(), recipient.getID(), message);
 
             System.out.println("Text message sent to " + recipientUsername);
         }
@@ -152,7 +153,7 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
             String recipientUsername = scanner.nextLine();
-            User recipient = userDatabase.searchByName(recipientUsername);
+            UserEntry recipient = userDB.searchByName(recipientUsername);
 
             if (recipient == null) {
                 System.out.println("User not found.");
@@ -162,9 +163,9 @@ public class UserThread extends Thread implements UserThreadInt {
             System.out.print("Enter the path of the photo: ");
             String photoPath = scanner.nextLine();
 
-            Message photoMessage = new PhotoMessage(photoPath, currentUser.getID());
+            //Message photoMessage = new PhotoMessage(photoPath, currUser.getID());
             //assumed implementation of PhotoMessage
-            messageDatabase.insertEntry(photoMessage.getTimeStamp(), currentUser.getID(), recipient.getID(), photoMessage);
+            //msgDB.insertEntry(photoMessage.getTimeStamp(), currUser.getID(), recipient.getID(), photoMessage);
 
             System.out.println("Photo message was sent to " + recipientUsername);
         }
