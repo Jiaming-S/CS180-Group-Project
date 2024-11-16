@@ -35,7 +35,7 @@ public class UserEntry extends GenericEntry {
 
   @Override
   protected void handleXML(String content, String curTag, String parentTag) {
-    if (curTag.equals("ID") && parentTag.equals("Message")) {
+    if (curTag.equals("ID") && parentTag.equals("User")) {
       this.ID = Integer.parseInt(content);
     } else if (curTag.equals("Username")) {
       this.username = content;
