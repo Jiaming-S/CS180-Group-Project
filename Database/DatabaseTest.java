@@ -238,6 +238,7 @@ public class DatabaseTest {
         assertEquals("ToString should return the correct format used to initiate MessageEntry", messageStr, me.toString());
     }
 
+    //test get methods for messages
     @Test
     public void testGettersMessages() {
         String messageStr = """
@@ -274,6 +275,7 @@ public class DatabaseTest {
         assertEquals("getContent returns the wrong string!", content, me.getContent());
     }
 
+    //test setters and getters for messageDabatase
     @Test
     public void testSettersGettersMessages() {
         MessageDatabase md;
@@ -305,7 +307,7 @@ public class DatabaseTest {
             return;
         }
 
-        assertEquals("getEntry for message database returns the wrong value!", me.toString(), md.getEntry(2).toString());
+        assertEquals("getEntry for message database returns the wrong value!", me.toString(), md.getEntry(3).toString());
 
         String newMessageStr = """
             <Message>
@@ -329,6 +331,80 @@ public class DatabaseTest {
 
         md.insertEntry(nme);
 
-        assertEquals("insertEntry for message database doesn't work properly!", nme.toString(), md.getEntry(3).toString());
+        assertEquals("insertEntry for message database doesn't work properly!", nme.toString(), md.getEntry(4).toString());
+    }
+
+    //test search methods for MessageDatabase
+    @Test
+    public void testSearchersMessages() {
+        MessageDatabase md;
+        try {
+            md = new MessageDatabase("./Database/messageDatabaseTestFile.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Exception occured while reading test file: " + e.getMessage());
+            return;
+        }
+
+        String messageStr = """
+            <Message>
+                <Timestamp>02/11/2024</Timestamp>
+                <Sender>
+                    <ID>12345678</ID>
+                </Sender>
+                <Recipient>
+                    <ID>77889900</ID>
+                </Recipient>
+                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+            </Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry me;
+        try {
+            me = new MessageEntry(messageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        MessageEntry res = md.searchFirstByRecipientID(77889900);
+
+        assertEquals("searchFirstByRecipientID returns the wrong value!", me.toString(), res.toString());
+
+        String messageStr2 = """
+            <Message>
+                <Timestamp>02/12/2024</Timestamp>
+                <Sender>
+                    <ID>12345678</ID>
+                </Sender>
+                <Recipient>
+                    <ID>77889900</ID>
+                </Recipient>
+                <Content>blocked</Content>
+                </Message>
+            <Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry me2;
+        try {
+            me2 = new MessageEntry(messageStr2);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        ArrayList<MessageEntry> messageArr = new ArrayList<>();
+        messageArr.add(me);
+        messageArr.add(me2);
+
+        ArrayList<MessageEntry> resArr = md.searchAllByRecipientID(77889900);
+        assertEquals("searchAllByRecipientID returns the wrong number of entries!", messageArr.size(), resArr.size());
+        assertEquals("searchAllByRecipientID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
+
+        res = md.searchFirstBySenderID(12345678);
+
+        assertEquals("searchFirstBySenderID returns the wrong value!", me.toString(), res.toString());
+
+        resArr = md.searchAllBySenderID(12345678);
+        assertEquals("searchAllBySenderID returns the wrong number of entries!", messageArr.size(), resArr.size());
+        assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
     }
 }
