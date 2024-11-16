@@ -15,7 +15,7 @@ import java.io.*;
 import javax.management.modelmbean.XMLParseException;
 
 /**
- * A set of JUnit tests testing everything surrounding Database
+ * A set of JUnit tests testing everything surrounding the network side e.g. servers for users and messages, packets, etc.
  * @author Haochen(Richard) Feng
  * @version 11/16/2024
  */
