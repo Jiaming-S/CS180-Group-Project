@@ -25,6 +25,24 @@ public class MessageDatabase extends GenericDatabase {
     }
   }
 
+  public MessageEntry searchBySenderID(int id) {
+    for (MessageEntry me : db) {
+      if (me.getSender() == id) {
+        return me;
+      }
+    }
+    return null;
+  }
+
+  public MessageEntry searchByRecipientID(int id) {
+    for (MessageEntry me : db) {
+      if (me.getRecipient() == id) {
+        return me;
+      }
+    }
+    return null;
+  }
+
   @Override
   public Object getEntry(int rowNum) {
     return db.get(rowNum);
