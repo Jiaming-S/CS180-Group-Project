@@ -1,5 +1,6 @@
 package Database;
 
+import java.io.Serializable;
 import java.util.Stack;
 import java.util.regex.*;
 
@@ -9,7 +10,7 @@ import java.util.regex.*;
  * @author Jiaming Situ
  * @version 11/02/2024
  */
-public abstract class GenericEntry {
+public abstract class GenericEntry implements Serializable {
   public final Pattern REGEX_XML_BEGIN = Pattern.compile("<(\\w+)>");
   public final Pattern REGEX_XML_END   = Pattern.compile("</(\\w+)>");
   public final Pattern REGEX_XML_FULL_TAG = Pattern.compile("<(\\w+)>([^<>]*)</\\1>");

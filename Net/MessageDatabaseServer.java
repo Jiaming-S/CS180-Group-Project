@@ -3,9 +3,14 @@ package Net;
 import java.net.*;
 import Database.*;
 
+/**
+ * This class represents a MessageDatabaseServer acting as a web API for a `MessageDatabase` in a thread-safe manner.
+ * @author Jiaming Situ
+ * @version 11/16/2024
+ */
 public class MessageDatabaseServer extends GenericDatabaseServer {
-  public MessageDatabaseServer(Socket client, MessageDatabase db) {
-    super(client, db);
+  public MessageDatabaseServer(ServerSocket server, MessageDatabase db) {
+    super(server, db);
   }
 
   @Override

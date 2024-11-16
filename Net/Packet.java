@@ -1,6 +1,13 @@
 package Net;
 
-public class Packet {
+import java.io.Serializable;
+
+/**
+ * This class represents a Packet which is used to communicate with `DatabaseServer`s.
+ * @author Jiaming Situ
+ * @version 11/16/2024
+ */
+public class Packet implements Serializable {
   public String query; // ALWAYS non-null; if this is null then something has gone horribly wrong
   public Object content; // usually non-null; except when this is an error packet or "end of connection" packet
   public Object recipient; // usually null; only used in some niche api calls

@@ -4,12 +4,19 @@ import java.io.*;
 import java.net.*;
 import Database.*;
 
+/**
+ * This abstract class represents a generic database server and implements the main server logic.
+ * Any extending class MUST implement `handlePacket(Packet p)`.
+ * Not intended for direct use.
+ * @author Jiaming Situ
+ * @version 11/16/2024
+ */
 public abstract class GenericDatabaseServer implements DatabaseServer, Runnable {
-  protected Socket client;
+  protected ServerSocket server;
   protected GenericDatabase db;
 
-  public GenericDatabaseServer(Socket client, GenericDatabase db) {
-    this.client = client;
+  public GenericDatabaseServer(ServerSocket server, GenericDatabase db) {
+    this.server = server;
     this.db = db;
   }
 
@@ -19,6 +26,7 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
 		ObjectInputStream  ois;
 
     try {
+      Socket client = server.accept();
       oos = new ObjectOutputStream(client.getOutputStream());
 			ois = new ObjectInputStream(client.getInputStream());
 			oos.flush();
@@ -28,18 +36,15 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
     }
 
     try {
-      while (true) {
-        Packet p = (Packet) ois.readObject();
+      Packet p = (Packet) ois.readObject();
 
-        System.out.println("Received Packet:\n" + p);
-        if (p == null || p.query == null) break;
-        
-        Packet response = handlePacket(p);
-        if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
-      }
+      System.out.println("Received Packet:\n" + p);
+      
+      Packet response = handlePacket(p);
+      if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
     } catch (Exception e) {
       e.printStackTrace();
-      System.out.println("Exception occurred while handling query. Exiting main loop.");
+      System.out.println("Exception occurred while handling query.");
     }
 
     try {

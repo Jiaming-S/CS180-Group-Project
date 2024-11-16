@@ -3,9 +3,14 @@ package Net;
 import java.net.*;
 import Database.*;
 
+/**
+ * This class represents a UserDatabaseServer acting as a web API for a `UserDatabase` in a thread-safe manner.
+ * @author Jiaming Situ
+ * @version 11/16/2024
+ */
 public class UserDatabaseServer extends GenericDatabaseServer {
-  public UserDatabaseServer(Socket client, UserDatabase db) {
-    super(client, db);
+  public UserDatabaseServer(ServerSocket server, UserDatabase db) {
+    super(server, db);
   }
 
   @Override
