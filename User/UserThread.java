@@ -3,9 +3,9 @@ package User;
 import Database.MessageDatabase;
 import Database.UserDatabase;
 import Database.UserEntry;
-import Message.Message;
-import Message.PhotoMessage;
-import Message.TextMessage;
+//import Message.Message;
+//import Message.PhotoMessage;
+//import Message.TextMessage;
 import java.util.Scanner;
 
 /**
@@ -33,7 +33,7 @@ public class UserThread extends Thread implements UserThreadInt {
         boolean running = true;
         while (running) {
             System.out.println("Welcome " + currUser.getUsername());
-            System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send Message\n7 - Log Out");
+            System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
             int answer = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
