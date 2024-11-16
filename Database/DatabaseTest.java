@@ -166,7 +166,7 @@ public class DatabaseTest {
             fail("Exception occurred while parsing XML: " + e.getMessage());
             return;
         }
-        assertEquals("getEntry returns wrong value!", ue, ud.getEntry(3));
+        assertEquals("getEntry for user database returns wrong value!", ue, ud.getEntry(3));
         
         String newUserStr = """
             <User>
@@ -195,7 +195,7 @@ public class DatabaseTest {
         }
 
         ud.insertEntry(nue);
-        assertEquals("insertEntry doesn't work as expected!", nue, ud.getEntry(4));
+        assertEquals("insertEntry for user database doesn't work as expected!", nue, ud.getEntry(4));
     }
 
     // Test for message content by itself
@@ -275,7 +275,60 @@ public class DatabaseTest {
     }
 
     @Test
-    public void testSearchersMessages() {
+    public void testSettersGettersMessages() {
+        MessageDatabase md;
+        try {
+            md = new MessageDatabase("./Database/messageDatabaseTestFile.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Exception occured while reading test file: " + e.getMessage());
+            return;
+        }
         
+        String messageStr = """
+            <Message>
+                <Timestamp>02/13/2024</Timestamp>
+                <Sender>
+                    <ID>88888888</ID>
+                </Sender>
+                <Recipient>
+                    <ID>99999999</ID>
+                </Recipient>
+                <Content>Content</Content>
+            </Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry me;
+        try {
+            me = new MessageEntry(messageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        assertEquals("getEntry for message database returns the wrong value!", me.toString(), md.getEntry(2).toString());
+
+        String newMessageStr = """
+            <Message>
+                <Timestamp>02/13/2024</Timestamp>
+                <Sender>
+                    <ID>99999999</ID>
+                </Sender>
+                <Recipient>
+                    <ID>10101010</ID>
+                </Recipient>
+                <Content>Content</Content>
+            </Message>""".replaceAll(" ", "").replaceAll("\n", "");
+        MessageEntry nme;
+        try {
+            nme = new MessageEntry(newMessageStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        md.insertEntry(nme);
+
+        assertEquals("insertEntry for message database doesn't work properly!", nme.toString(), md.getEntry(3).toString());
     }
 }
