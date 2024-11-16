@@ -1,0 +1,30 @@
+<Message.Message>
+  <Timestamp>02/11/2024</Timestamp>
+  <Sender>
+    <ID>12345678</ID>
+  </Sender>
+  <Recipient>
+    <ID>77889900</ID>
+  </Recipient>
+  <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+</Message.Message>
+<Message.Message>
+  <Timestamp>02/12/2024</Timestamp>
+  <Sender>
+    <ID>77889900</ID>
+  </Sender>
+  <Recipient>
+    <ID>12345678</ID>
+  </Recipient>
+  <Content>I'm breaking up with you.</Content>
+</Message.Message>
+<Message.Message>
+  <Timestamp>02/13/2024</Timestamp>
+  <Sender>
+    <ID>88888888</ID>
+  </Sender>
+  <Recipient>
+    <ID>99999999</ID>
+  </Recipient>
+  <Content>Content</Content>
+</Message.Message>

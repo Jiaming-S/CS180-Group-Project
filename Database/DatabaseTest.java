@@ -131,6 +131,73 @@ public class DatabaseTest {
         assertEquals("searchByID returns wrong user!", "name3", ud.searchByID(4).getUsername());
     }
 
+    @Test
+    public void testSettersGettersUser() {
+        UserDatabase ud;
+        try {
+            ud = new UserDatabase("./Database/databaseTestFile.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail("Exception occured while reading test file: " + e.getMessage());
+            return;
+        }
+        String userStr = """
+            <User>
+                <Username>name3</Username>
+                <Password>password123</Password>
+                <ID>00000004</ID>
+                <FriendList>
+                    <ID>11223344</ID>
+                    <ID>55667788</ID>
+                    <ID>12345678</ID>
+                </FriendList>
+                <BlockList>
+                    <ID>10101010</ID>
+                    <ID>44444444</ID>
+                </BlockList>
+                <ProfilePicture>/path/to/image.png</ProfilePicture>
+                <Region>USA/Midwest</Region>
+            </User>""".replaceAll(" ", "").replaceAll("\n", "");
+        UserEntry ue;
+        try {
+            ue = new UserEntry(userStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+        assertEquals("getEntry returns wrong value!", ue, ud.getEntry(3));
+        
+        String newUserStr = """
+            <User>
+                <Username>name4</Username>
+                <Password>password123</Password>
+                <ID>00000004</ID>
+                <FriendList>
+                    <ID>11223344</ID>
+                    <ID>55667788</ID>
+                    <ID>12345678</ID>
+                </FriendList>
+                <BlockList>
+                    <ID>10101010</ID>
+                    <ID>44444444</ID>
+                </BlockList>
+                <ProfilePicture>/path/to/image.png</ProfilePicture>
+                <Region>USA/Midwest</Region>
+            </User>""".replaceAll(" ", "").replaceAll("\n", "");
+        UserEntry nue;
+        try {
+            nue = new UserEntry(newUserStr);
+        } catch (ParseExceptionXML e) {
+            e.printStackTrace();
+            fail("Exception occurred while parsing XML: " + e.getMessage());
+            return;
+        }
+
+        ud.insertEntry(nue);
+        assertEquals("insertEntry doesn't work as expected!", nue, ud.getEntry(4));
+    }
+
     // Test for message content by itself
     @Test
     public void initialTestContentMessages() {
@@ -207,4 +274,8 @@ public class DatabaseTest {
         assertEquals("getContent returns the wrong string!", content, me.getContent());
     }
 
+    @Test
+    public void testSearchersMessages() {
+        
+    }
 }
