@@ -25,7 +25,7 @@ public class UserDatabase extends GenericDatabase {
     }
   }
 
-  public UserEntry searchByName (String name) {
+  synchronized public UserEntry searchByName (String name) {
     for (UserEntry ue : db) {
       if (ue.getUsername().equals(name)) {
         return ue;
@@ -34,7 +34,7 @@ public class UserDatabase extends GenericDatabase {
     return null;
   }
 
-  public UserEntry searchByID (int id) {
+  synchronized public UserEntry searchByID (int id) {
     for (UserEntry ue : db) {
       if (ue.getID() == id) {
         return ue;
@@ -44,12 +44,12 @@ public class UserDatabase extends GenericDatabase {
   }
 
   @Override
-  public Object getEntry(int rowNum) {
+  synchronized public Object getEntry(int rowNum) {
     return db.get(rowNum);
   }
 
   @Override
-  public void insertEntry(Object entry) {
+  synchronized public void insertEntry(Object entry) {
     db.add((UserEntry) entry);
   }
 }

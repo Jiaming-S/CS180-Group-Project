@@ -25,13 +25,51 @@ public class MessageDatabase extends GenericDatabase {
     }
   }
 
+  synchronized public MessageEntry searchFirstBySenderID(int id) {
+    for (MessageEntry me : db) {
+      if (me.getSender() == id) {
+        return me;
+      }
+    }
+    return null;
+  }
+
+  synchronized public ArrayList<MessageEntry> searchAllBySenderID(int id) {
+    ArrayList<MessageEntry> results = new ArrayList<>();
+    for (MessageEntry me : db) {
+      if (me.getSender() == id) {
+        results.add(me);
+      }
+    }
+    return results;
+  }
+
+  synchronized public MessageEntry searchFirstByRecipientID(int id) {
+    for (MessageEntry me : db) {
+      if (me.getRecipient() == id) {
+        return me;
+      }
+    }
+    return null;
+  }
+
+  synchronized public ArrayList<MessageEntry> searchAllByRecipientID(int id) {
+    ArrayList<MessageEntry> results = new ArrayList<>();
+    for (MessageEntry me : db) {
+      if (me.getRecipient() == id) {
+        results.add(me);
+      }
+    }
+    return results;
+  }
+
   @Override
-  public Object getEntry(int rowNum) {
+  synchronized public Object getEntry(int rowNum) {
     return db.get(rowNum);
   }
 
   @Override
-  public void insertEntry(Object entry) {
+  synchronized public void insertEntry(Object entry) {
     db.add((MessageEntry) entry);
   }
 }
