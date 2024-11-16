@@ -1,5 +1,7 @@
+package User;
+
 /**
- * UserThreadInt is interface for UserThread class and details methods for it
+ * User.UserThreadInt is interface for UserThread class and details methods for it
  * @author Nikita Sirandasu
  * @version 11/03/2024
  */
