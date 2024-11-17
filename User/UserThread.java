@@ -3,6 +3,10 @@ package User;
 import Database.MessageDatabase;
 import Database.UserDatabase;
 import Database.UserEntry;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 //import Message.Message;
 //import Message.PhotoMessage;
 //import Message.TextMessage;
@@ -12,20 +16,31 @@ import java.util.Scanner;
  * UserThread class with several methods related to User actions and will work with GUI
  * (Some methods may need to be altered during Phase 3 to work with GUI)
  * @author Nikita Sirandasu
- * @version 11/03/2024
+ * @version 11/17/2024
  */
 public class UserThread extends Thread implements UserThreadInt {
     private User currUser;
+    private Socket userDBSocket;
+    private Socket msgDBSocket;
     private UserDatabase userDB;
     private MessageDatabase msgDB;
-    private Scanner scanner;
     private final Object lock = new Object();
+    private Scanner scanner;
 
-    public UserThread(User currUser, UserDatabase userDB, MessageDatabase msgDB) {
+    public UserThread(User currUser, Socket userDBSocket, Socket msgDBSocket) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
-        this.userDB = userDB;
-        this.msgDB = msgDB;
+        this.userDBSocket = userDBSocket;
+        this.msgDBSocket = msgDBSocket;
+        ObjectOutputStream userOut = new ObjectOutputStream(userDBSocket.getOutputStream());
+        ObjectInputStream userIn = new ObjectInputStream(userDBSocket.getInputStream());
+        userOut.writeObject("START_USER_DB");
+        this.userDB = (UserDatabase) userIn.readObject();
+        ObjectOutputStream msgOut = new ObjectOutputStream(msgDBSocket.getOutputStream());
+        ObjectInputStream msgIn = new ObjectInputStream(msgDBSocket.getInputStream());
+        msgOut.writeObject("START_MESSAGE_DB");
+        this.msgDB = (MessageDatabase) msgIn.readObject();
         this.scanner = new Scanner(System.in);
+
     }
 
     @Override
