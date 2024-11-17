@@ -38,17 +38,15 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
       try {
         Packet p = (Packet) ois.readObject();
 
-        if (p == null || (p.content == null && p.query == null)) {
-          break;
-        }
+        if (p == null || (p.content == null && p.query == null)) break;
 
-        System.out.println("Received Packet:\n" + p);
+        System.out.println("[Server] Received Packet:\n[Server] " + p.toString().replaceAll("\n", "\n[Server] "));
       
         Packet response = handlePacket(p);
         if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
       } catch (Exception e) {
         e.printStackTrace();
-        System.out.println("Exception occurred while handling query.");
+        System.out.println("[Server] Exception occurred while handling query.");
       }
     }
 

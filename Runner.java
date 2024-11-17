@@ -12,6 +12,7 @@ import java.io.*;
 import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -121,7 +122,7 @@ public class Runner {
             System.out.println("Please increase password length");
             addUser(scanner, userDatabase, oos, ois);
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, null, null, null, null);
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "");
         Packet packet = new Packet("insertEntry", userEntry, null);
         try {
             oos.writeObject(packet);
