@@ -17,12 +17,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Runner {
+
     /**
-     * This class is a sample class with the main method that creates the
-     * shell for full implementation of the program. Handles user interaction,
-     * and in the future will handle GUI.
+     * This class is the main method run by the client. Handles user interaction, network
+     * startup and interaction, thread creation, and in the future will handle GUI.
      * @author Jane Bazzell
-     * @version 11/02/2024
+     * @version 11/17/2024
      */
 
     public static void main(String[] args) throws IOException {
@@ -134,7 +134,6 @@ public class Runner {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        userDatabase.insertEntry((new User(username, password)).userToEntry()); //add database write at same time ? or handle within userdatabase
     }
 
     public static User attemptLogin(Scanner scanner, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
