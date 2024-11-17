@@ -1,8 +1,14 @@
 import Database.MessageDatabase;
+import Database.ParseExceptionXML;
 import Database.UserDatabase;
-import User.User;
+import Database.UserEntry;
+import Net.Packet;
+import User.*;
 
-import java.io.IOException;
+import javax.swing.*;
+import java.io.*;
+import java.net.ConnectException;
+import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,56 +21,28 @@ public class Runner {
      * @version 11/02/2024
      */
 
-    public static void addUser(Scanner scanner, UserDatabase userDatabase) {
-        System.out.println("Please enter your new username");
-        String username = scanner.next();
-        if (username.contains(" ") || username.length() < 3) {
-            System.out.println("Invalid username");
-            addUser(scanner, userDatabase);
-        }
-        System.out.println("Please enter your new password");
-        String password = scanner.next();
-        if (password.length() < 3) {
-            System.out.println("Please increase password length");
-            addUser(scanner, userDatabase);
-        } userDatabase.insertEntry((new User(username, password)).userToEntry());
-    }
-
-    public static boolean logIn(String username, String pwInput, UserDatabase database) {
-        User user = new User(database.searchByName(username));
-        if (pwInput.equals(user.getPassword())) {
-            return true;
-        } return false;
-    }
-
-    public void openGUI() {
-
-    }
-
-    public static User attemptLogin(Scanner scanner, UserDatabase database) {
-        System.out.println("Enter username: ");
-        String username = scanner.next();
-        System.out.println("Enter password: ");
-        String pw = scanner.next();
-        if (!logIn(username, pw, database)) {
-            System.out.println("Incorrect!");
-            attemptLogin(scanner, database);
-        } else {
-            System.out.println("Welcome " + username);
-            return new User (database.searchByName(username));
-        }
-        return null;
-    }
-
     public static void main(String[] args) throws IOException {
 
         UserDatabase userDatabase;
         MessageDatabase messageDatabase;
+
+        UserThread userThread = null;
         User currentUser = null;
+
+
+        String hostName = "localhost";
+        int port = 12345;
+        Socket socket;
+        ObjectOutputStream oos;
+        ObjectInputStream ois;
 
         try {
             userDatabase = new UserDatabase("user_db.txt");
             messageDatabase = new MessageDatabase("message_db.txt");
+            socket = new Socket(hostName, port);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            System.out.println("REACHED");
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
@@ -86,47 +64,89 @@ public class Runner {
             }
             switch (selection) {
                 case 1:
-                    addUser(scanner, userDatabase);
+                    addUser(scanner, userDatabase, oos, ois);
                     System.out.println("User created");
                     break;
                 case 2:
-                    currentUser = attemptLogin(scanner, userDatabase);
-                    //where we will, in phase 2, start a new thread for this login session.
+                    currentUser = attemptLogin(scanner, userDatabase, oos, ois);
+                    userThread = new UserThread(currentUser, userDatabase, messageDatabase);
                     loggedIn = true;
                     break;
                 default:
                     System.out.println("Please select a valid option.");
                     break;
             }
-        }
-        while (loggedIn) {
-            selection = 0;
-            System.out.println("1 - Search users\n2 - Log out");
-            try {
-                selection = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter 1 or 2.");
-                break;
-            }
-            switch (selection) {
-                case 1:
-                    System.out.println("Enter username to search");
-                    String username = scanner.next();
-                    User user = new User(userDatabase.searchByName(username));
-                    if (!(user.userToEntry() == null)) {
-                        System.out.println("Username: " + user.getUsername());
-                        System.out.println("ID: " + user.getID());
-                        System.out.println("Region: " + user.getRegion());
-                    }
-                    break;
-                case 2:
-                    loggedIn = false;
-                    break; //will probably have to implement a more complex solution with threads later
-                default:
-                    System.out.println("Please select a valid option.");
-                    break;
-            } break;
+        } if (userThread != null) {
+            userThread.start();
+        } try {
+            if (userThread != null) userThread.join();
+            if (ois != null) ois.close();
+            if (oos != null) oos.close();
+            if (socket != null) socket.close();
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
+    public static void addUser(Scanner scanner, UserDatabase userDatabase, ObjectOutputStream oos, ObjectInputStream ois) {
+        System.out.println("Please enter your new username");
+        String username = scanner.next();
+        if (username.contains(" ") || username.length() < 3) {
+            System.out.println("Invalid username");
+            addUser(scanner, userDatabase, oos, ois);
+        }
+        System.out.println("Please enter your new password");
+        String password = scanner.next();
+        if (password.length() < 3) {
+            System.out.println("Please increase password length");
+            addUser(scanner, userDatabase, oos, ois);
+        }
+        UserEntry userEntry = new UserEntry(username, password, 0, null, null, null, null);
+        Packet packet = new Packet("insertEntry", userEntry, null);
+        try {
+            oos.writeObject(packet);
+            Packet response = (Packet) ois.readObject();
+            boolean success = response.getQuery().equals("success");
+            if (!success) {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        userDatabase.insertEntry((new User(username, password)).userToEntry()); //add database write at same time ? or handle within userdatabase
+    }
+
+    public static User attemptLogin(Scanner scanner, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
+        System.out.println("Enter username: ");
+        String username = scanner.next();
+        System.out.println("Enter password: ");
+        String pw = scanner.next();
+        if (!logIn(username, pw, database, oos, ois)) {
+            System.out.println("Incorrect!");
+            attemptLogin(scanner, database, oos, ois);
+        } else {
+            return new User (database.searchByName(username));
+        }
+        return null;
+    }
+
+    public static boolean logIn(String username, String pwInput, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
+        Packet packet = new Packet("searchByName", username, null);
+        UserEntry userE = null;
+        try {
+            oos.writeObject(packet);
+            Packet response = (Packet) ois.readObject();
+            userE = new UserEntry(String.valueOf(response.getContent()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (pwInput.equals(userE.getPassword())) {
+            return true;
+        } return false;
+    }
+
+    public void openGUI() {
+
+    }
 }

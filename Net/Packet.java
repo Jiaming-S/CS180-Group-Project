@@ -22,4 +22,12 @@ public class Packet implements Serializable {
   public String toString() {
     return String.format("Query: %s\nContent: %s\nRecipient: %s\n",this.query, this.content, this.recipient);
   }
+
+  public Object getContent() {
+    return content;
+  }
+
+  public String getQuery() {
+    return query;
+  }
 }
