@@ -42,7 +42,6 @@ public class Runner {
             socket = new Socket(hostName, port);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
-            System.out.println("REACHED");
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
