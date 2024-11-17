@@ -20,6 +20,31 @@ public class Packet implements Serializable {
 
   @Override
   public String toString() {
-    return String.format("Query: %s\nContent: %s\nRecipient: %s\n",this.query, this.content, this.recipient);
+    String q = this.query;
+    String c = "null";
+    String r = "null";
+
+    try {
+      c = content.toString();
+    } catch (Exception e) {
+      // TODO
+    }
+
+    try {
+      r = recipient.toString();
+    } catch (Exception e) {
+      // TODO
+    }
+
+    return String.format(
+      "Query: %s\nContent: %s\nRecipient: %s\n", q, c, r);
+  }
+
+  public Object getContent() {
+    return content;
+  }
+
+  public String getQuery() {
+    return query;
   }
 }
