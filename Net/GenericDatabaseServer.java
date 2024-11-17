@@ -1,8 +1,8 @@
 package Net;
 
+import Database.*;
 import java.io.*;
 import java.net.*;
-import Database.*;
 
 /**
  * This abstract class represents a generic database server and implements the main server logic.
@@ -34,17 +34,25 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
       e.printStackTrace();
       return;
     }
+    while(true) {
+      try {
+        Packet p = (Packet) ois.readObject();
 
-    try {
-      Packet p = (Packet) ois.readObject();
+        if (p == null || (p.content == null && p.query == null)) {
+          break;
+        }
 
-      System.out.println("Received Packet:\n" + p);
+        System.out.println("Received Packet:\n" + p);
       
-      Packet response = handlePacket(p);
-      if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
-    } catch (Exception e) {
-      e.printStackTrace();
-      System.out.println("Exception occurred while handling query.");
+        Packet response = handlePacket(p);
+        if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
+      } catch (EOFException e) {
+        System.out.println("[Server] Received EOF. Exiting server.");
+        break;
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Exception occurred while handling query.");
+      }
     }
 
     try {
