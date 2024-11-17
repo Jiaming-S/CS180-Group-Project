@@ -2,12 +2,15 @@ import Database.MessageDatabase;
 import Database.ParseExceptionXML;
 import Database.UserDatabase;
 import Database.UserEntry;
+import Net.MessageDatabaseServer;
 import Net.Packet;
+import Net.UserDatabaseServer;
 import User.*;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.ConnectException;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -31,15 +34,32 @@ public class Runner {
 
 
         String hostName = "localhost";
-        int port = 12345;
+        int portUDBS = 12345;
+        int portMDBS = 12346;
         Socket socket;
         ObjectOutputStream oos;
         ObjectInputStream ois;
 
         try {
             userDatabase = new UserDatabase("user_db.txt");
+            UserDatabaseServer userDatabaseServer = new UserDatabaseServer(
+                new ServerSocket(portUDBS), 
+                userDatabase
+            );
+
             messageDatabase = new MessageDatabase("message_db.txt");
-            socket = new Socket(hostName, port);
+            MessageDatabaseServer messageDatabaseServer = new MessageDatabaseServer(
+                new ServerSocket(portMDBS),
+                messageDatabase
+            );
+
+            Thread udbs = new Thread(userDatabaseServer);
+            udbs.start();
+
+            Thread mdbs = new Thread(messageDatabaseServer);
+            mdbs.start(); // note: probably don't need to do anything with message db in runner, good to just start it tho
+
+            socket = new Socket(hostName, portUDBS);
             oos = new ObjectOutputStream(socket.getOutputStream());
             ois = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
