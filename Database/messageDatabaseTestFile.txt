@@ -19,6 +19,16 @@
   <Content>I'm breaking up with you.</Content>
 </Message>
 <Message>
+  <Timestamp>02/12/2024</Timestamp>
+  <Sender>
+    <ID>12345678</ID>
+  </Sender>
+  <Recipient>
+    <ID>77889900</ID>
+  </Recipient>
+  <Content>blocked</Content>
+</Message>
+<Message>
   <Timestamp>02/13/2024</Timestamp>
   <Sender>
     <ID>88888888</ID>
