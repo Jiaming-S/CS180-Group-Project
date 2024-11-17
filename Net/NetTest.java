@@ -11,8 +11,6 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.io.*;
-import javax.management.modelmbean.XMLParseException;
 
 /**
  * A set of JUnit tests testing everything surrounding the network side e.g. servers for users and messages, packets, etc.

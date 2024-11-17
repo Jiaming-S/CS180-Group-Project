@@ -1,17 +1,9 @@
-import Database.MessageDatabase;
-import Database.ParseExceptionXML;
-import Database.UserDatabase;
-import Database.UserEntry;
-import Net.MessageDatabaseServer;
-import Net.Packet;
-import Net.UserDatabaseServer;
+import Database.*;
+import Net.*;
 import User.*;
 
-import javax.swing.*;
 import java.io.*;
-import java.net.ConnectException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
