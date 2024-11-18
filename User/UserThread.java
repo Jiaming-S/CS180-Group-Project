@@ -42,41 +42,61 @@ public class UserThread extends Thread implements UserThreadInt {
     @Override
     public void run() {
         boolean running = true;
-        while (running) {
-            System.out.println("Welcome " + currUser.getUsername());
-            System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
-            int answer = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+        try {
+            while (running) {
+                System.out.println("Welcome " + currUser.getUsername());
+                System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
+                int answer = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (answer) {
-                case 1:
-                    searchUser();
-                    break;
-                case 2:
-                    viewProfile();
-                    break;
-                case 3:
-                    blockUser();
-                    break;
-                case 4:
-                    newConvo();
-                    break;
-                case 5:
-                    viewMsg();
-                    break;
-                case 6:
-                    sendTextMsg();
-                    break;
-                case 7:
-                    sendPhotoMsg();
-                    break;
-                case 8:
-                    running = false;
-                    System.out.println("Logging out");
-                    break;
-                default:
-                    System.out.println("Invalid answer, please enter a valid answer.");
-             }
+                switch (answer) {
+                    case 1:
+                        searchUser();
+                        break;
+                    case 2:
+                        viewProfile();
+                        break;
+                    case 3:
+                        blockUser();
+                        break;
+                    case 4:
+                        newConvo();
+                        break;
+                    case 5:
+                        viewMsg();
+                        break;
+                    case 6:
+                        sendTextMsg();
+                        break;
+                    case 7:
+                        sendPhotoMsg();
+                        break;
+                    case 8:
+                        running = false;
+                        System.out.println("Logging out");
+                        break;
+                    default:
+                        System.out.println("Invalid answer, please enter a valid answer.");
+                        break;
+                }
+            }
+        } catch(Exception e) {
+            System.err.println("An error occurred: " + e.getMessage());
+        } finally {
+            try {
+                if (userOut != null)
+                    userOut.close();
+                if (userIn != null)
+                    userIn.close();
+                if (msgOut != null)
+                    msgOut.close();
+                if (msgIn != null)
+                    msgIn.close();
+                if (scanner != null)
+                    scanner.close();
+            } catch (IOException e) {
+                System.err.println("Streams cannot be closed: " + e.getMessage());
+            }
         }
     }
 
