@@ -165,7 +165,6 @@ public class Runner {
             if (response.getContent() == null) {
                 return null;
             }
-            System.out.println("here: " + new UserEntry(response.getContent().toString()));
             return new UserEntry(response.getContent().toString());
         } catch (Exception e) {
             e.printStackTrace();
