@@ -32,8 +32,10 @@ public class UserThreadTest {
 
 
         String hostName = "localhost";
-        int portUDBS = 3333;
-        int portMDBS = 4444;
+        int portUDBS = 5555;
+        int portMDBS = 6666;
+
+
         Socket socket, messageSocket;
         ObjectOutputStream oos, moos;
         ObjectInputStream ois, mois;
@@ -62,8 +64,9 @@ public class UserThreadTest {
             ois = new ObjectInputStream(socket.getInputStream());
 
             messageSocket = new Socket(hostName, portMDBS);
-            moos = new ObjectOutputStream(socket.getOutputStream());
-            mois = new ObjectInputStream(socket.getInputStream());
+            moos = new ObjectOutputStream(messageSocket.getOutputStream());
+            mois = new ObjectInputStream(messageSocket.getInputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
@@ -87,9 +90,15 @@ public class UserThreadTest {
             <Region>USA/Midwest</Region>
         </User>""".replaceAll(" ", "").replaceAll("\n", "");
 
-        User tempUser = new User(new UserEntry(newUserStr));
+        User tempUser = new User("name4", "password123");
 
-        userThread = new UserThread(tempUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
+        System.out.println("Here");
+        
+        try {
+            userThread = new UserThread(tempUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
                     
         if (userThread != null) {
             userThread.start();
