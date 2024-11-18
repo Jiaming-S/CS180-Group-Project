@@ -48,6 +48,20 @@ public class UserDatabase extends GenericDatabase {
     }
   }
 
+  public void addFriend(int myID, int friendID) {
+    UserEntry me = searchByID(myID);
+    synchronized(USR_DB_LOCK) {
+      me.getFriendList().add(friendID);
+    }
+  }
+
+  public void removeFriend(int myID, int friendID) {
+    UserEntry me = searchByID(myID);
+    synchronized(USR_DB_LOCK) {
+      me.getFriendList().remove(friendID);
+    }
+  }
+
   @Override
   public Object getEntry(int rowNum) {
     synchronized(USR_DB_LOCK) {

@@ -72,6 +72,12 @@ public class MessageDatabase extends GenericDatabase {
     }
   }
 
+  public void deleteMessage(MessageEntry entry) {
+    synchronized(MSG_DB_LOCK) {
+      this.db.remove(entry);
+    }
+  }
+
   @Override
   public Object getEntry(int rowNum) {
     synchronized(MSG_DB_LOCK) {
