@@ -10,11 +10,11 @@ public class PhotoMessage implements Message {
     int recipientID;
     private LocalDateTime timeStamp;
 
-    public PhotoMessage(Object message, int senderID, int recipientID, LocalDateTime timeStamp) {
-        this.message = message;
+    public PhotoMessage(Object message, int senderID, int recipientID) {
+        this.message = message; //photo path
         this.senderID = senderID;
         this.recipientID = recipientID;
-        this.timeStamp = timeStamp;
+        this.timeStamp = LocalDateTime.now();
     }
 
     public Object getMessage() {
@@ -24,5 +24,21 @@ public class PhotoMessage implements Message {
     @Override
     public LocalDateTime getTimeStamp() {
         return timeStamp;
+    }
+
+    public int getSenderID() {
+        return senderID;
+    }
+
+    public void setSenderID(int senderID) {
+        this.senderID = senderID;
+    }
+
+    public int getRecipientID() {
+        return recipientID;
+    }
+
+    public void setRecipientID(int recipientID) {
+        this.recipientID = recipientID;
     }
 }

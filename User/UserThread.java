@@ -6,6 +6,8 @@ import java.net.*;
 
 import Database.MessageEntry;
 import Database.UserEntry;
+
+import java.time.LocalDateTime;
 import java.util.Scanner;
 import Message.*;
 
@@ -188,7 +190,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     // Assuming implementation of TextMessage is created here
                     Packet textMsgPacket = new Packet(
                         "sendTextMessage", 
-                        new MessageEntry("", currUser.getID(), recipient.getID(), messageContent), 
+                        new TextMessage(messageContent, currUser.getID(), recipient.getID()),
                         null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
@@ -218,9 +220,13 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter the path of the photo: ");
                     String photoPath = scanner.nextLine();
-                    // Assumed implementation of PhotoMessage is created here
-                    //Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
-                    //msgOut.writeObject(photoMsgPacket); // Send the photo message packet
+
+                    Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
+                    msgOut.writeObject(photoMsgPacket); // Send the photo message packet
+                    Packet photoResponse = (Packet) msgIn.readObject();
+                    if (photoResponse == null || photoResponse.query.isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
                     System.out.println("Photo message sent to " + recipientUsername);
                 } else {
                     System.out.println("User was not found.");
