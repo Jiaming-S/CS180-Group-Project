@@ -21,6 +21,25 @@ import java.net.Socket;
  * @version 11/17/2024
  */
 public class UserThreadTest {
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final PrintStream originalOut = System.out;
+    private final ByteArrayInputStream inContent = new ByteArrayInputStream("".getBytes());
+    private final InputStream originalIn = System.in;
+
+    //initiate Input and outputstreams for JUnit
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(outContent));
+        System.setIn(new ByteArrayInputStream("".getBytes()));
+    }
+
+    //restore input output streams to original values
+    @After
+    public void restoreStreams() {
+        System.setOut(originalOut);
+        System.setIn(originalIn);
+    }
+
     // Comprehensive test for the methods in UserThread
     @Test
     public void methodsTest() throws Exception {
@@ -32,8 +51,8 @@ public class UserThreadTest {
 
 
         String hostName = "localhost";
-        int portUDBS = 5555;
-        int portMDBS = 6666;
+        int portUDBS = 15855;
+        int portMDBS = 12366;
 
 
         Socket socket, messageSocket;
@@ -91,8 +110,6 @@ public class UserThreadTest {
         </User>""".replaceAll(" ", "").replaceAll("\n", "");
 
         User tempUser = new User("name4", "password123");
-
-        System.out.println("Here");
         
         try {
             userThread = new UserThread(tempUser, oos, ois, moos, mois);
@@ -102,6 +119,8 @@ public class UserThreadTest {
                     
         if (userThread != null) {
             userThread.start();
+            String input = "8\n";
+            System.setIn(new ByteArrayInputStream(input.getBytes()));
         } try {
             if (userThread != null) userThread.join();
             if (ois != null) ois.close();
@@ -116,3 +135,4 @@ public class UserThreadTest {
         }
     }
 }
+

@@ -1,7 +1,6 @@
 import Database.*;
 import Net.*;
 import User.*;
-
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -27,8 +26,8 @@ public class Runner {
 
 
         String hostName = "localhost";
-        int portUDBS = 12345;
-        int portMDBS = 12346;
+        int portUDBS = 19693;
+        int portMDBS = 12422;
         Socket userSocket, messageSocket;
         ObjectOutputStream uoos, moos;
         ObjectInputStream uois, mois;
