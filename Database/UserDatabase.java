@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @version 11/02/2024
  */
 public class UserDatabase extends GenericDatabase {
+  private static final Object USR_DB_LOCK = new Object();
   private ArrayList<UserEntry> db;
 
   public UserDatabase(String filepath) throws IOException {
@@ -25,31 +26,39 @@ public class UserDatabase extends GenericDatabase {
     }
   }
 
-  synchronized public UserEntry searchByName (String name) {
-    for (UserEntry ue : db) {
-      if (ue.getUsername().equals(name)) {
-        return ue;
+  public UserEntry searchByName (String name) {
+    synchronized(USR_DB_LOCK) {
+      for (UserEntry ue : db) {
+        if (ue.getUsername().equals(name)) {
+          return ue;
+        }
       }
+      return null;
     }
-    return null;
   }
 
-  synchronized public UserEntry searchByID (int id) {
-    for (UserEntry ue : db) {
-      if (ue.getID() == id) {
-        return ue;
+  public UserEntry searchByID (int id) {
+    synchronized(USR_DB_LOCK) {
+      for (UserEntry ue : db) {
+        if (ue.getID() == id) {
+          return ue;
+        }
       }
+      return null;
     }
-    return null;
   }
 
   @Override
-  synchronized public Object getEntry(int rowNum) {
-    return db.get(rowNum);
+  public Object getEntry(int rowNum) {
+    synchronized(USR_DB_LOCK) {
+      return db.get(rowNum);
+    }
   }
 
   @Override
-  synchronized public void insertEntry(Object entry) {
-    db.add((UserEntry) entry);
+  public void insertEntry(Object entry) {
+    synchronized(USR_DB_LOCK) {
+      db.add((UserEntry) entry);
+    }
   }
 }

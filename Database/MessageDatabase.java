@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * @version 11/02/2024
  */
 public class MessageDatabase extends GenericDatabase {
+  private static final Object MSG_DB_LOCK = new Object();
   private ArrayList<MessageEntry> db;
 
   public MessageDatabase(String filepath) throws IOException {
@@ -25,51 +26,63 @@ public class MessageDatabase extends GenericDatabase {
     }
   }
 
-  synchronized public MessageEntry searchFirstBySenderID(int id) {
-    for (MessageEntry me : db) {
-      if (me.getSender() == id) {
-        return me;
+  public MessageEntry searchFirstBySenderID(int id) {
+    synchronized(MSG_DB_LOCK) {
+      for (MessageEntry me : db) {
+        if (me.getSender() == id) {
+          return me;
+        }
       }
+      return null;
     }
-    return null;
   }
 
-  synchronized public ArrayList<MessageEntry> searchAllBySenderID(int id) {
+  public ArrayList<MessageEntry> searchAllBySenderID(int id) {
+    synchronized(MSG_DB_LOCK) {
     ArrayList<MessageEntry> results = new ArrayList<>();
-    for (MessageEntry me : db) {
-      if (me.getSender() == id) {
-        results.add(me);
+      for (MessageEntry me : db) {
+        if (me.getSender() == id) {
+          results.add(me);
+        }
       }
+      return results;
     }
-    return results;
   }
 
-  synchronized public MessageEntry searchFirstByRecipientID(int id) {
-    for (MessageEntry me : db) {
-      if (me.getRecipient() == id) {
-        return me;
+  public MessageEntry searchFirstByRecipientID(int id) {
+    synchronized(MSG_DB_LOCK) {
+      for (MessageEntry me : db) {
+        if (me.getRecipient() == id) {
+          return me;
+        }
       }
+      return null;
     }
-    return null;
   }
 
-  synchronized public ArrayList<MessageEntry> searchAllByRecipientID(int id) {
-    ArrayList<MessageEntry> results = new ArrayList<>();
-    for (MessageEntry me : db) {
-      if (me.getRecipient() == id) {
-        results.add(me);
+  public ArrayList<MessageEntry> searchAllByRecipientID(int id) {
+    synchronized(MSG_DB_LOCK) {
+      ArrayList<MessageEntry> results = new ArrayList<>();
+      for (MessageEntry me : db) {
+        if (me.getRecipient() == id) {
+          results.add(me);
+        }
       }
+      return results;
     }
-    return results;
   }
 
   @Override
-  synchronized public Object getEntry(int rowNum) {
-    return db.get(rowNum);
+  public Object getEntry(int rowNum) {
+    synchronized(MSG_DB_LOCK) {
+      return db.get(rowNum);
+    }
   }
 
   @Override
-  synchronized public void insertEntry(Object entry) {
-    db.add((MessageEntry) entry);
+  public void insertEntry(Object entry) {
+    synchronized(MSG_DB_LOCK) {
+      db.add((MessageEntry) entry);
+    }
   }
 }
