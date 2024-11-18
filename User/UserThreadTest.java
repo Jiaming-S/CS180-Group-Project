@@ -32,16 +32,16 @@ public class UserThreadTest {
             new MessageDatabase("./Database/messageDatabaseTestFile.txt")
         );
 
-        Socket us = new Socket("127.0.0.1",12345);
-        Socket ms = new Socket("127.0.0.1", 12346);
-        ObjectOutputStream uoos = new ObjectOutputStream(us.getOutputStream());
-        ObjectOutputStream moos = new ObjectOutputStream(ms.getOutputStream());
-
         Thread userServerThread = new Thread(udbserv);
         userServerThread.start();
 
         Thread messageServerThread = new Thread(mdbserv);
         messageServerThread.start();
+
+        Socket us = new Socket("127.0.0.1",12345);
+        Socket ms = new Socket("127.0.0.1", 12346);
+        ObjectOutputStream uoos = new ObjectOutputStream(us.getOutputStream());
+        ObjectOutputStream moos = new ObjectOutputStream(ms.getOutputStream());
 
         String newUserStr = """
             <User>
