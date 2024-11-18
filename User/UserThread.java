@@ -97,7 +97,6 @@ public class UserThread extends Thread implements UserThreadInt {
             } catch (IOException e) {
                 System.err.println("Streams cannot be closed: " + e.getMessage());
             }
-
         }
     }
 
