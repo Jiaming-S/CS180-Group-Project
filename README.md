@@ -1,4 +1,6 @@
 Nikita Sirandasu - Submitted Vocareum workspace.
+How to use the app:
+
 Database Classes:
 - Both `UserDatabase` and `MessageDatabase` extend `GenericDatabase` which implements `Database`. 
 - Both `UserEntry` and `MessageEntry` implement `GenericEntry`.
@@ -6,8 +8,13 @@ Database Classes:
 - `UserDatabase` and `MessageDatabase` have ArrayLists of `UserEntry` and `MessageEntry` which parse XML to populate.
 
 Testing Classes:
-- We created basic JUnit tests to ensure that UserEntry, MessageEntry, and UserDatabase worked as expected. 
+- We created basic JUnit tests to ensure that UserEntry, MessageEntry, UserDatabase, MessageDatabaseServer, UserDatabaseServer, and UserThread worked as expected. 
 - We did not test any "corner cases" or unconventional uses of the classes as we have not implemented the ability to handle those yet.
+Server Classes:
+- Both `UserDatabaseServer` and `MessageDatabaseServer` extend `GenericDatabaseServer` which implements `DatabaseServer'.
+- `UserDatabaseServer` is a thread-safe web API for interacting with a UserDatabase and handles queries like searching by name or ID and inserting new entries.
+- `MessageDatabaseServer`is a thread-safe web API for managing message data, handling queries related to searching and inserting message entries in a MessageDatabase.
+- Packet.java is used to communicate between clients and the DatabaseServers. A packet contains a query, content, and optionally a recipient. It is serializable so that it can be sent over a network.
 
 Runner.java is the program's main method that allows for client-database interaction through the network, performs login/password validation, and begins the threads for databases and multi-client access. 
 
