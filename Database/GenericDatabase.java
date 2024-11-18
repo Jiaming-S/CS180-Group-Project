@@ -26,13 +26,13 @@ public abstract class GenericDatabase implements Database {
     this.pw = new PrintWriter(new FileOutputStream(this.file, true));
   }
 
-  public void writeStringsToFile(ArrayList<GenericEntry> db) {
+  synchronized public void writeStringsToFile(ArrayList<GenericEntry> db) {
     for (GenericEntry ge : db) {
       pw.println(ge.toString());
     }
   }
 
-  public ArrayList<String> readStringsFromFile() throws IOException {
+  synchronized public ArrayList<String> readStringsFromFile() throws IOException {
     String fileContents = "";
 
     String line = bfr.readLine();
