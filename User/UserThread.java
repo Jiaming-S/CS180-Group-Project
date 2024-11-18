@@ -82,7 +82,7 @@ public class UserThread extends Thread implements UserThreadInt {
         } catch(Exception e) {
             System.err.println("An error occurred: " + e.getMessage());
         } finally {
-            try {
+            try { //close all streams
                 if (userOut != null)
                     userOut.close();
                 if (userIn != null)
@@ -103,11 +103,12 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username you want to search: ");
             String username = scanner.nextLine();
+            //sends packet to databaseserver to get matching userEntry of username
             Packet packet = new Packet("searchByName", username, null);
             try {
                 userOut.writeObject(packet);
-                Packet response = (Packet) userIn.readObject();
-                if (response.query.equals("success")) {
+                Packet response = (Packet) userIn.readObject(); //receive packet with UserEntry info from databaseserver
+                if (response.query.equals("success")) { //query == "success" if user found, "failure" if anything else occurs.
                     UserEntry userToFind = (UserEntry) response.content;
                     System.out.println("User found: " + userToFind.getUsername());
                     System.out.println("ID: " + userToFind.getID());
@@ -140,7 +141,7 @@ public class UserThread extends Thread implements UserThreadInt {
                 Packet response = (Packet) userIn.readObject();
                 if (response.query.equals("success")) {
                     UserEntry blocked = (UserEntry) response.content;
-                    currUser.getBlockList().add(blocked.getID());
+                    currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
                     System.out.println("Blocked user is: " + blocked.getUsername());
                 } else {
                     System.out.println("User not found.");
@@ -187,7 +188,6 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
-                    // Assuming implementation of TextMessage is created here
                     Packet textMsgPacket = new Packet(
                         "sendTextMessage", 
                         new TextMessage(messageContent, currUser.getID(), recipient.getID()),
@@ -195,6 +195,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
                     Packet textResponse = (Packet) msgIn.readObject();
+                    // if anything besides success of textmessage writing occurs throw exception
                     if (textResponse == null || textResponse.query.isEmpty()) {
                         throw new IllegalArgumentException();
                     }

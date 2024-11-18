@@ -14,7 +14,7 @@ public class PhotoMessage implements Message {
         this.message = message; //photo path
         this.senderID = senderID;
         this.recipientID = recipientID;
-        this.timeStamp = LocalDateTime.now();
+        this.timeStamp = LocalDateTime.now(); //will allow for viewmessage implementation in phase 3
     }
 
     public Object getMessage() {

@@ -13,7 +13,7 @@ public class TextMessage implements Message {
         this.content = content;
         this.senderID = senderID;
         this.recipientID = recipientID;
-        this.timestamp = LocalDateTime.now();
+        this.timestamp = LocalDateTime.now(); //will allow for viewmessage implementation in phase 3
     }
 
     public String getMessage() {

@@ -34,29 +34,31 @@ public class Runner {
         ObjectInputStream uois, mois;
 
         try {
+            //create client-side userdatabase file and access server
             userDatabase = new UserDatabase("user_db.txt");
             UserDatabaseServer userDatabaseServer = new UserDatabaseServer(
                 new ServerSocket(portUDBS), 
                 userDatabase
             );
-
+            //create client-side messagedatabase file and access server
             messageDatabase = new MessageDatabase("message_db.txt");
             MessageDatabaseServer messageDatabaseServer = new MessageDatabaseServer(
                 new ServerSocket(portMDBS),
                 messageDatabase
             );
 
+            //begin servers
             Thread udbs = new Thread(userDatabaseServer);
             udbs.start();
-
             Thread mdbs = new Thread(messageDatabaseServer);
             mdbs.start(); // note: probably don't need to do anything with message db in runner, good to just start it tho
 
+            //connect client to database of user information, begin streams
             userSocket = new Socket(hostName, portUDBS);
             uoos = new ObjectOutputStream(userSocket.getOutputStream());
             uoos.flush();
             uois = new ObjectInputStream(userSocket.getInputStream());
-
+            //connect client to database of messaging conversations, begin streams
             messageSocket = new Socket(hostName, portMDBS);
             moos = new ObjectOutputStream(messageSocket.getOutputStream());
             moos.flush();
@@ -68,11 +70,11 @@ public class Runner {
 
         Scanner scanner = new Scanner(System.in);
         boolean loggedIn = false;
-        int selection = 0;
+        int selection = 0; //just used for tracking user input
 
         System.out.println("Welcome");
 
-        while (!loggedIn) {
+        while (!loggedIn) { //prompts user to create account or log in until they succesfully log in.
             System.out.println("1 - Create New User\n2 - Log In");
             try {
                 selection = scanner.nextInt();
@@ -84,14 +86,15 @@ public class Runner {
                 case 1:
                     addUser(scanner, userDatabase, uoos, uois);
                     System.out.println("User created");
-                    break;
+                    break; //reloop to the selection menu
                 case 2:
                     currentUser = attemptLogin(scanner, userDatabase, uoos, uois);
                     if (currentUser == null) {
-                        break;
+                        break; //reloop to the selection menu
                     }
                     try {
                         userThread = new UserThread(currentUser, uoos, uois, moos, mois);
+                        //create new userthread, sending streams so userthread can access the same databaseservers.
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -102,14 +105,14 @@ public class Runner {
                     break;
             }
         } if (userThread != null) {
-            userThread.start();
+            userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
         } try {
             if (userThread != null) userThread.join();
             if (uois != null) uois.close();
             if (uoos != null) uoos.close();
             if (mois != null) mois.close();
             if (moos != null) moos.close();
-            if (userSocket != null) userSocket.close();
+            if (userSocket != null) userSocket.close(); //close all streams
             scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,21 +124,23 @@ public class Runner {
         String username = scanner.next();
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
-            addUser(scanner, userDatabase, oos, ois);
+            addUser(scanner, userDatabase, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
         }
         System.out.println("Please enter your new password");
         String password = scanner.next();
         if (password.length() < 3) {
             System.out.println("Please increase password length");
-            addUser(scanner, userDatabase, oos, ois);
+            addUser(scanner, userDatabase, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
         }
         UserEntry userEntry = new UserEntry(username, password, User.CUR_ID++, new ArrayList<>(), new ArrayList<>(), "./", "USA");
         Packet packet = new Packet("insertEntry", userEntry, null);
+        //sends packet with the new user's info to server to be written to the database.
         try {
             oos.writeObject(packet);
             Packet response = (Packet) ois.readObject();
-            boolean success = response.getQuery().equals("success");
+            boolean success = response.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
             if (!success) {
+                System.out.println("Error writing to database.");
                 throw new Exception();
             }
         } catch (Exception e) {
@@ -148,7 +153,7 @@ public class Runner {
         String username = scanner.next();
         System.out.println("Enter password: ");
         String pw = scanner.next();
-        UserEntry ue = logIn(username, database, oos, ois);
+        UserEntry ue = logIn(username, database, oos, ois); //login method handles server packet fetching.
         if (ue.getPassword().equals(pw)) {
             return new User(ue);
         } else {
@@ -159,7 +164,7 @@ public class Runner {
     }
 
     public static UserEntry logIn(String username, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
-        Packet packet = new Packet("searchByName", username, null);
+        Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
         UserEntry userE = null;
         try {
             oos.writeObject(packet);
@@ -167,7 +172,7 @@ public class Runner {
             if (response.getContent() == null) {
                 return null;
             }
-            return new UserEntry(response.getContent().toString());
+            return new UserEntry(response.getContent().toString()); //returns matching userentry if found.
         } catch (Exception e) {
             e.printStackTrace();
         } return null;
