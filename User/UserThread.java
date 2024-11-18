@@ -3,6 +3,8 @@ package User;
 import Net.Packet;
 import java.io.*;
 import java.net.*;
+
+import Database.MessageEntry;
 import Database.UserEntry;
 import java.util.Scanner;
 import Message.*;
@@ -184,8 +186,16 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     // Assuming implementation of TextMessage is created here
-                    Packet textMsgPacket = new Packet("sendTextMessage", new TextMessage(messageContent, currUser.getID(), recipient.getID()), null);
-                    msgOut.writeObject(textMsgPacket);
+                    Packet textMsgPacket = new Packet(
+                        "sendTextMessage", 
+                        new MessageEntry("", currUser.getID(), recipient.getID(), messageContent), 
+                        null
+                    );
+                    msgOut.writeObject(textMsgPacket); // Send the text message packet
+                    Packet textResponse = (Packet) msgIn.readObject();
+                    if (textResponse == null || textResponse.query.isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
                     System.out.println("Text message sent to " + recipientUsername);
                 } else {
                     System.out.println("User was not found.");
