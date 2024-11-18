@@ -22,28 +22,50 @@ public class UserThreadTest {
     // Comprehensive test for the methods in UserThread
     @Test
     public void methodsTest() throws Exception {
-        int port1 = 4242;
-        int port2 = 2424;
-        UserDatabaseServer udbserv = new UserDatabaseServer(
-            new ServerSocket(port1),
-            new UserDatabase("./Database/databaseTestFile.txt")
-        );
+        UserDatabase userDatabase;
+        MessageDatabase messageDatabase;
 
-        MessageDatabaseServer mdbserv = new MessageDatabaseServer(
-            new ServerSocket(port2),
-            new MessageDatabase("./Database/messageDatabaseTestFile.txt")
-        );
+        UserThread userThread = null;
+        User currentUser = null;
 
-        Thread userServerThread = new Thread(udbserv);
-        userServerThread.start();
 
-        Thread messageServerThread = new Thread(mdbserv);
-        messageServerThread.start();
+        String hostName = "localhost";
+        int portUDBS = 5943;
+        int portMDBS = 4383;
+        Socket userSocket, messageSocket;
+        ObjectOutputStream uoos, moos;
+        ObjectInputStream uois, mois;
 
-        Socket us = new Socket("127.0.0.1",port1);
-        Socket ms = new Socket("127.0.0.1", port2);
-        ObjectOutputStream uoos = new ObjectOutputStream(us.getOutputStream());
-        ObjectOutputStream moos = new ObjectOutputStream(ms.getOutputStream());
+        try {
+            userDatabase = new UserDatabase("user_db.txt");
+            UserDatabaseServer userDatabaseServer = new UserDatabaseServer(
+                new ServerSocket(portUDBS), 
+                userDatabase
+            );
+
+            messageDatabase = new MessageDatabase("message_db.txt");
+            MessageDatabaseServer messageDatabaseServer = new MessageDatabaseServer(
+                new ServerSocket(portMDBS),
+                messageDatabase
+            );
+
+            Thread udbs = new Thread(userDatabaseServer);
+            udbs.start();
+
+            Thread mdbs = new Thread(messageDatabaseServer);
+            mdbs.start(); // note: probably don't need to do anything with message db in runner, good to just start it tho
+
+            userSocket = new Socket(hostName, portUDBS);
+            uoos = new ObjectOutputStream(userSocket.getOutputStream());
+            uois = new ObjectInputStream(userSocket.getInputStream());
+
+            messageSocket = new Socket(hostName, portMDBS);
+            moos = new ObjectOutputStream(messageSocket.getOutputStream());
+            mois = new ObjectInputStream(messageSocket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw e;
+        }
 
         String newUserStr = """
             <User>
@@ -65,23 +87,20 @@ public class UserThreadTest {
 
         User tempUser = new User(new UserEntry(newUserStr));
 
-        UserThread ut = new UserThread(tempUser, us, ms);
+        userThread = new UserThread(tempUser, userSocket, messageSocket);
 
-        uoos.writeObject(new Packet(
-            null,
-            null, 
-            null
-        ));
-
-        moos.writeObject(new Packet(
-            null,
-            null, 
-            null
-        ));
-
-        messageServerThread.join();
-        userServerThread.join();
-        us.close();
-        ms.close();
+        if (userThread != null) {
+            userThread.start();
+        } try {
+            if (userThread != null) userThread.join();
+            if (uois != null) uois.close();
+            if (uoos != null) uoos.close();
+            if (userSocket != null) userSocket.close();
+            if (mois != null) mois.close();
+            if (moos != null) moos.close();
+            if (messageSocket != null) messageSocket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
