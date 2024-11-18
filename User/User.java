@@ -19,10 +19,12 @@ public class User {
     private ArrayList<Integer> blockList;
     private String profilePicture;
     private String region;
+    public static int CUR_ID = 0;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+        this.ID = User.CUR_ID++;
     }
     public User(String username, String password, int ID) {
         this.username = username;

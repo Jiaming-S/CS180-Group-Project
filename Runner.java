@@ -127,7 +127,7 @@ public class Runner {
             System.out.println("Please increase password length");
             addUser(scanner, userDatabase, oos, ois);
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "");
+        UserEntry userEntry = new UserEntry(username, password, User.CUR_ID++, new ArrayList<>(), new ArrayList<>(), "./", "USA");
         Packet packet = new Packet("insertEntry", userEntry, null);
         try {
             oos.writeObject(packet);
