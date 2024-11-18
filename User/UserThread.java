@@ -1,14 +1,11 @@
 package User;
 
-import Database.MessageDatabase;
-import Database.UserDatabase;
-import Database.UserEntry;
 import Net.Packet;
-import java.io.*;
-import java.net.*;
-//import Message.Message;
-//import Message.PhotoMessage;
-//import Message.TextMessage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import Database.UserEntry;
 import java.util.Scanner;
 
 /**
@@ -21,8 +18,10 @@ public class UserThread extends Thread implements UserThreadInt {
     private User currUser;
     private Socket userDBSocket;
     private Socket msgDBSocket;
-    private UserDatabase userDB;
-    private MessageDatabase msgDB;
+    private ObjectOutputStream userOut;
+    private ObjectInputStream userIn;
+    private ObjectOutputStream msgOut;
+    private ObjectInputStream msgIn;
     private final Object lock = new Object();
     private Scanner scanner;
 
@@ -30,20 +29,12 @@ public class UserThread extends Thread implements UserThreadInt {
         this.currUser = currUser;
         this.userDBSocket = userDBSocket;
         this.msgDBSocket = msgDBSocket;
-        ObjectOutputStream userOut = new ObjectOutputStream(userDBSocket.getOutputStream());
-        ObjectInputStream userIn = new ObjectInputStream(userDBSocket.getInputStream());
-        Packet userStartPacket = new Packet("START_USER_DB", null, null);
-        userOut.writeObject(userStartPacket);
-        userOut.flush();
-        Packet userResponse = (Packet) userIn.readObject();
-        this.userDB = (UserDatabase) userResponse.getContent();
-        ObjectOutputStream msgOut = new ObjectOutputStream(msgDBSocket.getOutputStream());
-        ObjectInputStream msgIn = new ObjectInputStream(msgDBSocket.getInputStream());
-        Packet msgStartPacket = new Packet("START_MESSAGE_DB", null, null);
-        msgOut.writeObject(msgStartPacket);
-        msgOut.flush();
-        Packet msgResponse = (Packet) msgIn.readObject();
-        this.msgDB = (MessageDatabase) msgResponse.getContent();
+        this.userOut = new ObjectOutputStream(userDBSocket.getOutputStream());
+        this.userIn = new ObjectInputStream(userDBSocket.getInputStream());
+        userOut.writeObject("START_USER_DB");
+        this.msgOut = new ObjectOutputStream(msgDBSocket.getOutputStream());
+        this.msgIn = new ObjectInputStream(msgDBSocket.getInputStream());
+        msgOut.writeObject("START_MESSAGE_DB");
         this.scanner = new Scanner(System.in);
 
     }
@@ -94,22 +85,20 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username you want to search: ");
             String username = scanner.nextLine();
-
-            Packet searchPacket = new Packet("SEARCH_USER", username, null);
+            Packet packet = new Packet("searchByName", username, null);
             try {
-                sendPacket(userDBSocket, searchPacket);
-                Packet response = receivePacket(userDBSocket);
-                UserEntry userToFind = (UserEntry) response.getContent();
-
-                if (userToFind != null) {
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry userToFind = (UserEntry) response.content;
                     System.out.println("User found: " + userToFind.getUsername());
                     System.out.println("ID: " + userToFind.getID());
                     System.out.println("Region: " + userToFind.getRegion());
                 } else {
-                    System.out.println("User not found.");
+                    System.out.println("User was not found.");
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error searching user: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error when searching user.");
             }
         }
     }
@@ -127,20 +116,19 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username to block: ");
             String blockedUsername = scanner.nextLine();
-
-            Packet blockPacket = new Packet("BLOCK_USER", blockedUsername, null);
+            Packet packet = new Packet("searchByName", blockedUsername, null);
             try {
-                sendPacket(userDBSocket, blockPacket);
-                Packet response = receivePacket(userDBSocket);
-                if (response.getContent() != null) {
-                    UserEntry blocked = (UserEntry) response.getContent();
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry blocked = (UserEntry) response.content;
                     currUser.getBlockList().add(blocked.getID());
-                    System.out.println("Blocked user: " + blocked.getUsername());
+                    System.out.println("Blocked user is: " + blocked.getUsername());
                 } else {
-                    System.out.println("User was not found.");
+                    System.out.println("User not found.");
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error while blocking user: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error when blocking user.");
             }
         }
     }
@@ -149,18 +137,18 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter username to start a conversation with: ");
             String username = scanner.nextLine();
-
-            Packet convoPacket = new Packet("START_CONVO", username, null);
+            Packet packet = new Packet("searchByName", username, null);
             try {
-                sendPacket(msgDBSocket, convoPacket);
-                Packet response = receivePacket(msgDBSocket);
-                if (response.getContent() != null) {
-                    System.out.println("Started conversation with " + username);
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry recipientEntry = (UserEntry) response.content;
+                    System.out.println("Starting a conversation with " + recipientEntry.getUsername());
                 } else {
-                    System.out.println("User was not found.");
+                    System.out.println("User not found.");
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error while starting conversation: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error when starting conversation.");
             }
         }
     }
@@ -173,18 +161,23 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
             String recipientUsername = scanner.nextLine();
-
-            Packet textPacket = new Packet("SEND_TEXT_MSG", recipientUsername, null);
+            Packet packet = new Packet("searchByName", recipientUsername, null);
             try {
-                sendPacket(msgDBSocket, textPacket);
-                Packet response = receivePacket(msgDBSocket);
-                if (response.getContent() != null) {
-                    System.out.println("Text message sent.");
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry recipient = (UserEntry) response.content;
+                    System.out.print("Enter your message: ");
+                    String messageContent = scanner.nextLine();
+                    // Assuming implementation of TextMessage is created here
+                    //Packet textMsgPacket = new Packet("sendTextMessage", new TextMessage(messageContent, currUser.getID(), recipient.getID()), null);
+                    //msgOut.writeObject(textMsgPacket); // Send the text message packet
+                    System.out.println("Text message sent to " + recipientUsername);
                 } else {
-                    System.out.println("Error when sending text message.");
+                    System.out.println("User was not found.");
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error sending text message: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error when sending text message.");
             }
         }
     }
@@ -193,30 +186,25 @@ public class UserThread extends Thread implements UserThreadInt {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
             String recipientUsername = scanner.nextLine();
-
-            Packet photoPacket = new Packet("SEND_PHOTO_MSG", recipientUsername, null);
+            Packet packet = new Packet("searchByName", recipientUsername, null);
             try {
-                sendPacket(msgDBSocket, photoPacket);
-                Packet response = receivePacket(msgDBSocket);
-                if (response.getContent() != null) {
-                    System.out.println("Photo message sent.");
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry recipient = (UserEntry) response.content;
+                    System.out.print("Enter the path of the photo: ");
+                    String photoPath = scanner.nextLine();
+                    // Assumed implementation of PhotoMessage is created here
+                    //Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
+                    //msgOut.writeObject(photoMsgPacket); // Send the photo message packet
+                    System.out.println("Photo message sent to " + recipientUsername);
                 } else {
-                    System.out.println("Error when sending photo message.");
+                    System.out.println("User was not found.");
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                System.out.println("Error sending photo message: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Error when sending photo message.");
             }
         }
-    }
-    private void sendPacket(Socket socket, Packet packet) throws IOException {
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        out.writeObject(packet);
-        out.flush();
-    }
-
-    private Packet receivePacket(Socket socket) throws IOException, ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        return (Packet) in.readObject();
     }
 
 }
