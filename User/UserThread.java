@@ -46,8 +46,8 @@ public class UserThread extends Thread implements UserThreadInt {
             while (running) {
                 System.out.println("Welcome " + currUser.getUsername());
                 System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
-                int answer = scanner.nextInt();
-                scanner.nextLine();
+                String input = scanner.nextLine();
+                int answer = Integer.parseInt(input);
 
                 switch (answer) {
                     case 1:
