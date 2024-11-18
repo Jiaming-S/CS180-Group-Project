@@ -112,7 +112,7 @@ public class UserThreadTest {
             <Region>USA/Midwest</Region>
         </User>""".replaceAll(" ", "").replaceAll("\n", "");
 
-        User tempUser = new User("name4", "password123");
+        User tempUser = new User(new UserEntry(newUserStr));
         
         try {
             userThread = new UserThread(tempUser, oos, ois, moos, mois);
@@ -122,8 +122,31 @@ public class UserThreadTest {
                     
         if (userThread != null) {
             userThread.start();
+
+            System.out.println(outContent.toString());
+
+            String expectedOutput = """
+                Welcome name4
+                1 - Search User
+                2 - View Profile
+                3 - Block User
+                4 - Start New Conversation
+                5 - View Message
+                6 - Send TextMessage
+                7 - Send PhotoMessage
+                8 - Log Out
+                """;
+
+           // assertEquals("ensure that the menu is printed as intended", expectedOutput, outContent.toString());
+            
             String input = "8\n";
             System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+            System.out.println(outContent.toString());
+
+            //assertEquals("ensure that the search user function works as intended", expectedOutput, outContent.toString());
+        } else {
+            fail("userThread was not initiated!");
         } try {
             if (userThread != null) userThread.join();
             if (ois != null) ois.close();
