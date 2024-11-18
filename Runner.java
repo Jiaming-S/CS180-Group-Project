@@ -85,28 +85,7 @@ public class Runner {
                     System.out.println("User created");
                     break;
                 case 2:
-                String newUserStr = """
-        <User>
-            <Username>name4</Username>
-            <Password>password123</Password>
-            <ID>00000004</ID>
-            <FriendList>
-                <ID>11223344</ID>
-                <ID>55667788</ID>
-                <ID>12345678</ID>
-            </FriendList>
-            <BlockList>
-                <ID>10101010</ID>
-                <ID>44444444</ID>
-            </BlockList>
-            <ProfilePicture>/path/to/image.png</ProfilePicture>
-            <Region>USA/Midwest</Region>
-        </User>""".replaceAll(" ", "").replaceAll("\n", "");
-                    try {
-                    currentUser = new User(new UserEntry(newUserStr));
-                    } catch (Exception e) {
-                        
-                    }
+                    currentUser = attemptLogin(scanner, userDatabase, uoos, uois);
                     if (currentUser == null) {
                         break;
                     }
