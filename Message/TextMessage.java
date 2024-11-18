@@ -4,25 +4,40 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TextMessage implements Message {
-
-    private String message;
-    int senderID;
-    int recipientID;
-    private LocalDateTime timeStamp;
-
-    public TextMessage(String message, int senderID, int recipientID, LocalDateTime timeStamp) {
-        this.message = message;
+    private String content;
+    private int senderID;
+    private int recipientID;
+    private LocalDateTime timestamp;
+  
+    public TextMessage(String content, int senderID, int recipientID) {
+        this.content = content;
         this.senderID = senderID;
         this.recipientID = recipientID;
-        this.timeStamp = timeStamp;
+        this.timestamp = LocalDateTime.now();
     }
 
     public String getMessage() {
-        return message;
+        return content;
     }
 
     @Override
     public LocalDateTime getTimeStamp() {
-        return timeStamp;
+        return timestamp;
+    }
+
+    public int getSenderID() {
+        return senderID;
+    }
+
+    public void setSenderID(int senderID) {
+        this.senderID = senderID;
+    }
+
+    public int getRecipientID() {
+        return recipientID;
+    }
+
+    public void setRecipientID(int recipientID) {
+        this.recipientID = recipientID;
     }
 }

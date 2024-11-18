@@ -1,15 +1,13 @@
 package User;
 
-import Message.PhotoMessage;
-import Message.TextMessage;
 import Net.Packet;
 import java.io.*;
 import java.net.*;
-import Database.UserEntry;
 
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
+import Database.MessageEntry;
+import Database.UserEntry;
 import java.util.Scanner;
+import Message.*;
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
@@ -187,8 +185,17 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
-                    Packet textMsgPacket = new Packet("sendTextMessage", new TextMessage(messageContent, currUser.getID(), recipient.getID(), LocalDateTime.now()), null);
-                    msgOut.writeObject(textMsgPacket); //send txt message packet to serverdatabase
+                    // Assuming implementation of TextMessage is created here
+                    Packet textMsgPacket = new Packet(
+                        "sendTextMessage", 
+                        new MessageEntry("", currUser.getID(), recipient.getID(), messageContent), 
+                        null
+                    );
+                    msgOut.writeObject(textMsgPacket); // Send the text message packet
+                    Packet textResponse = (Packet) msgIn.readObject();
+                    if (textResponse == null || textResponse.query.isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
                     System.out.println("Text message sent to " + recipientUsername);
                 } else {
                     System.out.println("User was not found.");
@@ -211,8 +218,9 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter the path of the photo: ");
                     String photoPath = scanner.nextLine();
-                    Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID(), LocalDateTime.now()), null);
-                    msgOut.writeObject(photoMsgPacket); // Send the photo message packet
+                    // Assumed implementation of PhotoMessage is created here
+                    //Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
+                    //msgOut.writeObject(photoMsgPacket); // Send the photo message packet
                     System.out.println("Photo message sent to " + recipientUsername);
                 } else {
                     System.out.println("User was not found.");
