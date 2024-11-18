@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.*;
 import Database.UserEntry;
 import java.util.Scanner;
+import Message.*;
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
@@ -183,8 +184,8 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     // Assuming implementation of TextMessage is created here
-                    //Packet textMsgPacket = new Packet("sendTextMessage", new TextMessage(messageContent, currUser.getID(), recipient.getID()), null);
-                    //msgOut.writeObject(textMsgPacket); // Send the text message packet
+                    Packet textMsgPacket = new Packet("sendTextMessage", new TextMessage(messageContent, currUser.getID(), recipient.getID()), null);
+                    msgOut.writeObject(textMsgPacket);
                     System.out.println("Text message sent to " + recipientUsername);
                 } else {
                     System.out.println("User was not found.");
