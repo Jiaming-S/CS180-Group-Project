@@ -1,5 +1,6 @@
 package Message;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class TextMessage implements Message {
@@ -7,7 +8,7 @@ public class TextMessage implements Message {
     private int senderID;
     private int recipientID;
     private LocalDateTime timestamp;
-
+  
     public TextMessage(String content, int senderID, int recipientID) {
         this.content = content;
         this.senderID = senderID;
