@@ -81,7 +81,11 @@ public class Runner {
                     break;
                 case 2:
                     currentUser = attemptLogin(scanner, userDatabase, oos, ois);
-                    userThread = new UserThread(currentUser, userDatabase, messageDatabase);
+                    try {
+                        userThread = new UserThread(currentUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     loggedIn = true;
                     break;
                 default:
