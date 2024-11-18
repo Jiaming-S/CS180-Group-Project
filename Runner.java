@@ -107,6 +107,8 @@ public class Runner {
             if (userThread != null) userThread.join();
             if (uois != null) uois.close();
             if (uoos != null) uoos.close();
+            if (mois != null) mois.close();
+            if (moos != null) moos.close();
             if (userSocket != null) userSocket.close();
             scanner.close();
         } catch (Exception e) {
