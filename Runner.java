@@ -81,6 +81,9 @@ public class Runner {
                     break;
                 case 2:
                     currentUser = attemptLogin(scanner, userDatabase, oos, ois);
+                    if (currentUser == null) {
+                        break;
+                    }
                     try {
                         userThread = new UserThread(currentUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
                     } catch (ClassNotFoundException e) {
@@ -137,28 +140,29 @@ public class Runner {
         String username = scanner.next();
         System.out.println("Enter password: ");
         String pw = scanner.next();
-        if (!logIn(username, pw, database, oos, ois)) {
+        UserEntry ue = logIn(username, database, oos, ois);
+        if (ue.getPassword().equals(pw)) {
+            return new User(ue);
+        } else {
             System.out.println("Incorrect!");
             attemptLogin(scanner, database, oos, ois);
-        } else {
-            return new User (database.searchByName(username));
         }
         return null;
     }
 
-    public static boolean logIn(String username, String pwInput, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static UserEntry logIn(String username, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
         Packet packet = new Packet("searchByName", username, null);
         UserEntry userE = null;
         try {
             oos.writeObject(packet);
             Packet response = (Packet) ois.readObject();
-            userE = new UserEntry(String.valueOf(response.getContent()));
+            if (response.getContent() == null) {
+                return null;
+            }
+            return new UserEntry(String.valueOf(response.getContent()));
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        if (pwInput.equals(userE.getPassword())) {
-            return true;
-        } return false;
+        } return null;
     }
 
     public void openGUI() {
