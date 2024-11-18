@@ -46,38 +46,41 @@ public class UserThread extends Thread implements UserThreadInt {
             while (running) {
                 System.out.println("Welcome " + currUser.getUsername());
                 System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
-                String input = scanner.nextLine();
-                int answer = Integer.parseInt(input);
-
-                switch (answer) {
-                    case 1:
-                        searchUser();
-                        break;
-                    case 2:
-                        viewProfile();
-                        break;
-                    case 3:
-                        blockUser();
-                        break;
-                    case 4:
-                        newConvo();
-                        break;
-                    case 5:
-                        viewMsg();
-                        break;
-                    case 6:
-                        sendTextMsg();
-                        break;
-                    case 7:
-                        sendPhotoMsg();
-                        break;
-                    case 8:
-                        running = false;
-                        System.out.println("Logging out");
-                        break;
-                    default:
-                        System.out.println("Invalid answer, please enter a valid answer.");
-                        break;
+                String input = scanner.nextLine().trim();
+                try {
+                    int answer = Integer.parseInt(input);
+                    switch (answer) {
+                        case 1:
+                            searchUser();
+                            break;
+                        case 2:
+                            viewProfile();
+                            break;
+                        case 3:
+                            blockUser();
+                            break;
+                        case 4:
+                            newConvo();
+                            break;
+                        case 5:
+                            viewMsg();
+                            break;
+                        case 6:
+                            sendTextMsg();
+                            break;
+                        case 7:
+                            sendPhotoMsg();
+                            break;
+                        case 8:
+                            running = false;
+                            System.out.println("Logging out");
+                            break;
+                        default:
+                            System.out.println("Invalid answer, please enter a valid answer.");
+                            break;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a valid number.");
                 }
             }
         } catch(Exception e) {
