@@ -1,5 +1,7 @@
 Nikita Sirandasu - Submitted Vocareum workspace.
 How to use the app:
+Start the servers UserDatabaseServer and MessageDatabaseServer. The Runner class should be run to start the servers and runs them in separate threads. Users can interact with the app by connecting to the server on the appropriate ports (port 12345). The user will be asked to either log in or create an account. They can perform actions like searching for users, sending messages, and managing conversations. Once the user chooses to log out, the app will terminate.
+
 
 Database Classes:
 - Both `UserDatabase` and `MessageDatabase` extend `GenericDatabase` which implements `Database`. 
@@ -10,6 +12,7 @@ Database Classes:
 Testing Classes:
 - We created basic JUnit tests to ensure that UserEntry, MessageEntry, UserDatabase, MessageDatabaseServer, UserDatabaseServer, and UserThread worked as expected. 
 - We did not test any "corner cases" or unconventional uses of the classes as we have not implemented the ability to handle those yet.
+  
 Server Classes:
 - Both `UserDatabaseServer` and `MessageDatabaseServer` extend `GenericDatabaseServer` which implements `DatabaseServer'.
 - `UserDatabaseServer` is a thread-safe web API for interacting with a UserDatabase and handles queries like searching by name or ID and inserting new entries.
