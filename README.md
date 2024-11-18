@@ -1,4 +1,4 @@
-Nikita Sirandasu - Submitted Vocareum workspace.
+Jane Bazzell - Submitted Vocareum workspace.
 How to use the app:
 Start the servers UserDatabaseServer and MessageDatabaseServer. The Runner class should be run to start the servers and runs them in separate threads. Users can interact with the app by connecting to the server on the appropriate ports (port 12345). The user will be asked to either log in or create an account. They can perform actions like searching for users, sending messages, and managing conversations. Once the user chooses to log out, the app will terminate.
 
