@@ -31,10 +31,8 @@ public class UserThread extends Thread implements UserThreadInt {
         this.msgDBSocket = msgDBSocket;
         this.userOut = new ObjectOutputStream(userDBSocket.getOutputStream());
         this.userIn = new ObjectInputStream(userDBSocket.getInputStream());
-        userOut.writeObject("START_USER_DB");
         this.msgOut = new ObjectOutputStream(msgDBSocket.getOutputStream());
         this.msgIn = new ObjectInputStream(msgDBSocket.getInputStream());
-        msgOut.writeObject("START_MESSAGE_DB");
         this.scanner = new Scanner(System.in);
 
     }
