@@ -31,6 +31,8 @@ public class UserEntry extends GenericEntry {
   // Create entry given XML
   public UserEntry(String xml) throws ParseExceptionXML {
     super(xml);
+    if (this.friendList == null) this.friendList = new ArrayList<>();
+    if (this.blockList == null)  this.blockList = new ArrayList<>();
   }
 
   @Override

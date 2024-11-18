@@ -29,9 +29,9 @@ public class Runner {
         String hostName = "localhost";
         int portUDBS = 12345;
         int portMDBS = 12346;
-        Socket socket;
-        ObjectOutputStream oos;
-        ObjectInputStream ois;
+        Socket userSocket, messageSocket;
+        ObjectOutputStream uoos, moos;
+        ObjectInputStream uois, mois;
 
         try {
             userDatabase = new UserDatabase("user_db.txt");
@@ -52,9 +52,15 @@ public class Runner {
             Thread mdbs = new Thread(messageDatabaseServer);
             mdbs.start(); // note: probably don't need to do anything with message db in runner, good to just start it tho
 
-            socket = new Socket(hostName, portUDBS);
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            ois = new ObjectInputStream(socket.getInputStream());
+            userSocket = new Socket(hostName, portUDBS);
+            uoos = new ObjectOutputStream(userSocket.getOutputStream());
+            uoos.flush();
+            uois = new ObjectInputStream(userSocket.getInputStream());
+
+            messageSocket = new Socket(hostName, portMDBS);
+            moos = new ObjectOutputStream(messageSocket.getOutputStream());
+            moos.flush();
+            mois = new ObjectInputStream(messageSocket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
@@ -76,16 +82,16 @@ public class Runner {
             }
             switch (selection) {
                 case 1:
-                    addUser(scanner, userDatabase, oos, ois);
+                    addUser(scanner, userDatabase, uoos, uois);
                     System.out.println("User created");
                     break;
                 case 2:
-                    currentUser = attemptLogin(scanner, userDatabase, oos, ois);
+                    currentUser = attemptLogin(scanner, userDatabase, uoos, uois);
                     if (currentUser == null) {
                         break;
                     }
                     try {
-                        userThread = new UserThread(currentUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
+                        userThread = new UserThread(currentUser, uoos, uois, moos, mois);
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -99,9 +105,9 @@ public class Runner {
             userThread.start();
         } try {
             if (userThread != null) userThread.join();
-            if (ois != null) ois.close();
-            if (oos != null) oos.close();
-            if (socket != null) socket.close();
+            if (uois != null) uois.close();
+            if (uoos != null) uoos.close();
+            if (userSocket != null) userSocket.close();
             scanner.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -159,7 +165,8 @@ public class Runner {
             if (response.getContent() == null) {
                 return null;
             }
-            return new UserEntry(String.valueOf(response.getContent()));
+            System.out.println("here: " + new UserEntry(response.getContent().toString()));
+            return new UserEntry(response.getContent().toString());
         } catch (Exception e) {
             e.printStackTrace();
         } return null;

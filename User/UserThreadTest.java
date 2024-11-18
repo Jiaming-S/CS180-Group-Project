@@ -95,7 +95,7 @@ public class UserThreadTest {
         System.out.println("Here");
         
         try {
-            userThread = new UserThread(tempUser, new Socket("localhost", portUDBS), new Socket("localhost", portMDBS));
+            userThread = new UserThread(tempUser, oos, ois, moos, mois);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

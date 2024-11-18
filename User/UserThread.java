@@ -1,10 +1,8 @@
 package User;
 
 import Net.Packet;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.io.*;
+import java.net.*;
 import Database.UserEntry;
 import java.util.Scanner;
 
@@ -16,8 +14,6 @@ import java.util.Scanner;
  */
 public class UserThread extends Thread implements UserThreadInt {
     private User currUser;
-    private Socket userDBSocket;
-    private Socket msgDBSocket;
     private ObjectOutputStream userOut;
     private ObjectInputStream userIn;
     private ObjectOutputStream msgOut;
@@ -25,18 +21,13 @@ public class UserThread extends Thread implements UserThreadInt {
     private final Object lock = new Object();
     private Scanner scanner;
 
-    public UserThread(User currUser, Socket userDBSocket, Socket msgDBSocket) throws IOException, ClassNotFoundException {
+    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
-        this.userDBSocket = userDBSocket;
-        this.msgDBSocket = msgDBSocket;
-        this.userOut = new ObjectOutputStream(userDBSocket.getOutputStream());
-        this.userIn = new ObjectInputStream(userDBSocket.getInputStream());
-        userOut.writeObject("START_USER_DB");
-        this.msgOut = new ObjectOutputStream(msgDBSocket.getOutputStream());
-        this.msgIn = new ObjectInputStream(msgDBSocket.getInputStream());
-        msgOut.writeObject("START_MESSAGE_DB");
+        this.userOut = userOut;
+        this.userIn = userIn;
+        this.msgOut = msgOut;
+        this.msgIn = msgIn;
         this.scanner = new Scanner(System.in);
-
     }
 
     @Override
