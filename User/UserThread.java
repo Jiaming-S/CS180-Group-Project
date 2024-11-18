@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-//import Message.Message;
-//import Message.PhotoMessage;
-//import Message.TextMessage;
 import java.util.Scanner;
 
 /**
@@ -80,8 +77,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     break;
                 default:
                     System.out.println("Invalid answer, please enter a valid answer.");
-                    break;
-            }
+             }
         }
     }
 
