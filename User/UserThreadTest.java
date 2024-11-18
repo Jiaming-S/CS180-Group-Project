@@ -22,13 +22,15 @@ public class UserThreadTest {
     // Comprehensive test for the methods in UserThread
     @Test
     public void methodsTest() throws Exception {
+        int port1 = 4242;
+        int port2 = 2424;
         UserDatabaseServer udbserv = new UserDatabaseServer(
-            new ServerSocket(12345),
+            new ServerSocket(port1),
             new UserDatabase("./Database/databaseTestFile.txt")
         );
 
         MessageDatabaseServer mdbserv = new MessageDatabaseServer(
-            new ServerSocket(12346),
+            new ServerSocket(port2),
             new MessageDatabase("./Database/messageDatabaseTestFile.txt")
         );
 
@@ -38,8 +40,8 @@ public class UserThreadTest {
         Thread messageServerThread = new Thread(mdbserv);
         messageServerThread.start();
 
-        Socket us = new Socket("127.0.0.1",12345);
-        Socket ms = new Socket("127.0.0.1", 12346);
+        Socket us = new Socket("127.0.0.1",port1);
+        Socket ms = new Socket("127.0.0.1", port2);
         ObjectOutputStream uoos = new ObjectOutputStream(us.getOutputStream());
         ObjectOutputStream moos = new ObjectOutputStream(ms.getOutputStream());
 
