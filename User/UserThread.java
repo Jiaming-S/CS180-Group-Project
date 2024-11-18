@@ -76,8 +76,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     break;
                 default:
                     System.out.println("Invalid answer, please enter a valid answer.");
-                    break;
-            }
+             }
         }
     }
 
