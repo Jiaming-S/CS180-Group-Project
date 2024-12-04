@@ -130,6 +130,7 @@ public class Runner {
         System.out.println("Enter password: ");
         String pw = scanner.next();
         UserEntry ue = logIn(username, oos, ois); //login method handles server packet fetching.
+        if (ue == null) return null;
         if (ue.getPassword().equals(pw)) {
             return new User(ue);
         } else {
