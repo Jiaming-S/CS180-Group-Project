@@ -18,13 +18,8 @@ public class Runner {
      */
 
     public static void main(String[] args) throws IOException {
-
-        UserDatabase userDatabase;
-        MessageDatabase messageDatabase;
-
         UserThread userThread = null;
         User currentUser = null;
-
 
         String hostName = "localhost";
         int portUDBS = 12345;
@@ -34,25 +29,6 @@ public class Runner {
         ObjectInputStream uois, mois;
 
         try {
-            //create client-side userdatabase file and access server
-            userDatabase = new UserDatabase("user_db.txt");
-            UserDatabaseServer userDatabaseServer = new UserDatabaseServer(
-                new ServerSocket(portUDBS), 
-                userDatabase
-            );
-            //create client-side messagedatabase file and access server
-            messageDatabase = new MessageDatabase("message_db.txt");
-            MessageDatabaseServer messageDatabaseServer = new MessageDatabaseServer(
-                new ServerSocket(portMDBS),
-                messageDatabase
-            );
-
-            //begin servers
-            Thread udbs = new Thread(userDatabaseServer);
-            udbs.start();
-            Thread mdbs = new Thread(messageDatabaseServer);
-            mdbs.start(); // note: probably don't need to do anything with message db in runner, good to just start it tho
-
             //connect client to database of user information, begin streams
             userSocket = new Socket(hostName, portUDBS);
             uoos = new ObjectOutputStream(userSocket.getOutputStream());
@@ -84,11 +60,11 @@ public class Runner {
             }
             switch (selection) {
                 case 1:
-                    addUser(scanner, userDatabase, uoos, uois);
+                    addUser(scanner, uoos, uois);
                     System.out.println("User created");
                     break; //reloop to the selection menu
                 case 2:
-                    currentUser = attemptLogin(scanner, userDatabase, uoos, uois);
+                    currentUser = attemptLogin(scanner, uoos, uois);
                     if (currentUser == null) {
                         break; //reloop to the selection menu
                     }
@@ -119,18 +95,18 @@ public class Runner {
         }
     }
 
-    public static void addUser(Scanner scanner, UserDatabase userDatabase, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static void addUser(Scanner scanner, ObjectOutputStream oos, ObjectInputStream ois) {
         System.out.println("Please enter your new username");
         String username = scanner.next();
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
-            addUser(scanner, userDatabase, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
         }
         System.out.println("Please enter your new password");
         String password = scanner.next();
         if (password.length() < 3) {
             System.out.println("Please increase password length");
-            addUser(scanner, userDatabase, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
         }
         UserEntry userEntry = new UserEntry(username, password, User.CUR_ID++, new ArrayList<>(), new ArrayList<>(), "./", "USA");
         Packet packet = new Packet("insertEntry", userEntry, null);
@@ -148,22 +124,22 @@ public class Runner {
         }
     }
 
-    public static User attemptLogin(Scanner scanner, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static User attemptLogin(Scanner scanner, ObjectOutputStream oos, ObjectInputStream ois) {
         System.out.println("Enter username: ");
         String username = scanner.next();
         System.out.println("Enter password: ");
         String pw = scanner.next();
-        UserEntry ue = logIn(username, database, oos, ois); //login method handles server packet fetching.
+        UserEntry ue = logIn(username, oos, ois); //login method handles server packet fetching.
         if (ue.getPassword().equals(pw)) {
             return new User(ue);
         } else {
             System.out.println("Incorrect!");
-            attemptLogin(scanner, database, oos, ois);
+            attemptLogin(scanner, oos, ois);
         }
         return null;
     }
 
-    public static UserEntry logIn(String username, UserDatabase database, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static UserEntry logIn(String username, ObjectOutputStream oos, ObjectInputStream ois) {
         Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
         UserEntry userE = null;
         try {
