@@ -12,11 +12,11 @@ import java.net.*;
  * @version 11/16/2024
  */
 public abstract class GenericDatabaseServer implements DatabaseServer, Runnable {
-  protected ServerSocket server;
+  protected Socket client;
   protected GenericDatabase db;
 
-  public GenericDatabaseServer(ServerSocket server, GenericDatabase db) {
-    this.server = server;
+  public GenericDatabaseServer(Socket client, GenericDatabase db) {
+    this.client = client;
     this.db = db;
   }
 
@@ -26,7 +26,6 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
 		ObjectInputStream  ois;
 
     try {
-      Socket client = server.accept();
       oos = new ObjectOutputStream(client.getOutputStream());
 			ois = new ObjectInputStream(client.getInputStream());
 			oos.flush();

@@ -9,8 +9,8 @@ import Database.*;
  * @version 11/16/2024
  */
 public class MessageDatabaseServer extends GenericDatabaseServer {
-  public MessageDatabaseServer(ServerSocket server, MessageDatabase db) {
-    super(server, db);
+  public MessageDatabaseServer(Socket client, MessageDatabase db) {
+    super(client, db);
   }
 
   @Override

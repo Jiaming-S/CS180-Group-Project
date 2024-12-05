@@ -9,8 +9,8 @@ import Database.*;
  * @version 11/16/2024
  */
 public class UserDatabaseServer extends GenericDatabaseServer {
-  public UserDatabaseServer(ServerSocket server, UserDatabase db) {
-    super(server, db);
+  public UserDatabaseServer(Socket client, UserDatabase db) {
+    super(client, db);
   }
 
   @Override
