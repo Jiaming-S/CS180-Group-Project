@@ -2,6 +2,7 @@ import Database.*;
 import Net.*;
 import User.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class Runner {
      * @author Jane Bazzell
      * @version 11/17/2024
      */
+
+    JPanel frame = new JPanel();
 
     public static void main(String[] args) throws IOException {
         UserThread userThread = null;
@@ -50,7 +53,7 @@ public class Runner {
 
         System.out.println("Welcome");
 
-        while (!loggedIn) { //prompts user to create account or log in until they succesfully log in.
+        while (!loggedIn) { //prompts user to create account or log in until they successfully log in.
             System.out.println("1 - Create New User\n2 - Log In");
             try {
                 selection = scanner.nextInt();

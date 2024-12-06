@@ -14,7 +14,6 @@ public class UserDatabase extends GenericDatabase {
 
   public UserDatabase(String filepath) throws IOException {
     super(filepath);
-
     this.db = new ArrayList<>();
     ArrayList<String> lines = readStringsFromFile();
     for (String s : lines) {
@@ -73,6 +72,7 @@ public class UserDatabase extends GenericDatabase {
   public void insertEntry(Object entry) {
     synchronized(USR_DB_LOCK) {
       db.add((UserEntry) entry);
+      writeUsersToFile(db);
     }
   }
 }
