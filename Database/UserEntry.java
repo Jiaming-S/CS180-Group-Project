@@ -106,6 +106,10 @@ public class UserEntry extends GenericEntry {
     return this.region;
   }
 
+  public void setID(int ID) {
+    this.ID = ID;
+  }
+
   public boolean equals(Object o) {
     if (!(o instanceof UserEntry)) return false;
     UserEntry compare = (UserEntry) o;

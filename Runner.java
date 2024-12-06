@@ -104,14 +104,16 @@ public class Runner {
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
             addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            return;
         }
         System.out.println("Please enter your new password");
         String password = scanner.next();
         if (password.length() < 3) {
             System.out.println("Please increase password length");
             addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            return;
         }
-        UserEntry userEntry = new UserEntry(username, password, User.CUR_ID++, new ArrayList<>(), new ArrayList<>(), "./", "USA");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "./", "USA");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {

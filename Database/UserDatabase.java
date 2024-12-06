@@ -1,5 +1,6 @@
 package Database;
 
+import User.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -71,7 +72,9 @@ public class UserDatabase extends GenericDatabase {
   @Override
   public void insertEntry(Object entry) {
     synchronized(USR_DB_LOCK) {
-      db.add((UserEntry) entry);
+      UserEntry ue = (UserEntry) entry;
+      ue.setID(ue.getID() > User.CUR_ID ? ue.getID() : User.getAndIncrementID());
+      db.add(ue);
       writeUsersToFile(db);
     }
   }
