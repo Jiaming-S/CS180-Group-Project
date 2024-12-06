@@ -75,7 +75,7 @@ public class UserDatabase extends GenericDatabase {
       UserEntry ue = (UserEntry) entry;
       ue.setID(ue.getID() > User.CUR_ID ? ue.getID() : User.getAndIncrementID());
       db.add(ue);
-      writeUsersToFile(db);
+      // writeUsersToFile(db);
     }
   }
 }

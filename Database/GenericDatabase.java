@@ -31,17 +31,17 @@ public abstract class GenericDatabase implements Database {
       pw.println(ge.toString());
     }
   }
-  synchronized public void writeUsersToFile(ArrayList<UserEntry> db) {
-    for (UserEntry ue : db) {
-      System.out.println(ue.toString());
-      pw.println(ue.toString());
-    }
-  }
-  synchronized public void writeMessagesToFile(ArrayList<MessageEntry> db) {
-    for (MessageEntry me : db) {
-      pw.println(me.toString());
-    }
-  }
+  // synchronized public void writeUsersToFile(ArrayList<UserEntry> db) {
+  //   for (UserEntry ue : db) {
+  //     System.out.println(ue.toString());
+  //     pw.println(ue.toString());
+  //   }
+  // }
+  // synchronized public void writeMessagesToFile(ArrayList<MessageEntry> db) {
+  //   for (MessageEntry me : db) {
+  //     pw.println(me.toString());
+  //   }
+  // }
 
   synchronized public ArrayList<String> readStringsFromFile() throws IOException {
     String fileContents = "";
