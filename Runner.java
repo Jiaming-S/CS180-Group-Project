@@ -2,6 +2,7 @@ import Database.*;
 import Net.*;
 import User.*;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class Runner {
      * @author Jane Bazzell
      * @version 11/17/2024
      */
+
+    JPanel frame = new JPanel();
 
     public static void main(String[] args) throws IOException {
         UserThread userThread = null;
@@ -49,7 +52,7 @@ public class Runner {
 
         System.out.println("Welcome");
 
-        while (!loggedIn) { //prompts user to create account or log in until they succesfully log in.
+        while (!loggedIn) { //prompts user to create account or log in until they successfully log in.
             System.out.println("1 - Create New User\n2 - Log In");
             try {
                 selection = scanner.nextInt();
@@ -100,14 +103,16 @@ public class Runner {
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
             addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            return;
         }
         System.out.println("Please enter your new password");
         String password = scanner.next();
         if (password.length() < 3) {
             System.out.println("Please increase password length");
             addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            return;
         }
-        UserEntry userEntry = new UserEntry(username, password, User.CUR_ID++, new ArrayList<>(), new ArrayList<>(), "./", "USA");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "./", "USA");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {
