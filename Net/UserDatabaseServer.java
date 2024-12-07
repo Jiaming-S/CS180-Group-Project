@@ -28,6 +28,10 @@ public class UserDatabaseServer extends GenericDatabaseServer {
           int userId = (Integer) p.content;
           response = new Packet("success", udb.searchByID(userId), null);
           break;
+        case "updateEntry":
+          udb.updateProfile((UserEntry) p.content);
+          response = new Packet("success", true, null);
+          break;
         case "getEntry":
           int getRowNum = (Integer) p.content;
           response = new Packet("success", udb.getEntry(getRowNum), null);

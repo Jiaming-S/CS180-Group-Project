@@ -65,6 +65,18 @@ public class UserDatabase extends GenericDatabase {
     }
   }
 
+  public void updateProfile(Object entry) {
+    synchronized(USR_DB_LOCK) {
+      UserEntry updatedEntry = (UserEntry) entry;
+      for (int i = 0; i < this.db.size(); i++) {
+        if (this.db.get(i).getID() == updatedEntry.getID()) {
+          this.db.set(i, updatedEntry);
+          break;
+        }
+      }
+    }
+  }
+
   @Override
   public Object getEntry(int rowNum) {
     synchronized(USR_DB_LOCK) {
