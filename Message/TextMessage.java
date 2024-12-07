@@ -1,13 +1,13 @@
 package Message;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 /**
  * This class represents a TextMessage that contains a string of content, the senderID number, and the recipientID number.
  * @author Nikita Sirandasu
  * @version 11/17/2024
  */
-public class TextMessage implements Message {
+public class TextMessage implements Message, Serializable {
     private String content;
     private int senderID;
     private int recipientID;

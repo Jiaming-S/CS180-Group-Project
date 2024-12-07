@@ -1,5 +1,6 @@
 package User;
 
+import Database.MessageEntry;
 import Database.UserEntry;
 import Message.*;
 import Net.Packet;
@@ -203,8 +204,8 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     Packet textMsgPacket = new Packet(
-                        "sendTextMessage", 
-                        new TextMessage(messageContent, currUser.getID(), recipient.getID()),
+                        "insertEntry", 
+                        new MessageEntry("12/07/24", currUser.getID(), recipient.getID(), messageContent),
                         null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet

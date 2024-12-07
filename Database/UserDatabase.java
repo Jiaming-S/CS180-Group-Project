@@ -1,6 +1,5 @@
 package Database;
 
-import User.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -24,6 +23,8 @@ public class UserDatabase extends GenericDatabase {
         e.printStackTrace();
       }
     }
+
+    for (UserEntry ue : this.db) UserEntry.HIGHEST_ID = Math.max(UserEntry.HIGHEST_ID, ue.getID());
   }
 
   public UserEntry searchByName (String name) {
@@ -52,6 +53,7 @@ public class UserDatabase extends GenericDatabase {
     UserEntry me = searchByID(myID);
     synchronized(USR_DB_LOCK) {
       me.getFriendList().add(friendID);
+      writeStringsToFile(this.db);
     }
   }
 
@@ -59,6 +61,19 @@ public class UserDatabase extends GenericDatabase {
     UserEntry me = searchByID(myID);
     synchronized(USR_DB_LOCK) {
       me.getFriendList().remove(friendID);
+      writeStringsToFile(this.db);
+    }
+  }
+
+  public void updateProfile(Object entry) {
+    synchronized(USR_DB_LOCK) {
+      UserEntry updatedEntry = (UserEntry) entry;
+      for (int i = 0; i < this.db.size(); i++) {
+        if (this.db.get(i).getID() == updatedEntry.getID()) {
+          this.db.set(i, updatedEntry);
+          break;
+        }
+      }
     }
   }
 
@@ -73,9 +88,9 @@ public class UserDatabase extends GenericDatabase {
   public void insertEntry(Object entry) {
     synchronized(USR_DB_LOCK) {
       UserEntry ue = (UserEntry) entry;
-      ue.setID(ue.getID() > User.CUR_ID ? ue.getID() : User.getAndIncrementID());
+      ue.setID(ue.getID() > UserEntry.HIGHEST_ID ? ue.getID() : UserEntry.incrementAndGetID());
       db.add(ue);
-      // writeUsersToFile(db);
+      writeStringsToFile(this.db);
     }
   }
 }

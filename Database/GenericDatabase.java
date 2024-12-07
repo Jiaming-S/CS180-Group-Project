@@ -15,37 +15,34 @@ public abstract class GenericDatabase implements Database {
   public final Pattern REGEX_XML_TOP_LEVEL = Pattern.compile("<(\\w+)>(.*?)</\\1>");
 
   protected File file;
-  protected BufferedReader bfr;
-  protected PrintWriter pw;
 
   public GenericDatabase(String filepath) throws IOException {
     this.file = new File(filepath);
     if (!file.exists()) file.createNewFile();
-
-    this.bfr = new BufferedReader(new FileReader(this.file));
-    this.pw = new PrintWriter(new FileOutputStream(this.file, true));
   }
 
-  synchronized public void writeStringsToFile(ArrayList<GenericEntry> db) {
-    for (GenericEntry ge : db) {
-      pw.println(ge.toString());
+  synchronized public void writeStringsToFile(ArrayList<? extends GenericEntry> db) {
+    // Clears the current file contents
+    System.out.println("Updating database: " + this.file.toPath());
+    PrintWriter pw;
+    try {
+      pw = new PrintWriter(this.file);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      return;
     }
+
+    // Updates database file with most recent db ArrayList contents
+    for (GenericEntry ent : db) pw.print(ent.toString());
+    pw.flush();
+    pw.close();
   }
-  // synchronized public void writeUsersToFile(ArrayList<UserEntry> db) {
-  //   for (UserEntry ue : db) {
-  //     System.out.println(ue.toString());
-  //     pw.println(ue.toString());
-  //   }
-  // }
-  // synchronized public void writeMessagesToFile(ArrayList<MessageEntry> db) {
-  //   for (MessageEntry me : db) {
-  //     pw.println(me.toString());
-  //   }
-  // }
 
   synchronized public ArrayList<String> readStringsFromFile() throws IOException {
+    System.out.println("Database linked to: " + this.file.toPath());
     String fileContents = "";
 
+    BufferedReader bfr = new BufferedReader(new FileReader(this.file));
     String line = bfr.readLine();
     while (line != null) {
       fileContents += line;
@@ -63,6 +60,7 @@ public abstract class GenericDatabase implements Database {
       }
     }
 
+    bfr.close();
     return entries;
   }
 }

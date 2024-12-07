@@ -1,9 +1,9 @@
 package Message;
 
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class PhotoMessage implements Message {
+public class PhotoMessage implements Message, Serializable {
 
     private Object message;
     int senderID;

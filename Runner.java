@@ -4,8 +4,10 @@ import User.*;
 
 
 import java.awt.event.*;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
@@ -26,8 +28,6 @@ public class Runner extends JComponent implements Runnable {
     private JButton loginButton;
     private JTextField usernameTF;
     private JTextField passwordTF;
-    private static UserThread userThread;
-
 
     private static boolean loggedIn;
 
@@ -40,8 +40,9 @@ public class Runner extends JComponent implements Runnable {
         String hostName = "localhost";
         int portUDBS = 12345;
         int portMDBS = 12346;
-        Socket userSocket, messageSocket;
-        userThread = null;
+        Socket userSocket = null;
+        Socket messageSocket = null;
+        UserThread userThread = null;
 
         try {
             //connect client to database of user information, begin streams
@@ -54,41 +55,45 @@ public class Runner extends JComponent implements Runnable {
             moos = new ObjectOutputStream(messageSocket.getOutputStream());
             moos.flush();
             mois = new ObjectInputStream(messageSocket.getInputStream());
+
+            SwingUtilities.invokeLater(new Runner());
+
+            try {
+                userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
+                //create new userthread, sending streams so userthread can access the same databaseservers.
+            } catch (ClassNotFoundException | IOException ex) {
+                ex.printStackTrace();
+            }
+
+            while (true) {
+                if (loggedIn) {
+                    if (userThread != null) {
+                        userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
+                    }
+                    try {
+                        if (userThread != null) userThread.join();
+                        if (uois != null) uois.close();
+                        if (uoos != null) uoos.close();
+                        if (mois != null) mois.close();
+                        if (moos != null) moos.close();
+                        if (userSocket != null) userSocket.close();
+                        if (messageSocket != null) messageSocket.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
             throw e;
+        } finally {
+            if (uois != null) uois.close();
+            if (uoos != null) uoos.close();
+            if (mois != null) mois.close();
+            if (moos != null) moos.close();
+            if (userSocket != null) userSocket.close();
+            if (messageSocket != null) messageSocket.close();
         }
-
-
-
-        try {
-            SwingUtilities.invokeLater(new Runner());
-            userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
-            //create new userthread, sending streams so userthread can access the same databaseservers.
-        } catch (ClassNotFoundException | IOException ex) {
-            ex.printStackTrace();
-        }
-
-        while (true) {
-            if (loggedIn) {
-                if (userThread != null) {
-                    userThread.start();
-
-                }
-                try {
-                    if (userThread != null) userThread.join();
-                    if (uois != null) uois.close();
-                    if (uoos != null) uoos.close();
-                    if (mois != null) mois.close();
-                    if (moos != null) moos.close();
-                    if (userSocket != null) userSocket.close();
-                    if (messageSocket != null) messageSocket.close();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
     }
 
     public void addUser(ObjectOutputStream oos, ObjectInputStream ois) {
@@ -153,21 +158,47 @@ public class Runner extends JComponent implements Runnable {
     }
 
     public void run() {
-        frame = new JFrame("AOL Two");
+        frame = new JFrame("AOL Squared");
 
-        Panel panel = new Panel();
-        panel.setLayout(new FlowLayout());
+        Container content = new Container();
+        content.setLayout(new BorderLayout());
+
+        Panel topPanel = new Panel();
+        topPanel.setLayout(new FlowLayout());
 
         registerButton = new JButton("Register");
         registerButton.addActionListener(actionListener);
-        panel.add(registerButton);
+        topPanel.add(registerButton);
 
         loginButton = new JButton("Login");
         loginButton.addActionListener(actionListener);
-        panel.add(loginButton);
+        topPanel.add(loginButton);
 
-        frame.add(panel, BorderLayout.CENTER);
+        content.add(topPanel, BorderLayout.CENTER);
+
+        Image image = null;
+        try {
+            BufferedImage bufferedImage = ImageIO.read(new File("aol.jpg"));
+            image = bufferedImage.getScaledInstance(100, 50, Image.SCALE_DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Panel bottomPanel = new Panel();
+        bottomPanel.setLayout(new FlowLayout());
+
+        ImageIcon aol = new ImageIcon(image);
+        JFrame frame = new JFrame();
+        JLabel jLabel = new JLabel();
+        jLabel.setIcon(aol);
+
+        bottomPanel.add(jLabel);
+
+        content.add(bottomPanel, BorderLayout.SOUTH);
+        frame.add(content);
+
         frame.setSize(600, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
@@ -185,9 +216,6 @@ public class Runner extends JComponent implements Runnable {
                 currentUser = attemptLogin(uoos, uois);
                 if (currentUser != null) {
                     loggedIn = true;
-                    frame.setVisible(false);
-                    MainPage mainPage = new MainPage(userThread);
-                    mainPage.showPage();
 
                 }
             }
