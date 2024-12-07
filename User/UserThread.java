@@ -10,6 +10,7 @@ import Database.UserEntry;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import Message.*;
+import javax.swing.*;
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
@@ -41,7 +42,7 @@ public class UserThread extends Thread implements UserThreadInt {
         try {
             while (running) {
                 System.out.println("Welcome " + currUser.getUsername());
-                System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
+                System.out.println("1 - Search User\n2 - View Profile\n3 - Edit Profile\n4 - Block User\n5 - Start New Conversation\n6 - View Message\n7 - Send TextMessage\n8 - Send PhotoMessage\n9 - Log Out");
                 String input = scanner.nextLine().trim();
                 try {
                     int answer = Integer.parseInt(input);
@@ -53,21 +54,24 @@ public class UserThread extends Thread implements UserThreadInt {
                             viewProfile();
                             break;
                         case 3:
-                            blockUser();
+                            editProfile();
                             break;
                         case 4:
-                            newConvo();
+                            blockUser();
                             break;
                         case 5:
-                            viewMsg();
+                            newConvo();
                             break;
                         case 6:
-                            sendTextMsg();
+                            viewMsg();
                             break;
                         case 7:
-                            sendPhotoMsg();
+                            sendTextMsg();
                             break;
                         case 8:
+                            sendPhotoMsg();
+                            break;
+                        case 9:
                             running = false;
                             System.out.println("Logging out");
                             break;
@@ -206,6 +210,12 @@ public class UserThread extends Thread implements UserThreadInt {
             } catch (Exception e) {
                 System.out.println("Error when sending text message.");
             }
+        }
+    }
+
+    public void editProfile() {
+        synchronized (lock) {
+            //l
         }
     }
 
