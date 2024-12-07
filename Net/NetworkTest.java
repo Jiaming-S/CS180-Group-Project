@@ -13,7 +13,7 @@ import Database.UserDatabase;
  * A set of JUnit tests testing netcode.
  * @author
  * @version 11/16/24
- *//*
+ */
 
 public class NetworkTest {
   // @Test
@@ -43,4 +43,4 @@ public class NetworkTest {
     client.close();
   }
 }
-*/
+
