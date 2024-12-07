@@ -31,8 +31,7 @@ public class Runner extends JComponent implements Runnable {
 
     private static ObjectOutputStream uoos, moos;
     private static ObjectInputStream uois, mois;
-    private UserThread userThread = null;
-    private User currentUser = null;
+    private static User currentUser = null;
 
     public static void main(String[] args) throws IOException {
 
@@ -40,6 +39,7 @@ public class Runner extends JComponent implements Runnable {
         int portUDBS = 12345;
         int portMDBS = 12346;
         Socket userSocket, messageSocket;
+        UserThread userThread = null;
 
         try {
             //connect client to database of user information, begin streams
@@ -56,8 +56,34 @@ public class Runner extends JComponent implements Runnable {
             e.printStackTrace();
             throw e;
         }
-        loggedIn = false;
+
         SwingUtilities.invokeLater(new Runner());
+
+        try {
+            userThread = new UserThread(currentUser, uoos, uois, moos, mois);
+            //create new userthread, sending streams so userthread can access the same databaseservers.
+        } catch (ClassNotFoundException | IOException ex) {
+            ex.printStackTrace();
+        }
+
+        while (true) {
+            if (loggedIn) {
+                if (userThread != null) {
+                    userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
+                }
+                try {
+                    if (userThread != null) userThread.join();
+                    if (uois != null) uois.close();
+                    if (uoos != null) uoos.close();
+                    if (mois != null) mois.close();
+                    if (moos != null) moos.close();
+                    if (userSocket != null) userSocket.close();
+                    if (messageSocket != null) messageSocket.close();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
 
     }
 
@@ -154,26 +180,8 @@ public class Runner extends JComponent implements Runnable {
             if (e.getSource() == loginButton) {
                 currentUser = attemptLogin(uoos, uois);
                 if (currentUser != null) {
-                    try {
-                        userThread = new UserThread(currentUser, uoos, uois, moos, mois);
-                        //create new userthread, sending streams so userthread can access the same databaseservers.
-                    } catch (ClassNotFoundException | IOException ex) {
-                        ex.printStackTrace();
-                    }
                     loggedIn = true;
-                    if (userThread != null) {
-                        userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
-                    }
-                    try {
-                        if (userThread != null) userThread.join();
-                        System.out.println("CLOSING!!");
-                        if (uois != null) uois.close();
-                        if (uoos != null) uoos.close();
-                        if (mois != null) mois.close();
-                        if (moos != null) moos.close();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+
                 }
             }
         }
