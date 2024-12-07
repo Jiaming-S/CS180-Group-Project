@@ -4,12 +4,12 @@ import Database.MessageEntry;
 import Database.UserEntry;
 import Message.*;
 import Net.Packet;
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-
 
 
 /**
@@ -27,6 +27,12 @@ public class UserThread extends Thread implements UserThreadInt {
     private final Object lock = new Object();
     private Scanner scanner;
 
+    private JFrame frame;
+
+    private JButton friendButton;
+    private JButton blockButton;
+    private JButton messageButton;
+
     public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
@@ -34,6 +40,7 @@ public class UserThread extends Thread implements UserThreadInt {
         this.msgOut = msgOut;
         this.msgIn = msgIn;
         this.scanner = new Scanner(System.in);
+        this.frame = frame;
     }
 
     @Override
@@ -121,17 +128,49 @@ public class UserThread extends Thread implements UserThreadInt {
                 }
             } catch (Exception e) {
                 System.out.println("Error when searching user.");
-                JOptionPane.showMessageDialog(null, "Error occured during search", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error occurred during search", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     public void viewProfile() {
         synchronized (lock) {
-            System.out.println(currUser.getUsername() + "'s Profile:");
-            System.out.println("Username: " + currUser.getUsername());
-            System.out.println("ID: " + currUser.getID());
-            System.out.println("Region: " + currUser.getRegion());
+            Container content = new Container();
+            content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+            leftPanel.add(new JLabel(currUser.getUsername()));
+
+            ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
+
+            JLabel jLabel = new JLabel();
+            jLabel.setIcon(image);
+            leftPanel.add(jLabel);
+            
+            leftPanel.add(new JLabel("User bio:"));
+            leftPanel.add(new JLabel(currUser.getBio()));
+
+            content.add(leftPanel);
+            
+            JPanel rightPanel = new JPanel();
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+            rightPanel.add(new JLabel("ID: " + currUser.getID()));
+            rightPanel.add(new JLabel("Location: " + currUser.getRegion()));
+
+            friendButton.setText("Add Friend");
+            blockButton.setText("Block User");
+            messageButton.setText("Message User");
+
+            rightPanel.add(friendButton);
+            rightPanel.add(blockButton);
+            rightPanel.add(messageButton);
+
+            content.add(rightPanel);
+
+            frame.add(content);
         }
     }
 
@@ -161,23 +200,19 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void newConvo() {
         synchronized (lock) {
-            System.out.print("Enter username to start a conversation with: ");
-            String username = scanner.nextLine();
+            String username = JOptionPane.showInputDialog(null, "Enter username to start a conversation with";
             Packet packet = new Packet("searchByName", username, null);
             try {
                 userOut.writeObject(packet);
                 Packet response = (Packet) userIn.readObject();
                 if (response.query.equals("success")) {
                     UserEntry recipientEntry = (UserEntry) response.content;
-                    System.out.println("Starting a conversation with " + recipientEntry.getUsername());
                     JOptionPane.showMessageDialog(null, "Starting a conversation with: " + recipientEntry.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    System.out.println("User not found.");
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                System.out.println("Error when starting conversation.");
-                JOptionPane.showMessageDialog(null, "Error occured when starting conversation", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error occurred when starting conversation", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -252,6 +287,15 @@ public class UserThread extends Thread implements UserThreadInt {
                 JOptionPane.showMessageDialog(null, "Error occured when sending photo message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
+        BufferedImage bimage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D bGr = bimage.createGraphics();
+        icon = new ImageIcon(bimage.getScaledInstance(100, 50, Image.SCALE_DEFAULT));
+        bGr.drawImage(icon.getImage(), 0, 0, null);
+        bGr.dispose();
+        return icon;
     }
 
 }

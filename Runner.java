@@ -45,6 +45,7 @@ public class Runner extends JComponent implements Runnable {
         UserThread userThread = null;
 
         try {
+            //TODO Handle ConnectException
             //connect client to database of user information, begin streams
             userSocket = new Socket(hostName, portUDBS);
             uoos = new ObjectOutputStream(userSocket.getOutputStream());
@@ -110,7 +111,7 @@ public class Runner extends JComponent implements Runnable {
             addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "./", "USA");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), null, "USA", "");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {
@@ -188,7 +189,6 @@ public class Runner extends JComponent implements Runnable {
         bottomPanel.setLayout(new FlowLayout());
 
         ImageIcon aol = new ImageIcon(image);
-        JFrame frame = new JFrame();
         JLabel jLabel = new JLabel();
         jLabel.setIcon(aol);
 
@@ -197,10 +197,12 @@ public class Runner extends JComponent implements Runnable {
         content.add(bottomPanel, BorderLayout.SOUTH);
         frame.add(content);
 
-        frame.setSize(600, 400);
+        //sets frame to full screen
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
     }

@@ -2,6 +2,7 @@ package User;
 
 import Database.UserEntry;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class User {
@@ -17,8 +18,9 @@ public class User {
     private int ID;
     private ArrayList<Integer> friendList;
     private ArrayList<Integer> blockList;
-    private String profilePicture;
+    private ImageIcon profilePicture;
     private String region;
+    private String bio;
 
     public User(String username, String password) {
         this.username = username;
@@ -30,7 +32,7 @@ public class User {
         this.password = password;
         this.ID = ID;
     }
-    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
+    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, ImageIcon profilePicture, String region, String bio) {
         this.username = username;
         this.password = password;
         this.ID = ID;
@@ -38,6 +40,7 @@ public class User {
         this.blockList = blockList;
         this.profilePicture = profilePicture;
         this.region = region;
+        this.bio = bio;
     }
     public User (UserEntry entry) {
         this.username = entry.getUsername();
@@ -47,7 +50,7 @@ public class User {
         this.blockList = entry.getBlockList();
         this.profilePicture = entry.getProfilePicture();
         this.region = entry.getRegion();
-
+        this.bio = bio;
     }
 
     public User() {
@@ -56,7 +59,7 @@ public class User {
     }
 
     public UserEntry userToEntry() {
-        return new UserEntry(username, password, ID, friendList, blockList, profilePicture, region);
+        return new UserEntry(username, password, ID, friendList, blockList, profilePicture, region, bio);
     }
 
     public String getUsername() {
@@ -79,11 +82,15 @@ public class User {
         return blockList;
     }
 
-    public String getProfilePicture() {
+    public ImageIcon getProfilePicture() {
         return profilePicture;
     }
 
     public String getRegion() {
         return region;
+    }
+
+    public String getBio() {
+        return bio;
     }
 }
