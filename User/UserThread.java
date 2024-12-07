@@ -236,7 +236,6 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
-                    System.out.println("Here1");
                     Packet textMsgPacket = new Packet(
                         "insertEntry", 
                         new MessageEntry(
