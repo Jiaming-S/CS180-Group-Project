@@ -1,4 +1,4 @@
-/*
+
 package Net;
 
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.net.*;
 
 import Database.UserDatabase;
 
-*/
+
 /**
  * A set of JUnit tests testing netcode.
  * @author
@@ -33,7 +33,7 @@ public class NetworkTest {
 
     oos.writeObject(new Packet(
       "searchByName",
-      "joebiden", 
+      "joebiden",
       null
     ));
 
