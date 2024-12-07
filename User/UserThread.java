@@ -7,10 +7,9 @@ import java.io.*;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 
-
 /**
  * UserThread class with several methods related to User actions and will work with GUI
- * (Some methods may need to be altered during Phase 3 to work with GUI)
+ *
  * @author Nikita Sirandasu
  * @version 11/17/2024
  */
