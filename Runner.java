@@ -57,9 +57,10 @@ public class Runner extends JComponent implements Runnable {
             throw e;
         }
 
-        SwingUtilities.invokeLater(new Runner());
+
 
         try {
+            SwingUtilities.invokeLater(new Runner());
             userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
             //create new userthread, sending streams so userthread can access the same databaseservers.
         } catch (ClassNotFoundException | IOException ex) {

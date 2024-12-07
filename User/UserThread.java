@@ -22,15 +22,19 @@ public class UserThread extends Thread implements UserThreadInt {
     private ObjectInputStream userIn;
     private ObjectOutputStream msgOut;
     private ObjectInputStream msgIn;
+    private JFrame frame;
+    JButton searchButton;
+    JTextField searchField;
     private final Object lock = new Object();
     private Scanner scanner;
 
-    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
+    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
         this.userIn = userIn;
         this.msgOut = msgOut;
         this.msgIn = msgIn;
+        this.frame = frame;
         this.scanner = new Scanner(System.in);
     }
 
@@ -39,6 +43,18 @@ public class UserThread extends Thread implements UserThreadInt {
         boolean running = true;
         try {
             while (running) {
+//                frame = new JFrame("AOL Two");
+//                Panel panel = new Panel();
+//                panel.setLayout(new GridLayout(1,2));
+//                searchButton = new JButton("Search");
+//                panel.add(searchButton);
+//                searchField = new JTextField();
+//                panel.add(searchField);
+//                SwingUtilities.invokeLater(() -> {
+//                    frame.getContentPane().add(panel, BorderLayout.SOUTH);
+//                    frame.revalidate();
+//                    frame.repaint();
+//                });
                 System.out.println("Welcome " + currUser.getUsername());
                 System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
                 String input = scanner.nextLine().trim();
