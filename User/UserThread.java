@@ -6,7 +6,10 @@ import Message.*;
 import Net.Packet;
 import java.io.*;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 
 
 /**
@@ -24,7 +27,7 @@ public class UserThread extends Thread implements UserThreadInt {
     private final Object lock = new Object();
     private Scanner scanner;
 
-    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn) throws IOException, ClassNotFoundException {
+    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
         this.userIn = userIn;
