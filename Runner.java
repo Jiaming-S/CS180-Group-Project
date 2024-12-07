@@ -2,16 +2,17 @@ import Database.*;
 import Net.*;
 import User.*;
 
+
+import java.awt.event.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-public class Runner {
+
+public class Runner extends JComponent implements Runnable {
 
     /**
      * This class is the main method run by the client. Handles user interaction, network
@@ -19,18 +20,26 @@ public class Runner {
      * @author Jane Bazzell
      * @version 11/17/2024
      */
+    private JFrame frame; // the canvas
 
+    private JButton registerButton;
+    private JButton loginButton;
+    private JTextField usernameTF;
+    private JTextField passwordTF;
+
+    private static boolean loggedIn;
+
+    private static ObjectOutputStream uoos, moos;
+    private static ObjectInputStream uois, mois;
+    private UserThread userThread = null;
+    private User currentUser = null;
 
     public static void main(String[] args) throws IOException {
-        UserThread userThread = null;
-        User currentUser = null;
 
         String hostName = "localhost";
         int portUDBS = 12345;
         int portMDBS = 12346;
         Socket userSocket, messageSocket;
-        ObjectOutputStream uoos, moos;
-        ObjectInputStream uois, mois;
 
         try {
             //connect client to database of user information, begin streams
@@ -47,92 +56,23 @@ public class Runner {
             e.printStackTrace();
             throw e;
         }
+        loggedIn = false;
+        SwingUtilities.invokeLater(new Runner());
 
-        Scanner scanner = new Scanner(System.in);
-        boolean loggedIn = false;
-        int selection = 0; //just used for tracking user input
-
-        JFrame frame = new JFrame("AOL 2");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        JPanel panel = new JPanel();
-        frame.add(panel);
-        JLabel label = new JLabel("Welcome to AOL 2! ");
-        panel.add(label);
-
-        JButton signUpButton = new JButton("Sign up");
-        JButton logInButton = new JButton("Log In");
-
-        signUpButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                label.setText("Button Clicked!");
-            }
-        });
-        panel.add(signUpButton);
-        panel.add(logInButton);
-        frame.add(panel);
-        frame.setVisible(true);
-
-        //System.out.println("Welcome");
-
-        while (!loggedIn) { //prompts user to create account or log in until they successfully log in.
-            System.out.println("1 - Create New User\n2 - Log In");
-            try {
-                selection = scanner.nextInt();
-            } catch (InputMismatchException e) {
-                System.out.println("Please enter 1 or 2.");
-                break;
-            }
-            switch (selection) {
-                case 1:
-                    addUser(scanner, uoos, uois);
-                    System.out.println("User created");
-                    break; //reloop to the selection menu
-                case 2:
-                    currentUser = attemptLogin(scanner, uoos, uois);
-                    if (currentUser == null) {
-                        break; //reloop to the selection menu
-                    }
-                    try {
-                        userThread = new UserThread(currentUser, uoos, uois, moos, mois);
-                        //create new userthread, sending streams so userthread can access the same databaseservers.
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    loggedIn = true;
-                    break;
-                default:
-                    System.out.println("Please select a valid option.");
-                    break;
-            }
-        } if (userThread != null) {
-            userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
-        } try {
-            if (userThread != null) userThread.join();
-            if (uois != null) uois.close();
-            if (uoos != null) uoos.close();
-            if (mois != null) mois.close();
-            if (moos != null) moos.close();
-            if (userSocket != null) userSocket.close(); //close all streams
-            scanner.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
-    public static void addUser(Scanner scanner, ObjectOutputStream oos, ObjectInputStream ois) {
-        System.out.println("Please enter your new username");
-        String username = scanner.next();
+    public void addUser(ObjectOutputStream oos, ObjectInputStream ois) {
+        String username = JOptionPane.showInputDialog(null, "Enter new username",
+                "New account creation", JOptionPane.QUESTION_MESSAGE);
         if (username.contains(" ") || username.length() < 3) {
             System.out.println("Invalid username");
-            addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
-        System.out.println("Please enter your new password");
-        String password = scanner.next();
+        String password = JOptionPane.showInputDialog(null, "Enter new password",
+                "New account creation", JOptionPane.QUESTION_MESSAGE);
         if (password.length() < 3) {
-            System.out.println("Please increase password length");
-            addUser(scanner, oos, ois); //recursively prompts user to create valid user inputs until they actually do it
+            addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
         UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "./", "USA");
@@ -151,23 +91,23 @@ public class Runner {
         }
     }
 
-    public static User attemptLogin(Scanner scanner, ObjectOutputStream oos, ObjectInputStream ois) {
-        System.out.println("Enter username: ");
-        String username = scanner.next();
-        System.out.println("Enter password: ");
-        String pw = scanner.next();
-        UserEntry ue = logIn(username, oos, ois); //login method handles server packet fetching.
+    public static User attemptLogin(ObjectOutputStream oos, ObjectInputStream ois) {
+        String username = JOptionPane.showInputDialog(null, "Enter your username",
+                "Login", JOptionPane.QUESTION_MESSAGE);
+        String pw = JOptionPane.showInputDialog(null, "Enter your password",
+                "Login", JOptionPane.QUESTION_MESSAGE);
+        UserEntry ue = fetchUser(username, oos, ois); //login method handles server packet fetching.
         if (ue == null) return null;
         if (ue.getPassword().equals(pw)) {
             return new User(ue);
         } else {
             System.out.println("Incorrect!");
-            attemptLogin(scanner, oos, ois);
+            attemptLogin(oos, ois);
         }
         return null;
     }
 
-    public static UserEntry logIn(String username, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
         Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
         UserEntry userE = null;
         try {
@@ -182,7 +122,60 @@ public class Runner {
         } return null;
     }
 
-    public void openGUI() {
+    public void run() {
+        frame = new JFrame("AOL Two");
+
+        Panel panel = new Panel();
+        panel.setLayout(new FlowLayout());
+
+        registerButton = new JButton("Register");
+        registerButton.addActionListener(actionListener);
+        panel.add(registerButton);
+
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(actionListener);
+        panel.add(loginButton);
+
+        frame.add(panel, BorderLayout.CENTER);
+        frame.setSize(600, 400);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 
     }
+
+    ActionListener actionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == registerButton) {
+                addUser(uoos, uois);
+
+            }
+            if (e.getSource() == loginButton) {
+                currentUser = attemptLogin(uoos, uois);
+                if (currentUser != null) {
+                    try {
+                        userThread = new UserThread(currentUser, uoos, uois, moos, mois);
+                        //create new userthread, sending streams so userthread can access the same databaseservers.
+                    } catch (ClassNotFoundException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    loggedIn = true;
+                    if (userThread != null) {
+                        userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
+                    }
+                    try {
+                        if (userThread != null) userThread.join();
+                        System.out.println("CLOSING!!");
+                        if (uois != null) uois.close();
+                        if (uoos != null) uoos.close();
+                        if (mois != null) mois.close();
+                        if (moos != null) moos.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+    };
 }

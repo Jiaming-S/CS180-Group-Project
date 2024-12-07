@@ -1,16 +1,12 @@
 package User;
 
+import Database.UserEntry;
+import Message.*;
 import Net.Packet;
 import java.io.*;
-import java.net.*;
-
-import Database.MessageEntry;
-import Database.UserEntry;
-
-import java.time.LocalDateTime;
 import java.util.Scanner;
-import Message.*;
-import javax.swing.*;
+import javax.swing.JOptionPane;
+
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
@@ -42,7 +38,7 @@ public class UserThread extends Thread implements UserThreadInt {
         try {
             while (running) {
                 System.out.println("Welcome " + currUser.getUsername());
-                System.out.println("1 - Search User\n2 - View Profile\n3 - Edit Profile\n4 - Block User\n5 - Start New Conversation\n6 - View Message\n7 - Send TextMessage\n8 - Send PhotoMessage\n9 - Log Out");
+                System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
                 String input = scanner.nextLine().trim();
                 try {
                     int answer = Integer.parseInt(input);
@@ -54,24 +50,21 @@ public class UserThread extends Thread implements UserThreadInt {
                             viewProfile();
                             break;
                         case 3:
-                            editProfile();
-                            break;
-                        case 4:
                             blockUser();
                             break;
-                        case 5:
+                        case 4:
                             newConvo();
                             break;
-                        case 6:
+                        case 5:
                             viewMsg();
                             break;
-                        case 7:
+                        case 6:
                             sendTextMsg();
                             break;
-                        case 8:
+                        case 7:
                             sendPhotoMsg();
                             break;
-                        case 9:
+                        case 8:
                             running = false;
                             System.out.println("Logging out");
                             break;
@@ -117,11 +110,14 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.println("User found: " + userToFind.getUsername());
                     System.out.println("ID: " + userToFind.getID());
                     System.out.println("Region: " + userToFind.getRegion());
+                    JOptionPane.showMessageDialog(null, String.format("%s\n%s\n%s", "User found: " + userToFind.getUsername(), "ID: " + userToFind.getID(), "Region: " + userToFind.getRegion()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User was not found.");
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when searching user.");
+                JOptionPane.showMessageDialog(null, "Error occured during search", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -147,11 +143,14 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry blocked = (UserEntry) response.content;
                     currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
                     System.out.println("Blocked user is: " + blocked.getUsername());
+                    JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User not found.");
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when blocking user.");
+                JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -167,11 +166,14 @@ public class UserThread extends Thread implements UserThreadInt {
                 if (response.query.equals("success")) {
                     UserEntry recipientEntry = (UserEntry) response.content;
                     System.out.println("Starting a conversation with " + recipientEntry.getUsername());
+                    JOptionPane.showMessageDialog(null, "Starting a conversation with: " + recipientEntry.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User not found.");
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when starting conversation.");
+                JOptionPane.showMessageDialog(null, "Error occured when starting conversation", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -204,18 +206,15 @@ public class UserThread extends Thread implements UserThreadInt {
                         throw new IllegalArgumentException();
                     }
                     System.out.println("Text message sent to " + recipientUsername);
+                    JOptionPane.showMessageDialog(null, "Text message sent to: " + recipientUsername, "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User was not found.");
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when sending text message.");
+                JOptionPane.showMessageDialog(null, "Error occured when sending text message", "Error", JOptionPane.ERROR_MESSAGE);
             }
-        }
-    }
-
-    public void editProfile() {
-        synchronized (lock) {
-            //l
         }
     }
 
@@ -239,11 +238,14 @@ public class UserThread extends Thread implements UserThreadInt {
                         throw new IllegalArgumentException();
                     }
                     System.out.println("Photo message sent to " + recipientUsername);
+                    JOptionPane.showMessageDialog(null, "Photo message sent to: " + recipientUsername, "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User was not found.");
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when sending photo message.");
+                JOptionPane.showMessageDialog(null, "Error occured when sending photo message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
