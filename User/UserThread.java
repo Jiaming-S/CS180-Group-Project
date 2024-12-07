@@ -283,7 +283,20 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter the path of the photo: ");
                     String photoPath = scanner.nextLine();
 
-                    Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
+                    Packet photoMsgPacket = new Packet(
+                        "insertEntry", 
+                        new MessageEntry(
+                            LocalTime.now().toString(), 
+                            currUser.getID(), 
+                            recipient.getID(), 
+                            new PhotoMessage ( 
+                                photoPath,
+                                currUser.getID(), 
+                                recipient.getID()
+                            )
+                        ),
+                        null
+                    );
                     msgOut.writeObject(photoMsgPacket); // Send the photo message packet
                     Packet photoResponse = (Packet) msgIn.readObject();
                     if (photoResponse == null || photoResponse.query.isEmpty()) {
