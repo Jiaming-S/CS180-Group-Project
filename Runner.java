@@ -34,6 +34,7 @@ public class Runner extends JComponent implements Runnable {
     private static ObjectOutputStream uoos, moos;
     private static ObjectInputStream uois, mois;
     private static User currentUser = null;
+    private static UserThread userThread;
 
     public static void main(String[] args) throws IOException {
 
@@ -42,7 +43,7 @@ public class Runner extends JComponent implements Runnable {
         int portMDBS = 12346;
         Socket userSocket = null;
         Socket messageSocket = null;
-        UserThread userThread = null;
+        userThread = null;
 
         try {
             //TODO Handle ConnectException
@@ -218,6 +219,9 @@ public class Runner extends JComponent implements Runnable {
                 currentUser = attemptLogin(uoos, uois);
                 if (currentUser != null) {
                     loggedIn = true;
+                    frame.setVisible(false);
+                    MainPage mainPage = new MainPage(userThread);
+                    mainPage.showPage();
 
                 }
             }

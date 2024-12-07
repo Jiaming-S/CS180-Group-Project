@@ -1,3 +1,4 @@
+
 package Net;
 
 import java.io.IOException;
@@ -7,11 +8,13 @@ import java.net.*;
 
 import Database.UserDatabase;
 
+
 /**
  * A set of JUnit tests testing netcode.
  * @author
  * @version 11/16/24
  */
+
 public class NetworkTest {
   // @Test
   // public void testUserDatabaseAPI() throws IOException, InterruptedException, ClassNotFoundException {
@@ -30,7 +33,7 @@ public class NetworkTest {
 
     oos.writeObject(new Packet(
       "searchByName",
-      "joebiden", 
+      "joebiden",
       null
     ));
 
@@ -40,3 +43,4 @@ public class NetworkTest {
     client.close();
   }
 }
+
