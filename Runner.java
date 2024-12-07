@@ -26,6 +26,8 @@ public class Runner extends JComponent implements Runnable {
     private JButton loginButton;
     private JTextField usernameTF;
     private JTextField passwordTF;
+    private static UserThread userThread;
+
 
     private static boolean loggedIn;
 
@@ -39,7 +41,7 @@ public class Runner extends JComponent implements Runnable {
         int portUDBS = 12345;
         int portMDBS = 12346;
         Socket userSocket, messageSocket;
-        UserThread userThread = null;
+        userThread = null;
 
         try {
             //connect client to database of user information, begin streams
@@ -70,7 +72,8 @@ public class Runner extends JComponent implements Runnable {
         while (true) {
             if (loggedIn) {
                 if (userThread != null) {
-                    userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
+                    userThread.start();
+
                 }
                 try {
                     if (userThread != null) userThread.join();
@@ -182,6 +185,9 @@ public class Runner extends JComponent implements Runnable {
                 currentUser = attemptLogin(uoos, uois);
                 if (currentUser != null) {
                     loggedIn = true;
+                    frame.setVisible(false);
+                    MainPage mainPage = new MainPage(userThread);
+                    mainPage.showPage();
 
                 }
             }

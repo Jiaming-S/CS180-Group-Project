@@ -38,31 +38,21 @@ public class UserThread extends Thread implements UserThreadInt {
         this.scanner = new Scanner(System.in);
     }
 
+
+
+
     @Override
     public void run() {
         boolean running = true;
         try {
             while (running) {
-//                frame = new JFrame("AOL Two");
-//                Panel panel = new Panel();
-//                panel.setLayout(new GridLayout(1,2));
-//                searchButton = new JButton("Search");
-//                panel.add(searchButton);
-//                searchField = new JTextField();
-//                panel.add(searchField);
-//                SwingUtilities.invokeLater(() -> {
-//                    frame.getContentPane().add(panel, BorderLayout.SOUTH);
-//                    frame.revalidate();
-//                    frame.repaint();
-//                });
-                System.out.println("Welcome " + currUser.getUsername());
                 System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
                 String input = scanner.nextLine().trim();
                 try {
                     int answer = Integer.parseInt(input);
                     switch (answer) {
                         case 1:
-                            searchUser();
+                            //searchUser();
                             break;
                         case 2:
                             viewProfile();
@@ -114,10 +104,10 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void searchUser() {
+    public void searchUser(String username) {
         synchronized (lock) {
-            System.out.print("Enter username you want to search: ");
-            String username = scanner.nextLine();
+//            System.out.print("Enter username you want to search: ");
+//            String username = scanner.nextLine();
             //sends packet to databaseserver to get matching userEntry of username
             Packet packet = new Packet("searchByName", username, null);
             try {
