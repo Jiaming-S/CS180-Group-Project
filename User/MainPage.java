@@ -27,7 +27,7 @@ public class MainPage extends JComponent {
 //        JButton blockButton = new JButton("Block User");
 //        JButton convoButton = new JButton("Start New Conversation");
 //        JButton msgButton = new JButton("View Message");
-//        JButton sendTextButton = new JButton("Send Text Message");
+        JButton sendTextButton = new JButton("Send Text Message");
 //        JButton sendPhotoButton = new JButton("Send Photo Message");
         JButton logOutButton = new JButton("Log Out");
 
@@ -36,7 +36,7 @@ public class MainPage extends JComponent {
 //        panel.add(blockButton);
 //        panel.add(convoButton);
 //        panel.add(msgButton);
-//        panel.add(sendTextButton);
+        panel.add(sendTextButton);
 //        panel.add(sendPhotoButton);
         panel.add(logOutButton);
 
@@ -47,11 +47,16 @@ public class MainPage extends JComponent {
 
 
         });
+
+        sendTextButton.addActionListener(e -> {
+            userThread.sendTextMsg();
+        });
+
 //        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
 //        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
 //        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));
 //        msgButton.addActionListener(e -> System.out.println("View Message clicked"));
-//        sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
+        sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
 //        sendPhotoButton.addActionListener(e -> System.out.println("Send Photo Message clicked"));
         logOutButton.addActionListener(e -> System.out.println("Log Out clicked"));
 

@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Runner extends JComponent implements Runnable {
 
@@ -60,15 +58,9 @@ public class Runner extends JComponent implements Runnable {
 
             SwingUtilities.invokeLater(new Runner());
 
-            try {
-                userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
-                //create new userthread, sending streams so userthread can access the same databaseservers.
-            } catch (ClassNotFoundException | IOException ex) {
-                ex.printStackTrace();
-            }
-
             while (true) {
                 if (loggedIn) {
+
                     if (userThread != null) {
                         userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
                     }
@@ -112,7 +104,7 @@ public class Runner extends JComponent implements Runnable {
             addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), null, "USA", "");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "USA", "");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {
@@ -146,7 +138,6 @@ public class Runner extends JComponent implements Runnable {
 
     public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
         Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
-        UserEntry userE = null;
         try {
             oos.writeObject(packet);
             Packet response = (Packet) ois.readObject();
@@ -217,6 +208,14 @@ public class Runner extends JComponent implements Runnable {
             }
             if (e.getSource() == loginButton) {
                 currentUser = attemptLogin(uoos, uois);
+
+                try {
+                    userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
+                    //create new userthread, sending streams so userthread can access the same databaseservers.
+                } catch (ClassNotFoundException | IOException ex) {
+                    ex.printStackTrace();
+                }
+
                 if (currentUser != null) {
                     loggedIn = true;
                     frame.setVisible(false);

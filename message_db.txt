@@ -1,0 +1,10 @@
+<Message>
+	<Timestamp>18:30:56.935344</Timestamp>
+	<Sender>
+		<ID>1</ID>
+	</Sender>
+	<Recipient>
+		<ID>2</ID>
+	</Recipient>
+	<Content>TextMessage|1|2|2024-12-07T18:30:56.938176|greeeetings</Content>
+</Message>

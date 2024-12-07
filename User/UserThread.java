@@ -11,7 +11,6 @@ import java.time.LocalTime;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 
 /**
@@ -145,10 +144,10 @@ public class UserThread extends Thread implements UserThreadInt {
 
             leftPanel.add(new JLabel(currUser.getUsername()));
 
-            ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
+            // ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
 
             JLabel jLabel = new JLabel();
-            jLabel.setIcon(image);
+            // jLabel.setIcon(image);
             leftPanel.add(jLabel);
 
             leftPanel.add(new JLabel("User bio:"));
@@ -237,6 +236,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     UserEntry recipient = (UserEntry) response.content;
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
+                    System.out.println("Here1");
                     Packet textMsgPacket = new Packet(
                         "insertEntry", 
                         new MessageEntry(
@@ -265,6 +265,7 @@ public class UserThread extends Thread implements UserThreadInt {
                 }
             } catch (Exception e) {
                 System.out.println("Error when sending text message.");
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error occured when sending text message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
