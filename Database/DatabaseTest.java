@@ -13,7 +13,7 @@ import java.io.*;
  * A set of JUnit tests testing everything surrounding Database
  * @author Haochen(Richard) Feng
  * @version 11/16/2024
- *//*
+ */
 
 public class DatabaseTest {
 
@@ -411,4 +411,4 @@ public class DatabaseTest {
         assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
     }
 }
-*/
+
