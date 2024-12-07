@@ -1,0 +1,11 @@
+<User>
+	<Username>jaba</Username>
+	<Password>pass</Password>
+	<ID>1</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture>./</ProfilePicture>
+	<Region>USA</Region>
+</User>

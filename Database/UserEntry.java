@@ -1,5 +1,7 @@
 package Database;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -13,8 +15,9 @@ public class UserEntry extends GenericEntry {
   private int ID;
   private ArrayList<Integer> friendList;
   private ArrayList<Integer> blockList;
-  private String profilePicture;
+  private ImageIcon profilePicture;
   private String region;
+  private String bio;
 
   public static volatile int HIGHEST_ID = 0;
   public static synchronized int incrementAndGetID() {
@@ -23,7 +26,7 @@ public class UserEntry extends GenericEntry {
   }
 
   // Create entry given fields
-  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
+  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, ImageIcon profilePicture, String region, String bio) {
     super();
     this.username = username;
     this.password = password;
@@ -32,6 +35,7 @@ public class UserEntry extends GenericEntry {
     this.blockList = blockList;
     this.profilePicture = profilePicture;
     this.region = region;
+    this.bio = bio;
   }
 
   // Create entry given XML
@@ -56,7 +60,7 @@ public class UserEntry extends GenericEntry {
       if (this.blockList == null) this.blockList = new ArrayList<>();
       this.blockList.add(Integer.parseInt(content));
     } else if (curTag.equals("ProfilePicture")) {
-      this.profilePicture = content;
+      this.profilePicture = new ImageIcon(content);
     } else if (curTag.equals("Region")) {
       this.region = content;
     }
@@ -85,6 +89,8 @@ public class UserEntry extends GenericEntry {
 
     result += String.format("\t<Region>%s</Region>\n", this.region);
 
+    result += String.format("\t<Bio>%s</Bio>\n");
+
     result += "</User>\n";
 
     return result;
@@ -105,7 +111,7 @@ public class UserEntry extends GenericEntry {
   public ArrayList<Integer> getBlockList() {
     return this.blockList;
   }
-  public String getProfilePicture() {
+  public ImageIcon getProfilePicture() {
     return this.profilePicture;
   }
   public String getRegion() {

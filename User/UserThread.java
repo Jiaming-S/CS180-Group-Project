@@ -4,6 +4,8 @@ import Database.MessageEntry;
 import Database.UserEntry;
 import Message.*;
 import Net.Packet;
+
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalTime;
 import java.util.Scanner;
@@ -14,7 +16,7 @@ import java.awt.event.*;
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
- *
+ * (Some methods may need to be altered during Phase 3 to work with GUI)
  * @author Nikita Sirandasu
  * @version 11/17/2024
  */
@@ -24,26 +26,27 @@ public class UserThread extends Thread implements UserThreadInt {
     private ObjectInputStream userIn;
     private ObjectOutputStream msgOut;
     private ObjectInputStream msgIn;
+
     private JFrame frame;
     JButton searchButton;
     JTextField searchField;
     private final Object lock = new Object();
     private Scanner scanner;
 
-    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame frame) throws IOException, ClassNotFoundException {
+    private JButton friendButton;
+    private JButton blockButton;
+    private JButton messageButton;
+
+    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
         this.userIn = userIn;
         this.msgOut = msgOut;
         this.msgIn = msgIn;
-        this.frame = frame;
         this.scanner = new Scanner(System.in);
+        this.frame = frame;
     }
 
-
-
-
-    @Override
     public void run() {
         boolean running = true;
         try {
@@ -134,10 +137,42 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void viewProfile() {
         synchronized (lock) {
-            System.out.println(currUser.getUsername() + "'s Profile:");
-            System.out.println("Username: " + currUser.getUsername());
-            System.out.println("ID: " + currUser.getID());
-            System.out.println("Region: " + currUser.getRegion());
+            Container content = new Container();
+            content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+            leftPanel.add(new JLabel(currUser.getUsername()));
+
+            ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
+
+            JLabel jLabel = new JLabel();
+            jLabel.setIcon(image);
+            leftPanel.add(jLabel);
+
+            leftPanel.add(new JLabel("User bio:"));
+            leftPanel.add(new JLabel(currUser.getBio()));
+
+            content.add(leftPanel);
+
+            JPanel rightPanel = new JPanel();
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+            rightPanel.add(new JLabel("ID: " + currUser.getID()));
+            rightPanel.add(new JLabel("Location: " + currUser.getRegion()));
+
+            friendButton.setText("Add Friend");
+            blockButton.setText("Block User");
+            messageButton.setText("Message User");
+
+            rightPanel.add(friendButton);
+            rightPanel.add(blockButton);
+            rightPanel.add(messageButton);
+
+            content.add(rightPanel);
+
+            frame.add(content);
         }
     }
 
@@ -167,8 +202,7 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void newConvo() {
         synchronized (lock) {
-            System.out.print("Enter username to start a conversation with: ");
-            String username = scanner.nextLine();
+            String username = JOptionPane.showInputDialog(null, "Enter username to start a conversation with");
             Packet packet = new Packet("searchByName", username, null);
             try {
                 userOut.writeObject(packet);
@@ -182,8 +216,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                System.out.println("Error when starting conversation.");
-                JOptionPane.showMessageDialog(null, "Error occured when starting conversation", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error occurred when starting conversation", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -267,6 +300,15 @@ public class UserThread extends Thread implements UserThreadInt {
                 JOptionPane.showMessageDialog(null, "Error occured when sending photo message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
+        BufferedImage bimage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D bGr = bimage.createGraphics();
+        icon = new ImageIcon(bimage.getScaledInstance(100, 50, Image.SCALE_DEFAULT));
+        bGr.drawImage(icon.getImage(), 0, 0, null);
+        bGr.dispose();
+        return icon;
     }
 
 }

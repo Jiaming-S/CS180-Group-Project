@@ -74,3 +74,5 @@ public class MessageEntry extends GenericEntry {
     System.out.println(new MessageEntry("<Message><Timestamp>02/11/2024</Timestamp><Sender><ID>12345678</ID></Sender><Recipient><ID>77889900</ID></Recipient><Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content></Message>"));
   }
 }
+
+
