@@ -200,7 +200,7 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void newConvo() {
         synchronized (lock) {
-            String username = JOptionPane.showInputDialog(null, "Enter username to start a conversation with";
+            String username = JOptionPane.showInputDialog(null, "Enter username to start a conversation with");
             Packet packet = new Packet("searchByName", username, null);
             try {
                 userOut.writeObject(packet);
