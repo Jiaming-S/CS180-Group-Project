@@ -1,5 +1,7 @@
 package Database;
 
+import Message.Message;
+
 /**
  * This class represents a MessageEntry for use in the MessageDatabase.
  * @author Jiaming Situ
@@ -9,10 +11,10 @@ public class MessageEntry extends GenericEntry {
   private String timestamp;
   private int sender;
   private int recipient;
-  private String content;
+  private Message content;
 
   // Create entry given fields
-  public MessageEntry(String timestamp,  int sender,  int recipient,  String content) {
+  public MessageEntry(String timestamp,  int sender,  int recipient,  Message content) {
     this.timestamp = timestamp;
     this.sender = sender;
     this.recipient = recipient;
@@ -33,7 +35,7 @@ public class MessageEntry extends GenericEntry {
     } else if (curTag.equals("ID") && parentTag.equals("Recipient")) {
       this.recipient = Integer.parseInt(content);
     } else if (curTag.equals("Content")) {
-      this.content = content;
+      this.content = Message.convertToMessage(content);
     }
   }
 
@@ -64,11 +66,11 @@ public class MessageEntry extends GenericEntry {
   public int getRecipient() {
     return this.recipient;
   }
-  public String getContent() {
+  public Message getContent() {
     return this.content;
   }
 
   public static void main(String[] args) throws ParseExceptionXML {
-    System.out.println(new MessageEntry("<Message.Message><Timestamp>02/11/2024</Timestamp><Sender><ID>12345678</ID></Sender><Recipient><ID>77889900</ID></Recipient><Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content></Message.Message>"));
+    System.out.println(new MessageEntry("<Message><Timestamp>02/11/2024</Timestamp><Sender><ID>12345678</ID></Sender><Recipient><ID>77889900</ID></Recipient><Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content></Message>"));
   }
 }

@@ -5,6 +5,7 @@ import Database.UserEntry;
 import Message.*;
 import Net.Packet;
 import java.io.*;
+import java.time.LocalTime;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
@@ -205,7 +206,16 @@ public class UserThread extends Thread implements UserThreadInt {
                     String messageContent = scanner.nextLine();
                     Packet textMsgPacket = new Packet(
                         "insertEntry", 
-                        new MessageEntry("12/07/24", currUser.getID(), recipient.getID(), messageContent),
+                        new MessageEntry(
+                            LocalTime.now().toString(), 
+                            currUser.getID(), 
+                            recipient.getID(), 
+                            new TextMessage( 
+                                messageContent,
+                                currUser.getID(), 
+                                recipient.getID()
+                            )
+                        ),
                         null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
