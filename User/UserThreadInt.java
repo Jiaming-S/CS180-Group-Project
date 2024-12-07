@@ -6,7 +6,7 @@ package User;
  * @version 11/03/2024
  */
 public interface UserThreadInt {
-    void searchUser();
+    void searchUser(String username);
     void viewProfile();
     void blockUser();
     void newConvo();

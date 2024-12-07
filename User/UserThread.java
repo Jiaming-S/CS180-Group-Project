@@ -11,10 +11,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 
-
 /**
  * UserThread class with several methods related to User actions and will work with GUI
- * (Some methods may need to be altered during Phase 3 to work with GUI)
+ *
  * @author Nikita Sirandasu
  * @version 11/17/2024
  */
@@ -24,31 +23,37 @@ public class UserThread extends Thread implements UserThreadInt {
     private ObjectInputStream userIn;
     private ObjectOutputStream msgOut;
     private ObjectInputStream msgIn;
+    private JFrame frame;
+    JButton searchButton;
+    JTextField searchField;
     private final Object lock = new Object();
     private Scanner scanner;
 
-    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
+    public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
         this.userIn = userIn;
         this.msgOut = msgOut;
         this.msgIn = msgIn;
+        this.frame = frame;
         this.scanner = new Scanner(System.in);
     }
+
+
+
 
     @Override
     public void run() {
         boolean running = true;
         try {
             while (running) {
-                System.out.println("Welcome " + currUser.getUsername());
                 System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
                 String input = scanner.nextLine().trim();
                 try {
                     int answer = Integer.parseInt(input);
                     switch (answer) {
                         case 1:
-                            searchUser();
+                            //searchUser();
                             break;
                         case 2:
                             viewProfile();
@@ -100,10 +105,10 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void searchUser() {
+    public void searchUser(String username) {
         synchronized (lock) {
-            System.out.print("Enter username you want to search: ");
-            String username = scanner.nextLine();
+//            System.out.print("Enter username you want to search: ");
+//            String username = scanner.nextLine();
             //sends packet to databaseserver to get matching userEntry of username
             Packet packet = new Packet("searchByName", username, null);
             try {
