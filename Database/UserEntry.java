@@ -16,6 +16,12 @@ public class UserEntry extends GenericEntry {
   private String profilePicture;
   private String region;
 
+  public static volatile int HIGHEST_ID = 0;
+  public static synchronized int incrementAndGetID() {
+    UserEntry.HIGHEST_ID++;
+    return UserEntry.HIGHEST_ID;
+  }
+
   // Create entry given fields
   public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
     super();

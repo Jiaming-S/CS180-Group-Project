@@ -33,6 +33,8 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
       e.printStackTrace();
       return;
     }
+
+    int exceptionLimit = 10;
     while(true) {
       try {
         Packet p = (Packet) ois.readObject();
@@ -48,7 +50,8 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
         break;
       } catch (Exception e) {
         e.printStackTrace();
-        System.out.println("[Server] Exception occurred while handling query.");
+        System.out.println("[Server] Exception occurred while handling query. Remaining exception limit: " + --exceptionLimit);
+        if (exceptionLimit <= 0) break;
       }
     }
 

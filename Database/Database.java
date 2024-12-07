@@ -12,6 +12,6 @@ public interface Database {
   Object getEntry(int rowNum);
   void insertEntry(Object entry);
   
-  void writeStringsToFile(ArrayList<GenericEntry> db);
+  void writeStringsToFile(ArrayList<? extends GenericEntry> db);
   ArrayList<String> readStringsFromFile() throws IOException;
 }

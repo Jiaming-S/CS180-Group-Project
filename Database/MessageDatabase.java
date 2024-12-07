@@ -75,6 +75,7 @@ public class MessageDatabase extends GenericDatabase {
   public void deleteMessage(MessageEntry entry) {
     synchronized(MSG_DB_LOCK) {
       this.db.remove(entry);
+      writeStringsToFile(this.db);
     }
   }
 
@@ -89,6 +90,7 @@ public class MessageDatabase extends GenericDatabase {
   public void insertEntry(Object entry) {
     synchronized(MSG_DB_LOCK) {
       db.add((MessageEntry) entry);
+      writeStringsToFile(this.db);
     }
   }
 }
