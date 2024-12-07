@@ -20,7 +20,7 @@ public class Runner extends JComponent implements Runnable {
      * @author Jane Bazzell
      * @version 11/17/2024
      */
-    private JFrame frame; // the canvas
+    private static JFrame frame; // the canvas
 
     private JButton registerButton;
     private JButton loginButton;
@@ -60,7 +60,7 @@ public class Runner extends JComponent implements Runnable {
         SwingUtilities.invokeLater(new Runner());
 
         try {
-            userThread = new UserThread(currentUser, uoos, uois, moos, mois);
+            userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
             //create new userthread, sending streams so userthread can access the same databaseservers.
         } catch (ClassNotFoundException | IOException ex) {
             ex.printStackTrace();
