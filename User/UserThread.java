@@ -8,8 +8,8 @@ import Net.Packet;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
@@ -58,6 +58,9 @@ public class UserThread extends Thread implements UserThreadInt {
                     switch (answer) {
                         case 1:
                             //searchUser();
+                            break;
+                        case 2:
+                            viewProfile();
                             break;
                         case 3:
                             //blockUser();
@@ -117,78 +120,83 @@ public class UserThread extends Thread implements UserThreadInt {
                 Packet response = (Packet) userIn.readObject(); //receive packet with UserEntry info from databaseserver
                 if (response.query.equals("success")) { //query == "success" if user found, "failure" if anything else occurs.
                     UserEntry userToFind = (UserEntry) response.content;
-                    ProfilePage profilePage = new ProfilePage(this, userToFind);
-                    profilePage.viewProfile();
+                    User searchedUser = new User(userToFind);
+                    JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
+                    if (input == JOptionPane.YES_OPTION) {
+                        UserThread newUT = new UserThread(searchedUser, userOut, userIn, msgOut, msgIn, frame);
+                        ProfilePage profilePage = new ProfilePage(newUT, newUT.getCurrUser().userToEntry());
+                        profilePage.viewProfile();
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "User was not found", "Failure", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                System.out.println("Error when searching user.");
                 JOptionPane.showMessageDialog(null, "Error occured during search", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public void blockUser(String blockedUsername) {
+    public void viewProfile() {
         synchronized (lock) {
-            Packet getUserPacket = new Packet("searchByName", blockedUsername, null);
-            try {
-                userOut.writeObject(getUserPacket);
-                Packet response = (Packet) userIn.readObject();
-                if (response.query.equals("success")) {
-                    UserEntry blocked = (UserEntry) response.content;
-                    currUser.addBlockedUser(blocked.getID()); //add to the userentry's arraylist of blocked users
-                    //sends packet with the new user's info to server to be written to the database.
-                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
-                    try {
-                        userOut.writeObject(blockPacket);
-                        Packet resp = (Packet) userIn.readObject();
-                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
-                        if (!success) {
-                            System.out.println("Error writing to database.");
-                            throw new Exception();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+            Container content = new Container();
+            content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
+
+            JPanel leftPanel = new JPanel();
+            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+
+            leftPanel.add(new JLabel(currUser.getUsername()));
+
+            // ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
+
+            JLabel jLabel = new JLabel();
+            // jLabel.setIcon(image);
+            leftPanel.add(jLabel);
+
+            leftPanel.add(new JLabel("User bio:"));
+            leftPanel.add(new JLabel(currUser.getBio()));
+
+            content.add(leftPanel);
+
+            JPanel rightPanel = new JPanel();
+            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+
+            rightPanel.add(new JLabel("ID: " + currUser.getID()));
+            rightPanel.add(new JLabel("Location: " + currUser.getRegion()));
+
+            friendButton.setText("Add Friend");
+            blockButton.setText("Block User");
+            messageButton.setText("Message User");
+
+            rightPanel.add(friendButton);
+            rightPanel.add(blockButton);
+            rightPanel.add(messageButton);
+
+            content.add(rightPanel);
+
+            frame.add(content);
         }
     }
 
-    public void unblockUser(String unBUsername) {
+    public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            Packet getUserPacket = new Packet("searchByName", unBUsername, null);
+            Packet packet = new Packet("searchByName", blockedUsername, null);
             try {
-                userOut.writeObject(getUserPacket);
+                userOut.writeObject(packet);
                 Packet response = (Packet) userIn.readObject();
                 if (response.query.equals("success")) {
-                    UserEntry unB = (UserEntry) response.content;
-                    currUser.removeBlockedUser(unB.getID()); //add to the userentry's arraylist of blocked users
-                    //sends packet with the new user's info to server to be written to the database.
-                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
-                    try {
-                        userOut.writeObject(blockPacket);
-                        Packet resp = (Packet) userIn.readObject();
-                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
-                        if (!success) {
-                            System.out.println("Error writing to database.");
-                            throw new Exception();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    JOptionPane.showMessageDialog(null, "Unblocked user: " + unB.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    UserEntry blocked = (UserEntry) response.content;
+                    currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
+                    System.out.println("Blocked user is: " + blocked.getUsername());
+                    JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
+                    System.out.println("User not found.");
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, "Error when unblocking user", "Error", JOptionPane.ERROR_MESSAGE);
+                System.out.println("Error when blocking user.");
+                JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -310,33 +318,6 @@ public class UserThread extends Thread implements UserThreadInt {
         return null;
     }
 
-    public void sendDMTextMessage(String msg, UserEntry recipientUser) {
-        Packet dmMessage = new Packet(
-            "insertEntry", 
-            new MessageEntry(
-                LocalTime.now().toString(),
-                currUser.getID(),
-                recipientUser.getID(),
-                new TextMessage( 
-                    msg,
-                    currUser.getID(), 
-                    recipientUser.getID()
-                )
-            ),
-            null
-        );
-
-        try {
-            msgOut.writeObject(dmMessage);
-            Packet response = (Packet) msgIn.readObject();
-            if (response.content == null || !response.query.equals("success")) throw new IllegalArgumentException();
-        } catch (Exception e) {
-            System.out.println("Error when sending text message.");
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error occured sending text message to " + recipientUser.getUsername(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     public void sendTextMsg() {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
@@ -350,18 +331,18 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     Packet textMsgPacket = new Packet(
-                        "insertEntry", 
-                        new MessageEntry(
-                            LocalTime.now().toString(), 
-                            currUser.getID(), 
-                            recipient.getID(), 
-                            new TextMessage( 
-                                messageContent,
-                                currUser.getID(), 
-                                recipient.getID()
-                            )
-                        ),
-                        null
+                            "insertEntry",
+                            new MessageEntry(
+                                    LocalTime.now().toString(),
+                                    currUser.getID(),
+                                    recipient.getID(),
+                                    new TextMessage(
+                                            messageContent,
+                                            currUser.getID(),
+                                            recipient.getID()
+                                    )
+                            ),
+                            null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
                     Packet textResponse = (Packet) msgIn.readObject();
@@ -397,18 +378,18 @@ public class UserThread extends Thread implements UserThreadInt {
                     String photoPath = scanner.nextLine();
 
                     Packet photoMsgPacket = new Packet(
-                        "insertEntry", 
-                        new MessageEntry(
-                            LocalTime.now().toString(), 
-                            currUser.getID(), 
-                            recipient.getID(), 
-                            new PhotoMessage ( 
-                                photoPath,
-                                currUser.getID(), 
-                                recipient.getID()
-                            )
-                        ),
-                        null
+                            "insertEntry",
+                            new MessageEntry(
+                                    LocalTime.now().toString(),
+                                    currUser.getID(),
+                                    recipient.getID(),
+                                    new PhotoMessage (
+                                            photoPath,
+                                            currUser.getID(),
+                                            recipient.getID()
+                                    )
+                            ),
+                            null
                     );
                     msgOut.writeObject(photoMsgPacket); // Send the photo message packet
                     Packet photoResponse = (Packet) msgIn.readObject();
@@ -439,19 +420,5 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public User getCurrUser() {
         return currUser;
-    }
-
-    public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
-        Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
-        try {
-            oos.writeObject(packet);
-            Packet response = (Packet) ois.readObject();
-            if (response.getContent() == null) {
-                return null;
-            }
-            return new UserEntry(response.getContent().toString()); //returns matching userentry if found.
-        } catch (Exception e) {
-            e.printStackTrace();
-        } return null;
     }
 }
