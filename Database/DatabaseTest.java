@@ -39,6 +39,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>BidenBlast</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -54,7 +55,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormatUser() {
-        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n\t<Bio>BidenBlast</Bio>\n</User>\n";
+        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n\t<Bio>BidenBlast</Bio>\n\t<PrivacyPreference>All</PrivacyPreference>\n</User>\n";
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -86,6 +87,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>BidenBlast</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         String username = "joebiden";
 
@@ -108,6 +110,8 @@ public class DatabaseTest {
 
         String bio = "BidenBlast";
 
+        String privacyPreference = "All";
+
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -124,6 +128,7 @@ public class DatabaseTest {
         assertEquals("getProfilePicture returns wrong string!", profilePicture, ue.getProfilePicture());
         assertEquals("getRegion returns wrong value!", region, ue.getRegion());
         assertEquals("getBio returns wrong value!", bio, ue.getBio());
+        assertEquals("getPrivacyPreference returns wrong value!", privacyPreference, ue.getPrivacyPreference());
     }
 
     //test searchers;
@@ -143,6 +148,45 @@ public class DatabaseTest {
 
     @Test
     public void testSettersGettersUser() {
+        String tocopy = "./Database/copyDatabaseTestFile.txt";
+        String tosave = "./Database/databaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tocopy = "./Database/copyMessageDatabaseTestFile.txt";
+        tosave = "./Database/messageDatabaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         UserDatabase ud;
         try {
             ud = new UserDatabase("./Database/databaseTestFile.txt");
@@ -168,6 +212,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>3name</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -183,7 +228,7 @@ public class DatabaseTest {
             <User>
                 <Username>name4</Username>
                 <Password>password123</Password>
-                <ID>00000004</ID>
+                <ID>00000021</ID>
                 <FriendList>
                     <ID>11223344</ID>
                     <ID>55667788</ID>
@@ -196,6 +241,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>4name</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry nue;
         try {
@@ -290,6 +336,45 @@ public class DatabaseTest {
     //test setters and getters for messageDabatase
     @Test
     public void testSettersGettersMessages() {
+        String tocopy = "./Database/copyDatabaseTestFile.txt";
+        String tosave = "./Database/databaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tocopy = "./Database/copyMessageDatabaseTestFile.txt";
+        tosave = "./Database/messageDatabaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         MessageDatabase md;
         try {
             md = new MessageDatabase("./Database/messageDatabaseTestFile.txt");
