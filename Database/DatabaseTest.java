@@ -8,6 +8,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.io.*;
 
+import Message.*;
+
 
 /**
  * A set of JUnit tests testing everything surrounding Database
@@ -165,6 +167,7 @@ public class DatabaseTest {
                 </BlockList>
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
+                <Bio>3name</Bio>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -192,6 +195,7 @@ public class DatabaseTest {
                 </BlockList>
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
+                <Bio>4name</Bio>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry nue;
         try {
@@ -211,14 +215,14 @@ public class DatabaseTest {
     public void initialTestContentMessages() {
         String messageStr = """
             <Message>
-                <Timestamp>02/11/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -234,7 +238,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormatMessages() {
-        String messageStr = "<Message>\n\t<Timestamp>02/11/2024</Timestamp>\n\t<Sender>\n\t\t<ID>12345678</ID>\n\t</Sender>\n\t<Recipient>\n\t\t<ID>77889900</ID>\n\t</Recipient>\n\t<Content>frfrsotrueong.</Content>\n</Message>\n";
+        String messageStr = "<Message>\n\t<Timestamp>2023-12-07T18:59:59.216152800</Timestamp>\n\t<Sender>\n\t\t<ID>12345678</ID>\n\t</Sender>\n\t<Recipient>\n\t\t<ID>77889900</ID>\n\t</Recipient>\n\t<Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|frfrsotrueong.</Content>\n</Message>\n";
         MessageEntry me;
         try {
             me = new MessageEntry(messageStr);
@@ -251,14 +255,14 @@ public class DatabaseTest {
     public void testGettersMessages() {
         String messageStr = """
             <Message>
-                <Timestamp>02/11/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>frfrsotrueong.</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|frfrsotrueong.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -269,18 +273,18 @@ public class DatabaseTest {
             return;
         }
 
-        String timestamp = "02/11/2024";
+        String timestamp = "2023-12-07T18:59:59.216152800";
 
         int sender = 12345678;
 
         int recipient = 77889900;
 
-        String content = "frfrsotrueong.";
+        String content = "TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|frfrsotrueong.";
 
         assertEquals("getTimestamp returns the wrong string!", timestamp, me.getTimestamp());
         assertEquals("getSender returns the wrong ID!", sender, me.getSender());
         assertEquals("getRecipient returns the wrong ID!", recipient, me.getRecipient());
-        assertEquals("getContent returns the wrong string!", content, me.getContent());
+        assertEquals("getContent returns the wrong string!", content, ((TextMessage)(me.getContent())).toString());
     }
 
     //test setters and getters for messageDabatase
@@ -297,14 +301,14 @@ public class DatabaseTest {
 
         String messageStr = """
             <Message>
-                <Timestamp>02/13/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>88888888</ID>
                 </Sender>
                 <Recipient>
                     <ID>99999999</ID>
                 </Recipient>
-                <Content>Content</Content>
+                <Content>TextMessage|88888888|99999999|2023-12-07T18:59:59.216152800|Content</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -319,14 +323,14 @@ public class DatabaseTest {
 
         String newMessageStr = """
             <Message>
-                <Timestamp>02/13/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>99999999</ID>
                 </Sender>
                 <Recipient>
                     <ID>10101010</ID>
                 </Recipient>
-                <Content>Content</Content>
+                <Content>TextMessage|99999999|10101010|2023-12-07T18:59:59.216152800|Content</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry nme;
         try {
@@ -356,14 +360,14 @@ public class DatabaseTest {
 
         String messageStr = """
             <Message>
-                <Timestamp>02/11/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -380,14 +384,14 @@ public class DatabaseTest {
 
         String messageStr2 = """
             <Message>
-                <Timestamp>02/12/2024</Timestamp>
+                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>blocked</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|blocked</Content>
                 </Message>
             <Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me2;

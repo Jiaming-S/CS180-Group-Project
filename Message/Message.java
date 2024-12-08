@@ -8,7 +8,7 @@ public interface Message {
     String toString();
 
     static Message convertToMessage(String s) {
-        String[] input = s.split("|");
+        String[] input = s.split("\\|");
         if (input[0].equals("PhotoMessage")) {
             return new PhotoMessage(s);
         } else if (input[0].equals("TextMessage")) {

@@ -1,40 +1,40 @@
 <Message>
-  <Timestamp>02/11/2024</Timestamp>
+  <Timestamp>2023-12-07T18:58:55.216152800</Timestamp>
   <Sender>
     <ID>12345678</ID>
   </Sender>
   <Recipient>
     <ID>77889900</ID>
   </Recipient>
-  <Content>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+  <Content>TextMessage|12345678|77889900|2023-12-07T18:58:55.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
 </Message>
 <Message>
-  <Timestamp>02/12/2024</Timestamp>
+  <Timestamp>2023-12-07T18:59:55.216152800</Timestamp>
   <Sender>
     <ID>77889900</ID>
   </Sender>
   <Recipient>
     <ID>12345678</ID>
   </Recipient>
-  <Content>I'm breaking up with you.</Content>
+  <Content>TextMessage|77889900|12345678|2023-12-07T18:59:55.216152800|I'm breaking up with you.</Content>
 </Message>
 <Message>
-  <Timestamp>02/12/2024</Timestamp>
+  <Timestamp>2023-12-07T18:59:55.216152800</Timestamp>
   <Sender>
     <ID>12345678</ID>
   </Sender>
   <Recipient>
     <ID>77889900</ID>
   </Recipient>
-  <Content>blocked</Content>
+  <Content>TextMessage|12345678|77889900|2023-12-07T18:59:55.216152800|blocked</Content>
 </Message>
 <Message>
-  <Timestamp>02/13/2024</Timestamp>
+  <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
   <Sender>
     <ID>88888888</ID>
   </Sender>
   <Recipient>
     <ID>99999999</ID>
   </Recipient>
-  <Content>Content</Content>
+  <Content>TextMessage|88888888|99999999|2023-12-07T18:59:59.216152800|Content</Content>
 </Message>

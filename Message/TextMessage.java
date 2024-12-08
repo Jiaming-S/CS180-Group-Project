@@ -21,7 +21,7 @@ public class TextMessage implements Message, Serializable {
     }
 
     public TextMessage(String content) {
-        String[] contentSplit = content.split("|");
+        String[] contentSplit = content.split("\\|");
         if (!contentSplit[0].equals("TextMessage")) return;
 
         this.senderID = Integer.parseInt(contentSplit[1]);
