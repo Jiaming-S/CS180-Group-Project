@@ -19,7 +19,6 @@ public class ConversationPage extends JComponent {
     this.currUser = userThread.getCurrUser();
 
     frame = new JFrame("AOL TWO");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(600, 400);
     frame.setLocationRelativeTo(null);
   }

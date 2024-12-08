@@ -27,7 +27,11 @@ public class TextMessage implements Message, Serializable {
         this.senderID = Integer.parseInt(contentSplit[1]);
         this.recipientID = Integer.parseInt(contentSplit[2]);
         this.timestamp = LocalDateTime.parse(contentSplit[3]);
-        this.content = contentSplit[4];
+        if (contentSplit.length == 5) {
+            this.content = contentSplit[4];
+        } else {
+            this.content = "";
+        }
     }
 
     @Override

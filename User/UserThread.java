@@ -300,7 +300,7 @@ public class UserThread extends Thread implements UserThreadInt {
 
         try {
             msgOut.writeObject(dmMessage);
-            Packet response = (Packet) userIn.readObject();
+            Packet response = (Packet) msgIn.readObject();
             if (response.content == null || !response.query.equals("success")) throw new IllegalArgumentException();
         } catch (Exception e) {
             System.out.println("Error when sending text message.");

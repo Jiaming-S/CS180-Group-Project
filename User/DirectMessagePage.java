@@ -1,12 +1,14 @@
 package User;
 
 import java.awt.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import Database.*;
+import Message.TextMessage;
 
 public class DirectMessagePage {
   private JFrame frame;
@@ -14,13 +16,16 @@ public class DirectMessagePage {
   private User currUser;
   private int otherUserID;
 
+  private JPanel messageHistory;
+  private JTextField sendMessageField;
+  private JButton sendMessageButton;
+
   public DirectMessagePage(UserThread userThread, int otherUserID) {
     this.userThread = userThread;
     this.currUser = userThread.getCurrUser();
     this.otherUserID = otherUserID;
 
     frame = new JFrame("AOL TWO");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setSize(600, 400);
     frame.setLocationRelativeTo(null);
   }
@@ -63,7 +68,7 @@ public class DirectMessagePage {
     Container content = new Container();
     content.setLayout(new BorderLayout());
 
-    JPanel messageHistory = new JPanel();
+    messageHistory = new JPanel();
     messageHistory.setLayout(new BoxLayout(messageHistory, BoxLayout.Y_AXIS));
     messageHistory.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -79,20 +84,35 @@ public class DirectMessagePage {
       }
     }
 
-    JScrollPane messageScroller = new JScrollPane(messageHistory);
-    content.add(messageScroller);
-
     JPanel sendMessageFooter = new JPanel();
     sendMessageFooter.setLayout(new FlowLayout(FlowLayout.LEFT));
     
-    JTextField sendMessageField = new JTextField(20);
-    JButton sendMessageButton = new JButton("Send");
+    sendMessageField = new JTextField(20);
+    sendMessageButton = new JButton("Send");
     
     sendMessageButton.addActionListener(_ -> {
       String sentText = sendMessageField.getText();
       sendMessageField.setText("");
       userThread.sendDMTextMessage(sentText, userThread.userFromID(otherUserID));
+
+      messageHistory.add(makeMessageTileNoPad(
+        new MessageEntry(
+          LocalTime.now().toString(),
+          currUser.getID(),
+          otherUserID,
+          new TextMessage( 
+            sentText,
+            currUser.getID(),
+            otherUserID
+          )
+        )
+      ));
+
+      new DirectMessagePage(userThread, otherUserID).viewDMPage();
     });
+
+    JScrollPane messageScroller = new JScrollPane(messageHistory);
+    content.add(messageScroller);
 
     sendMessageFooter.add(sendMessageField);
     sendMessageFooter.add(sendMessageButton);
