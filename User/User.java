@@ -18,7 +18,7 @@ public class User {
     private int ID;
     private ArrayList<Integer> friendList;
     private ArrayList<Integer> blockList;
-    private ImageIcon profilePicture;
+    private String profilePicture;
     private String region;
     private String bio;
 
@@ -32,7 +32,7 @@ public class User {
         this.password = password;
         this.ID = ID;
     }
-    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, ImageIcon profilePicture, String region, String bio) {
+    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio) {
         this.username = username;
         this.password = password;
         this.ID = ID;
@@ -50,7 +50,7 @@ public class User {
         this.blockList = entry.getBlockList();
         this.profilePicture = entry.getProfilePicture();
         this.region = entry.getRegion();
-        this.bio = bio;
+        this.bio = entry.getBio();
     }
 
     public User() {
@@ -82,7 +82,7 @@ public class User {
         return blockList;
     }
 
-    public ImageIcon getProfilePicture() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 

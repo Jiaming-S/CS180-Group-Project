@@ -7,10 +7,10 @@ import Net.Packet;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalTime;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
 
 /**
@@ -62,7 +62,7 @@ public class UserThread extends Thread implements UserThreadInt {
                             viewProfile();
                             break;
                         case 3:
-                            blockUser();
+                            //blockUser();
                             break;
                         case 4:
                             newConvo();
@@ -144,10 +144,10 @@ public class UserThread extends Thread implements UserThreadInt {
 
             leftPanel.add(new JLabel(currUser.getUsername()));
 
-            ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
+            // ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
 
             JLabel jLabel = new JLabel();
-            jLabel.setIcon(image);
+            // jLabel.setIcon(image);
             leftPanel.add(jLabel);
 
             leftPanel.add(new JLabel("User bio:"));
@@ -175,10 +175,8 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void blockUser() {
+    public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            System.out.print("Enter username to block: ");
-            String blockedUsername = scanner.nextLine();
             Packet packet = new Packet("searchByName", blockedUsername, null);
             try {
                 userOut.writeObject(packet);
@@ -237,8 +235,17 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     Packet textMsgPacket = new Packet(
-                        "insertEntry",
-                        new MessageEntry("12/07/24", currUser.getID(), recipient.getID(), messageContent),
+                        "insertEntry", 
+                        new MessageEntry(
+                            LocalTime.now().toString(), 
+                            currUser.getID(), 
+                            recipient.getID(), 
+                            new TextMessage( 
+                                messageContent,
+                                currUser.getID(), 
+                                recipient.getID()
+                            )
+                        ),
                         null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
@@ -255,6 +262,7 @@ public class UserThread extends Thread implements UserThreadInt {
                 }
             } catch (Exception e) {
                 System.out.println("Error when sending text message.");
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error occured when sending text message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -273,7 +281,20 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter the path of the photo: ");
                     String photoPath = scanner.nextLine();
 
-                    Packet photoMsgPacket = new Packet("sendPhotoMessage", new PhotoMessage(photoPath, currUser.getID(), recipient.getID()), null);
+                    Packet photoMsgPacket = new Packet(
+                        "insertEntry", 
+                        new MessageEntry(
+                            LocalTime.now().toString(), 
+                            currUser.getID(), 
+                            recipient.getID(), 
+                            new PhotoMessage ( 
+                                photoPath,
+                                currUser.getID(), 
+                                recipient.getID()
+                            )
+                        ),
+                        null
+                    );
                     msgOut.writeObject(photoMsgPacket); // Send the photo message packet
                     Packet photoResponse = (Packet) msgIn.readObject();
                     if (photoResponse == null || photoResponse.query.isEmpty()) {
@@ -301,4 +322,7 @@ public class UserThread extends Thread implements UserThreadInt {
         return icon;
     }
 
+    public User getCurrUser() {
+        return currUser;
+    }
 }
