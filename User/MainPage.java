@@ -11,17 +11,22 @@ public class MainPage extends JComponent {
     public MainPage(UserThread userThread) {
         this.userThread = userThread;
         frame = new JFrame("AOL TWO");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
     }
 
     public void showPage() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
+        frame.dispose();
+        frame.setLayout(new BorderLayout());
+        JPanel gridPanel = new JPanel();
+        gridPanel.setLayout(new GridLayout(3, 1, 10, 10));
+
 
         JButton searchButton = new JButton("Search User");
-        JTextField searchField = new JTextField(15);
+        JTextField searchField = new JTextField(20);
+        gridPanel.add(new JLabel("Search User:"));
+        gridPanel.add(searchField);
 //        JButton profileButton = new JButton("View Profile");
 //        JButton editProfileButton = new JButton("Edit Profile");
 //        JButton blockButton = new JButton("Block User");
@@ -29,16 +34,17 @@ public class MainPage extends JComponent {
 //        JButton msgButton = new JButton("View Message");
 //        JButton sendTextButton = new JButton("Send Text Message");
 //        JButton sendPhotoButton = new JButton("Send Photo Message");
-        JButton logOutButton = new JButton("Log Out");
+//        JButton logOutButton = new JButton("Log Out");
 
-        panel.add(searchButton);
+        gridPanel.add(searchButton);
+        gridPanel.add(searchField);
 //        panel.add(profileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
 //        panel.add(msgButton);
 //        panel.add(sendTextButton);
 //        panel.add(sendPhotoButton);
-        panel.add(logOutButton);
+//        panel.add(logOutButton);
 
         // Action Listeners for buttons
         searchButton.addActionListener(e -> {
@@ -53,9 +59,9 @@ public class MainPage extends JComponent {
 //        msgButton.addActionListener(e -> System.out.println("View Message clicked"));
 //        sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
 //        sendPhotoButton.addActionListener(e -> System.out.println("Send Photo Message clicked"));
-        logOutButton.addActionListener(e -> System.out.println("Log Out clicked"));
-
-        frame.getContentPane().add(panel);
+//        logOutButton.addActionListener(e -> System.out.println("Log Out clicked"));
+        frame.add(gridPanel, BorderLayout.NORTH);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 }
