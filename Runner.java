@@ -199,9 +199,9 @@ public class Runner extends JComponent implements Runnable {
         frame.add(content);
 
         frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
     }
@@ -220,7 +220,6 @@ public class Runner extends JComponent implements Runnable {
                     frame.setVisible(false);
                     MainPage mainPage = new MainPage(userThread);
                     mainPage.showPage();
-
                 }
             }
         }
