@@ -1,6 +1,8 @@
 package Database;
 
 import java.util.ArrayList;
+import javax.swing.*;
+import User.User;
 
 /**
  * This class represents a UserEntry for use in the UserDatabase.
@@ -34,6 +36,17 @@ public class UserEntry extends GenericEntry {
     this.profilePicture = profilePicture;
     this.region = region;
     this.bio = bio;
+  }
+
+  public UserEntry(User user) {
+    this.username = user.getUsername();
+    this.password = user.getPassword();
+    this.ID = user.getID();
+    this.friendList = user.getFriendList();
+    this.blockList = user.getBlockList();
+    this.profilePicture = user.getProfilePicture();
+    this.region = user.getRegion();
+    this.bio = user.getBio();
   }
 
   // Create entry given XML

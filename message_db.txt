@@ -6,7 +6,7 @@
 	<Recipient>
 		<ID>2</ID>
 	</Recipient>
-	<Content>TextMessage|1|2|2024-12-07T18:30:56.938176|greeeetings</Content>
+	<Content>null</Content>
 </Message>
 <Message>
 	<Timestamp>18:45:51.684137</Timestamp>
@@ -16,5 +16,145 @@
 	<Recipient>
 		<ID>2</ID>
 	</Recipient>
-	<Content>PhotoMessage|1|2|2024-12-07T18:45:51.686521|./reel.png</Content>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>18:55:10.297364200</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>3</ID>
+	</Recipient>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>18:58:55.216152800</Timestamp>
+	<Sender>
+		<ID>6</ID>
+	</Sender>
+	<Recipient>
+		<ID>3</ID>
+	</Recipient>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>19:10:03.438345</Timestamp>
+	<Sender>
+		<ID>1</ID>
+	</Sender>
+	<Recipient>
+		<ID>2</ID>
+	</Recipient>
+	<Content>TextMessage|1|2|2024-12-07T19:10:03.440721|so true fr fr ong</Content>
+</Message>
+<Message>
+	<Timestamp>14:04:44.526104</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:04:44.530033|greeeeetings</Content>
+</Message>
+<Message>
+	<Timestamp>14:25:42.965004</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>1</ID>
+	</Recipient>
+	<Content>TextMessage|2|1|2024-12-08T14:25:42.967649|ong bro</Content>
+</Message>
+<Message>
+	<Timestamp>14:27:20.517433</Timestamp>
+	<Sender>
+		<ID>1</ID>
+	</Sender>
+	<Recipient>
+		<ID>2</ID>
+	</Recipient>
+	<Content>TextMessage|1|2|2024-12-08T14:27:20.520380|no literally</Content>
+</Message>
+<Message>
+	<Timestamp>14:28:14.719621</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>1</ID>
+	</Recipient>
+	<Content>TextMessage|2|1|2024-12-08T14:28:14.722461|wait fr</Content>
+</Message>
+<Message>
+	<Timestamp>14:29:04.537229</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>3</ID>
+	</Recipient>
+	<Content>TextMessage|2|3|2024-12-08T14:29:04.540379|joe!!!!</Content>
+</Message>
+<Message>
+	<Timestamp>14:31:18.624898</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:31:18.627644|mouse</Content>
+</Message>
+<Message>
+	<Timestamp>14:36:36.146613</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>1</ID>
+	</Recipient>
+	<Content>TextMessage|2|1|2024-12-08T14:36:36.148693|so true king</Content>
+</Message>
+<Message>
+	<Timestamp>14:57:07.699721</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:57:07.701964|mickey???</Content>
+</Message>
+<Message>
+	<Timestamp>14:57:11.959277</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:57:11.959318|this is so sad</Content>
+</Message>
+<Message>
+	<Timestamp>14:57:15.859182</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:57:15.859222|actual schizphrenia</Content>
+</Message>
+<Message>
+	<Timestamp>14:57:27.859286</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:57:27.859320|womp womp</Content>
 </Message>

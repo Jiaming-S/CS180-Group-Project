@@ -74,6 +74,8 @@ public class UserDatabase extends GenericDatabase {
           break;
         }
       }
+      writeStringsToFile(this.db);
+
     }
   }
 

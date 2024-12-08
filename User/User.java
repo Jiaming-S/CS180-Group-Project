@@ -82,6 +82,22 @@ public class User {
         return blockList;
     }
 
+    public void addBlockedUser(int user) {
+        blockList.add(user);
+    }
+
+    public void removeBlockedUser(int user) {
+        blockList.remove(user);
+    }
+
+    public void addFriend(int user) {
+        friendList.add(user);
+    }
+
+    public void removeFriend(int user) {
+        friendList.remove(user);
+    }
+
     public String getProfilePicture() {
         return profilePicture;
     }

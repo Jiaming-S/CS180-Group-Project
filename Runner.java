@@ -24,8 +24,6 @@ public class Runner extends JComponent implements Runnable {
 
     private JButton registerButton;
     private JButton loginButton;
-    private JTextField usernameTF;
-    private JTextField passwordTF;
 
     private static boolean loggedIn;
 
@@ -44,23 +42,40 @@ public class Runner extends JComponent implements Runnable {
         userThread = null;
 
         try {
-            //TODO Handle ConnectException
+            //TODO: implement photo messaging using a pop-up? consider drop-down
+            //TODO: look for and consider converting byte array to images
+            //TODO: show all of users conversations
+            //TODO: display a conversation
+            //TODO: Delete messages
+            //TODO: Be able to restrict messages to either all users or friends only
+            //TODO: Blocklist and friendlist
+            //TODO: Edit profile
+            //TODO: Make sure searchuser is working
+            //TODO: Do some bug-securing
+            //TODO: Handle if user closes the frame
+            //TODO: Report
+            //TODO: Slides
+            //TODO: Demo and presentation
             //connect client to database of user information, begin streams
-            userSocket = new Socket(hostName, portUDBS);
-            uoos = new ObjectOutputStream(userSocket.getOutputStream());
-            uoos.flush();
-            uois = new ObjectInputStream(userSocket.getInputStream());
-            //connect client to database of messaging conversations, begin streams
-            messageSocket = new Socket(hostName, portMDBS);
-            moos = new ObjectOutputStream(messageSocket.getOutputStream());
-            moos.flush();
-            mois = new ObjectInputStream(messageSocket.getInputStream());
+            try {
+                userSocket = new Socket(hostName, portUDBS);
+                uoos = new ObjectOutputStream(userSocket.getOutputStream());
+                uoos.flush();
+                uois = new ObjectInputStream(userSocket.getInputStream());
+                //connect client to database of messaging conversations, begin streams
+                messageSocket = new Socket(hostName, portMDBS);
+                moos = new ObjectOutputStream(messageSocket.getOutputStream());
+                moos.flush();
+                mois = new ObjectInputStream(messageSocket.getInputStream());
+            } catch (ConnectException e) {
+                JOptionPane.showMessageDialog(null, "Could not connect to server! Closing application.");
+                return;
+            }
 
             SwingUtilities.invokeLater(new Runner());
 
             while (true) {
                 if (loggedIn) {
-
                     if (userThread != null) {
                         userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
                     }
@@ -204,7 +219,6 @@ public class Runner extends JComponent implements Runnable {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == registerButton) {
                 addUser(uoos, uois);
-
             }
             if (e.getSource() == loginButton) {
                 currentUser = attemptLogin(uoos, uois);
