@@ -29,7 +29,7 @@ public class UserDatabase extends GenericDatabase {
 
   public UserEntry searchByName (String name) {
     synchronized(USR_DB_LOCK) {
-      for (UserEntry ue : db) {
+      for (UserEntry ue : this.db.reversed()) {
         if (ue.getUsername().equals(name)) {
           return ue;
         }

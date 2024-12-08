@@ -36,6 +36,7 @@ public class MainPage extends JComponent {
         panel.add(searchButton);
         panel.add(searchField);
         panel.add(profileButton);
+        panel.add(editProfileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
 //        panel.add(msgButton);
@@ -73,7 +74,19 @@ public class MainPage extends JComponent {
         });
 
         sendTextButton.addActionListener(e -> {
-            userThread.sendTextMsg();
+            String otherUserName = JOptionPane.showInputDialog(
+                null, 
+                "Enter a username.", 
+                "Search", 
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            DirectMessagePage dmPage = new DirectMessagePage(
+                userThread, 
+                userThread.userFromUsername(otherUserName).getID()
+            );
+            
+            dmPage.viewDMPage();
         });
 
         sendPhotoButton.addActionListener(e -> {
@@ -84,6 +97,10 @@ public class MainPage extends JComponent {
         logOutButton.addActionListener(e -> {
             frame.dispose();
 
+        });
+
+        editProfileButton.addActionListener(e -> {
+            userThread.editProfile();
         });
 
 //        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));

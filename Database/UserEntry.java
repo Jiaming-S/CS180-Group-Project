@@ -1,7 +1,6 @@
 package Database;
 
 import java.util.ArrayList;
-import javax.swing.*;
 import User.User;
 
 /**
@@ -18,6 +17,7 @@ public class UserEntry extends GenericEntry {
   private String profilePicture;
   private String region;
   private String bio;
+  private String privacyPreference;
 
   public static volatile int HIGHEST_ID = 0;
   public static synchronized int incrementAndGetID() {
@@ -26,7 +26,7 @@ public class UserEntry extends GenericEntry {
   }
 
   // Create entry given fields
-  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio) {
+  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio, String privacyPreference) {
     super();
     this.username = username;
     this.password = password;
@@ -36,6 +36,7 @@ public class UserEntry extends GenericEntry {
     this.profilePicture = profilePicture;
     this.region = region;
     this.bio = bio;
+    this.privacyPreference = privacyPreference;
   }
 
   public UserEntry(User user) {
@@ -47,6 +48,7 @@ public class UserEntry extends GenericEntry {
     this.profilePicture = user.getProfilePicture();
     this.region = user.getRegion();
     this.bio = user.getBio();
+    this.privacyPreference = user.getPrivacyPreference();
   }
 
   // Create entry given XML
@@ -76,6 +78,8 @@ public class UserEntry extends GenericEntry {
       this.region = content;
     } else if (curTag.equals("Bio")) {
       this.bio = content;
+    } else if (curTag.equals("PrivacyPreference")) {
+      this.privacyPreference = content;
     }
   }
 
@@ -103,6 +107,8 @@ public class UserEntry extends GenericEntry {
     result += String.format("\t<Region>%s</Region>\n", this.region);
 
     result += String.format("\t<Bio>%s</Bio>\n", this.bio);
+
+    result += String.format("\t<PrivacyPreference>%s</PrivacyPreference>\n", this.privacyPreference);
 
     result += "</User>\n";
 
@@ -132,6 +138,9 @@ public class UserEntry extends GenericEntry {
   }
   public String getBio() {
     return this.bio;
+  }
+  public String getPrivacyPreference() {
+    return this.privacyPreference;
   }
 
   public void setID(int ID) {
