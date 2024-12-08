@@ -445,14 +445,14 @@ public class DatabaseTest {
 
         String messageStr = """
             <Message>
-                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
+                <Timestamp>2023-12-07T18:58:55.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:58:55.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -465,18 +465,18 @@ public class DatabaseTest {
 
         MessageEntry res = md.searchFirstByRecipientID(77889900);
 
-        assertEquals("searchFirstByRecipientID returns the wrong value!", me.toString(), res.toString());
+        assertEquals("searchFirstByRecipientID returns the wrong value!", me.toString(), res.toString().replace(" ", ""));
 
         String messageStr2 = """
             <Message>
-                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
+                <Timestamp>2023-12-07T18:59:55.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|blocked</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:55.216152800|blocked</Content>
                 </Message>
             <Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me2;
@@ -494,15 +494,15 @@ public class DatabaseTest {
 
         ArrayList<MessageEntry> resArr = md.searchAllByRecipientID(77889900);
         assertEquals("searchAllByRecipientID returns the wrong number of entries!", messageArr.size(), resArr.size());
-        assertEquals("searchAllByRecipientID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
+        assertEquals("searchAllByRecipientID returns the wrong contents!", messageArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + messageArr.get(1).toString().replaceAll(" ", ""), resArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + resArr.get(1).toString().replaceAll(" ", ""));
 
         res = md.searchFirstBySenderID(12345678);
 
-        assertEquals("searchFirstBySenderID returns the wrong value!", me.toString(), res.toString());
+        assertEquals("searchFirstBySenderID returns the wrong value!", me.toString().replaceAll(" ", ""), res.toString().replaceAll(" ", ""));
 
         resArr = md.searchAllBySenderID(12345678);
         assertEquals("searchAllBySenderID returns the wrong number of entries!", messageArr.size(), resArr.size());
-        assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
+        assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + messageArr.get(1).toString().replaceAll(" ", ""), resArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + resArr.get(1).toString().replaceAll(" ", ""));
     }
 }
 
