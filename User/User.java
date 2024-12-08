@@ -2,7 +2,6 @@ package User;
 
 import Database.UserEntry;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 public class User {

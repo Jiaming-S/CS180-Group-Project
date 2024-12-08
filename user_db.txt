@@ -8,7 +8,7 @@
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
-	<Bio></Bio>
+	<Bio>This is person1's bio.</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
@@ -18,11 +18,10 @@
 	<FriendList>
 	</FriendList>
 	<BlockList>
-		<ID>7</ID>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
-	<Region>null</Region>
-	<Bio>null</Bio>
+	<Region>EUR</Region>
+	<Bio>I have a very uninteresting bio.</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
@@ -35,102 +34,33 @@
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
-	<Bio></Bio>
+	<Bio>eepy</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
-	<Username>person1</Username>
-	<Password>pass1</Password>
+	<Username>donald</Username>
+	<Password>trump</Password>
 	<ID>4</ID>
 	<FriendList>
 	</FriendList>
 	<BlockList>
+		<ID>3</ID>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
-	<Bio></Bio>
+	<Bio>orange</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
-	<Username>joebiden</Username>
-	<Password>eagle</Password>
+	<Username>kim</Username>
+	<Password>jongun</Password>
 	<ID>5</ID>
 	<FriendList>
 	</FriendList>
 	<BlockList>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
-	<Bio></Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>
-<User>
-	<Username>mikepence</Username>
-	<Password>eaglemini</Password>
-	<ID>6</ID>
-	<FriendList>
-	</FriendList>
-	<BlockList>
-	</BlockList>
-	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
-	<Bio></Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>
-<User>
-	<Username>donald</Username>
-	<Password>trump</Password>
-	<ID>7</ID>
-	<FriendList>
-		<ID>9</ID>
-		<ID>3</ID>
-	</FriendList>
-	<BlockList>
-		<ID>3</ID>
-	</BlockList>
-	<ProfilePicture></ProfilePicture>
-	<Region>USA!!!!!!!!!!!!!!!!!!!!!</Region>
-	<Bio>ong bro so true</Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>
-<User>
-	<Username>xingping</Username>
-	<Password>kim</Password>
-	<ID>8</ID>
-	<FriendList>
-	</FriendList>
-	<BlockList>
-	</BlockList>
-	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
-	<Bio></Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>
-<User>
-	<Username>kim</Username>
-	<Password>jongun</Password>
-	<ID>9</ID>
-	<FriendList>
-		<ID>7</ID>
-	</FriendList>
-	<BlockList>
-		<ID>7</ID>
-	</BlockList>
-	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
-	<Bio></Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>
-<User>
-	<Username>anotherone</Username>
-	<Password>sotruefr</Password>
-	<ID>10</ID>
-	<FriendList>
-	</FriendList>
-	<BlockList>
-	</BlockList>
-	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
+	<Region>KOR</Region>
 	<Bio></Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>

@@ -6,13 +6,11 @@ import Database.UserEntry;
 import Message.*;
 import Net.Packet;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalTime;
 import java.util.Scanner;
 import java.util.ArrayList;
 import javax.swing.*;
-import java.awt.*;
 
 
 /**
@@ -34,10 +32,6 @@ public class UserThread extends Thread implements UserThreadInt {
     private final Object lock = new Object();
     private Scanner scanner;
 
-    private JButton friendButton;
-    private JButton blockButton;
-    private JButton messageButton;
-
     public UserThread(User currUser, ObjectOutputStream userOut, ObjectInputStream userIn, ObjectOutputStream msgOut, ObjectInputStream msgIn, JFrame Frame) throws IOException, ClassNotFoundException {
         this.currUser = currUser;
         this.userOut = userOut;
@@ -45,7 +39,6 @@ public class UserThread extends Thread implements UserThreadInt {
         this.msgOut = msgOut;
         this.msgIn = msgIn;
         this.scanner = new Scanner(System.in);
-        this.frame = frame;
     }
 
     public void searchUser(String username) {
@@ -57,7 +50,6 @@ public class UserThread extends Thread implements UserThreadInt {
                 Packet response = (Packet) userIn.readObject(); //receive packet with UserEntry info from databaseserver
                 if (response.query.equals("success")) { //query == "success" if user found, "failure" if anything else occurs.
                     UserEntry userToFind = (UserEntry) response.content;
-                    User searchedUser = new User(userToFind);
                     JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                     int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
@@ -439,15 +431,6 @@ public class UserThread extends Thread implements UserThreadInt {
                 JOptionPane.showMessageDialog(null, "Error occured when sending photo message", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-
-    private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
-        BufferedImage bimage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bimage.createGraphics();
-        icon = new ImageIcon(bimage.getScaledInstance(100, 50, Image.SCALE_DEFAULT));
-        bGr.drawImage(icon.getImage(), 0, 0, null);
-        bGr.dispose();
-        return icon;
     }
 
     public User getCurrUser() {
