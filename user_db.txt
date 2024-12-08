@@ -18,6 +18,7 @@
 	<FriendList>
 	</FriendList>
 	<BlockList>
+		<ID>7</ID>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
@@ -89,7 +90,7 @@
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
 	<Region>USA!!!!!!!!!!!!!!!!!!!!!</Region>
-	<Bio>godking</Bio>
+	<Bio>ong bro so true</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>

@@ -291,6 +291,19 @@ public class UserThread extends Thread implements UserThreadInt {
         return null;
     }
 
+    public void deleteMessageEntry(MessageEntry me) {
+        Packet packet = new Packet("deleteEntry", me, null);
+        try {
+            msgOut.writeObject(packet);
+            Packet response = (Packet) msgIn.readObject();
+            if (!response.query.equals("success")) {
+                JOptionPane.showMessageDialog(null, "Failed to delete message.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred when deleting message.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public UserEntry userFromID(int ID) {
         UserEntry result = null;
         Packet packet = new Packet("searchByID", ID, null);
