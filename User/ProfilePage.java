@@ -2,11 +2,14 @@ package User;
 
 import Database.UserEntry;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class ProfilePage extends JComponent {
 
@@ -17,7 +20,6 @@ public class ProfilePage extends JComponent {
     private final Object lock = new Object();
     private JButton blockButton;
     private JButton friendButton;
-    private JButton messageButton;
 
     public ProfilePage(UserThread userThread, UserEntry user) {
         this.profiledUser = user;
@@ -29,7 +31,6 @@ public class ProfilePage extends JComponent {
         frame.setLocationRelativeTo(null);
         blockButton = new JButton();
         friendButton = new JButton();
-        messageButton = new JButton();
     }
 
     public void viewProfile() {
@@ -39,24 +40,32 @@ public class ProfilePage extends JComponent {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        if (profiledUser.getProfilePicture() != null && !profiledUser.getProfilePicture().equals("")) {
-            ImageIcon image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
+        // if (profiledUser.getProfilePicture() != null && !profiledUser.getProfilePicture().equals("")) {
+        //     ImageIcon image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
+        //     JLabel jLabel = new JLabel();
+        //     jLabel.setIcon(image);
+        //     leftPanel.add(jLabel);
+        // } else {
+            Image image = null;
+            try {
+                BufferedImage bufferedImage = ImageIO.read(new File("aol.jpg"));
+                image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ImageIcon aol = new ImageIcon(image);
             JLabel jLabel = new JLabel();
-            jLabel.setIcon(image);
-            leftPanel.add(jLabel);
-        } else {
-            ImageIcon image = scaleImageIcon(new ImageIcon("aol.jpg"), 100, 100);
-            JLabel jLabel = new JLabel();
-            jLabel.setIcon(image);
-            leftPanel.add(jLabel);
-        }
+            jLabel.setIcon(aol);
+            JPanel wrapper = new JPanel();
+            wrapper.add(jLabel);
+            wrapper.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            leftPanel.add(wrapper);
+        // }
 
         checkStatuses();
         blockButton.addActionListener(blockListener);
         friendButton.addActionListener(friendListener);
-
-        leftPanel.add(new JLabel("User bio:"));
-        leftPanel.add(new JLabel(profiledUser.getBio()));
 
         content.add(leftPanel);
 
@@ -74,13 +83,11 @@ public class ProfilePage extends JComponent {
             )
         ));
 
-        messageButton.setText("Message User");
         System.out.println(currUser.getID());
         System.out.println(profiledUser.getID());
         if (currUser.getID() != profiledUser.getID()) {
             rightPanel.add(friendButton);
             rightPanel.add(blockButton);
-            rightPanel.add(messageButton);
         }
 
         content.add(rightPanel);
