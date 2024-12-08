@@ -34,3 +34,15 @@
 	<Region>USA</Region>
 	<Bio></Bio>
 </User>
+<User>
+	<Username>mickey</Username>
+	<Password>mouse</Password>
+	<ID>4</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>USA</Region>
+	<Bio></Bio>
+</User>

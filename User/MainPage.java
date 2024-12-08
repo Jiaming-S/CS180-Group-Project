@@ -43,7 +43,7 @@ public class MainPage extends JComponent {
         panel.add(profileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
-//        panel.add(msgButton);
+        panel.add(msgButton);
         panel.add(sendTextButton);
         panel.add(sendPhotoButton);
         panel.add(logOutButton);
@@ -52,8 +52,11 @@ public class MainPage extends JComponent {
         searchButton.addActionListener(e -> {
             String searchUser = searchField.getText();
             userThread.searchUser(searchUser);
+        });
 
-
+        msgButton.addActionListener(e -> {
+            ConversationPage convoPage = new ConversationPage(userThread);
+            convoPage.viewMessagePage();
         });
 
         sendTextButton.addActionListener(e -> {

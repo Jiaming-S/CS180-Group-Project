@@ -8,6 +8,7 @@ import Net.Packet;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Scanner;
 import javax.swing.*;
 import java.awt.*;
@@ -220,6 +221,65 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void viewMsg() {
         //must be implemented after GUI is created
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<MessageEntry> getAllMessagesFromUser(int ID) {
+        ArrayList<MessageEntry> result = null;
+        Packet packet = new Packet("searchAllBySenderID", ID, null);
+        try {
+            msgOut.writeObject(packet);
+            Packet response = (Packet) msgIn.readObject();
+            if (response.query.equals("success")) {
+                result = (ArrayList<MessageEntry>) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any messages from " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred when searching messages from " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<MessageEntry> getAllMessagesToUser(int ID) {
+        ArrayList<MessageEntry> result = null;
+        Packet packet = new Packet("searchAllByRecipientID", ID, null);
+        try {
+            msgOut.writeObject(packet);
+            Packet response = (Packet) msgIn.readObject();
+            if (response.query.equals("success")) {
+                result = (ArrayList<MessageEntry>) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any messages from id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred when searching messages from id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        return null;
+    }
+
+    public UserEntry userFromID(int ID) {
+        UserEntry result = null;
+        Packet packet = new Packet("searchByID", ID, null);
+        try {
+            userOut.writeObject(packet);
+            Packet response = (Packet) userIn.readObject();
+            if (response.query.equals("success")) {
+                result = (UserEntry) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any users with id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred searching for user with id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
     }
 
     public void sendTextMsg() {

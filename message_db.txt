@@ -36,5 +36,25 @@
 	<Recipient>
 		<ID>3</ID>
 	</Recipient>
-	<Content>PhotoMessage|6|3|2024-12-07T18:58:55.231784200|aol.jpg</Content>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>19:10:03.438345</Timestamp>
+	<Sender>
+		<ID>1</ID>
+	</Sender>
+	<Recipient>
+		<ID>2</ID>
+	</Recipient>
+	<Content>TextMessage|1|2|2024-12-07T19:10:03.440721|sotruefrfrong</Content>
+</Message>
+<Message>
+	<Timestamp>14:04:44.526104</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>4</ID>
+	</Recipient>
+	<Content>TextMessage|2|4|2024-12-08T14:04:44.530033|greeeeetings</Content>
 </Message>
