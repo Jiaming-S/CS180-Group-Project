@@ -62,7 +62,7 @@ public class UserThread extends Thread implements UserThreadInt {
                             viewProfile();
                             break;
                         case 3:
-                            blockUser();
+                            //blockUser();
                             break;
                         case 4:
                             newConvo();
@@ -175,10 +175,8 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void blockUser() {
+    public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            System.out.print("Enter username to block: ");
-            String blockedUsername = scanner.nextLine();
             Packet packet = new Packet("searchByName", blockedUsername, null);
             try {
                 userOut.writeObject(packet);
@@ -324,4 +322,7 @@ public class UserThread extends Thread implements UserThreadInt {
         return icon;
     }
 
+    public User getCurrUser() {
+        return currUser;
+    }
 }
