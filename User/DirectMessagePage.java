@@ -60,6 +60,15 @@ public class DirectMessagePage {
     
     wrapper.add(tileContent);
 
+    if (me.getSender() == currUser.getID()) {
+      JButton deleteMessageButton = new JButton("Delete Above Message");
+      deleteMessageButton.addActionListener(_ -> {
+        userThread.deleteMessageEntry(me);
+        new DirectMessagePage(userThread, otherUserID).viewDMPage();
+      });
+      wrapper.add(deleteMessageButton);
+    }
+
     tile.add(wrapper);
     return tile;
   }

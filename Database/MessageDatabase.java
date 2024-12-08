@@ -74,7 +74,13 @@ public class MessageDatabase extends GenericDatabase {
 
   public void deleteMessage(MessageEntry entry) {
     synchronized(MSG_DB_LOCK) {
-      this.db.remove(entry);
+      for (MessageEntry me : this.db) {
+        if (me.getTimestamp().equals(entry.getTimestamp()) && me.getRecipient() == entry.getRecipient()) {
+          this.db.remove(me);
+          break;
+        }
+      }
+      
       writeStringsToFile(this.db);
     }
   }

@@ -80,7 +80,7 @@ public class ConversationPage extends JComponent {
 
       JLabel convoUser = new JLabel(
         String.format(
-          "<html>%s<h1>Conversation with %s:</h1><p>ID: %d</p><span>Timezone: %s</span></html>",
+          "<html>%s%s<h1>Conversation with %s:</h1><p>ID: %d</p><span>Timezone: %s</span></html>",
           (currUser.getBlockList().contains(otherUserID) ? "<h2>[BLOCKED USER]</h2>" : ""),
           (currUser.getPrivacyPreference().equals("Friends") && !currUser.getFriendList().contains(otherUserID) ? "<h2>[NON-FRIEND USER]</h2>" : ""),
           ue.getUsername(),
