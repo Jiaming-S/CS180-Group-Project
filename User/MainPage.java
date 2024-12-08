@@ -18,7 +18,7 @@ public class MainPage extends JComponent {
 
     public void showPage() {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 2));
+        panel.setLayout(new GridLayout(4, 1, 10, 10));
 
         JButton searchButton = new JButton("Search User");
         JTextField searchField = new JTextField(15);
@@ -32,6 +32,7 @@ public class MainPage extends JComponent {
         JButton logOutButton = new JButton("Log Out");
 
         panel.add(searchButton);
+        panel.add(searchField);
 //        panel.add(profileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
@@ -56,14 +57,18 @@ public class MainPage extends JComponent {
             userThread.sendPhotoMsg();
         });
 
+        logOutButton.addActionListener(e -> {
+            userThread.sendPhotoMsg();
+        });
+
 //        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
 //        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
 //        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));
 //        msgButton.addActionListener(e -> System.out.println("View Message clicked"));
         sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
         sendPhotoButton.addActionListener(e -> System.out.println("Send Photo Message clicked"));
-        logOutButton.addActionListener(e -> System.out.println("Log Out clicked"));
 
+        frame.add(panel, BorderLayout.NORTH);
         frame.getContentPane().add(panel);
         frame.setVisible(true);
     }
