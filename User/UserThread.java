@@ -47,72 +47,8 @@ public class UserThread extends Thread implements UserThreadInt {
         this.frame = frame;
     }
 
-    public void run() {
-        boolean running = true;
-        try {
-            while (running) {
-                System.out.println("1 - Search User\n2 - View Profile\n3 - Block User\n4 - Start New Conversation\n5 - View Message\n6 - Send TextMessage\n7 - Send PhotoMessage\n8 - Log Out");
-                String input = scanner.nextLine().trim();
-                try {
-                    int answer = Integer.parseInt(input);
-                    switch (answer) {
-                        case 1:
-                            //searchUser();
-                            break;
-                        case 2:
-                            //viewProfile();
-                            break;
-                        case 3:
-                            //blockUser();
-                            break;
-                        case 4:
-                            newConvo();
-                            break;
-                        case 5:
-                            viewMsg();
-                            break;
-                        case 6:
-                            sendTextMsg();
-                            break;
-                        case 7:
-                            sendPhotoMsg();
-                            break;
-                        case 8:
-                            running = false;
-                            System.out.println("Logging out");
-                            break;
-                        default:
-                            System.out.println("Invalid answer, please enter a valid answer.");
-                            break;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter a valid number.");
-                }
-            }
-        } catch(Exception e) {
-            System.err.println("An error occurred: " + e.getMessage());
-        } finally {
-            try { //close all streams
-                if (userOut != null)
-                    userOut.close();
-                if (userIn != null)
-                    userIn.close();
-                if (msgOut != null)
-                    msgOut.close();
-                if (msgIn != null)
-                    msgIn.close();
-                if (scanner != null)
-                    scanner.close();
-            } catch (IOException e) {
-                System.err.println("Streams cannot be closed: " + e.getMessage());
-            }
-        }
-    }
-
     public void searchUser(String username) {
         synchronized (lock) {
-//            System.out.print("Enter username you want to search: ");
-//            String username = scanner.nextLine();
             //sends packet to databaseserver to get matching userEntry of username
             Packet packet = new Packet("searchByName", username, null);
             try {
@@ -133,7 +69,7 @@ public class UserThread extends Thread implements UserThreadInt {
                 }
             } catch (Exception e) {
                 System.out.println("Error when searching user.");
-                JOptionPane.showMessageDialog(null, "Error occured during search", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Error occurred during search", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -162,20 +98,32 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            Packet packet = new Packet("searchByName", blockedUsername, null);
+            Packet getUserPacket = new Packet("searchByName", blockedUsername, null);
             try {
-                userOut.writeObject(packet);
+                userOut.writeObject(getUserPacket);
                 Packet response = (Packet) userIn.readObject();
                 if (response.query.equals("success")) {
                     UserEntry blocked = (UserEntry) response.content;
-                    currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
+                    currUser.addBlockedUser(blocked.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(blockPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    System.out.println("User not found.");
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                System.out.println("Error when blocking user.");
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -360,6 +308,22 @@ public class UserThread extends Thread implements UserThreadInt {
         }
 
         return null;
+    }
+
+    public void updateUserPrivacy(String newP) {
+        currUser.setPrivacyPreference(newP);
+        Packet packet = new Packet("updateEntry", new UserEntry(currUser), null);
+        try {
+            userOut.writeObject(packet);
+            Packet response = (Packet) userIn.readObject();
+            if (response.query.equals("success")) {
+                JOptionPane.showMessageDialog(null, "Privacy preference updated", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error writing to database!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error updating preference!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public UserEntry userFromUsername(String username) {

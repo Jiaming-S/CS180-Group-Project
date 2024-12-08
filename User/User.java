@@ -117,6 +117,10 @@ public class User {
         return privacyPreference;
     }
 
+    public void setPrivacyPreference(String newP) {
+        privacyPreference = newP;
+    }
+
     public void setBio(String newBio) {
         bio = newBio;
     }

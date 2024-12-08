@@ -45,8 +45,7 @@ public class Runner extends JComponent implements Runnable {
             //TODO: implement photo messaging using a pop-up? consider drop-down
             //TODO: look for and consider converting byte array to images
             //TODO: Delete messages
-            //TODO: Be able to restrict messages to either all users or friends only
-            //TODO: Edit profile
+            //TODO: Condense edit profile and toggle privacy into a single user settings page?
             //TODO: Do some bug-securing
             //TODO: Handle if user closes the frame
             //TODO: Report
