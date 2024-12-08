@@ -7,7 +7,6 @@ package User;
  */
 public interface UserThreadInt {
     void searchUser(String username);
-    void viewProfile();
     void blockUser(String blockedUsername);
     void newConvo();
     void viewMsg();

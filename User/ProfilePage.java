@@ -22,7 +22,7 @@ public class ProfilePage extends JComponent {
         this.userThread = userThread;
         this.currUser = new UserEntry(userThread.getCurrUser());
         frame = new JFrame("AOL TWO");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
         blockButton = new JButton();
@@ -64,21 +64,32 @@ public class ProfilePage extends JComponent {
         if (currUser.getBlockList().contains(profiledUser.getID())) {
             blockButton.setText("Unblock user");
             blockButton.addActionListener(e -> {
+                userThread.unblockUser(profiledUser.getUsername());
+            });
+        } else {
+            blockButton.setText("Block User");
+            blockButton.addActionListener(e -> {
                 userThread.blockUser(profiledUser.getUsername());
             });
         }
+        if (currUser.getFriendList().contains(profiledUser.getID())) {
+            friendButton.setText("Unfriend user");
+            friendButton.addActionListener(e -> {
+                userThread.unfriendUser(profiledUser.getUsername());
+            });
+        } else {
+            friendButton.setText("Friend User");
+            friendButton.addActionListener(e -> {
+                userThread.friendUser(profiledUser.getUsername());
+            });
+        }
 
-        friendButton.setText("Add Friend");
-        blockButton.setText("Block User");
         messageButton.setText("Message User");
-
-        friendButton.addActionListener(e -> {
-            userThread.friendUser(profiledUser.getUsername());
-        });
-
-        rightPanel.add(friendButton);
-        rightPanel.add(blockButton);
-        rightPanel.add(messageButton);
+        if (currUser.getID() != profiledUser.getID()) {
+            rightPanel.add(friendButton);
+            rightPanel.add(blockButton);
+            rightPanel.add(messageButton);
+        }
 
         content.add(rightPanel);
 

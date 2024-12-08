@@ -116,4 +116,12 @@ public class User {
     public String getPrivacyPreference() {
         return privacyPreference;
     }
+
+    public void setBio(String newBio) {
+        bio = newBio;
+    }
+
+    public void setRegion(String newR) {
+        region = newR;
+    }
 }

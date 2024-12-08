@@ -86,11 +86,10 @@
 	</FriendList>
 	<BlockList>
 		<ID>3</ID>
-		<ID>3</ID>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
-	<Region>USA</Region>
-	<Bio></Bio>
+	<Region>USA!!!!!!!!!!!!!!!!!!!!!</Region>
+	<Bio>godking</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
@@ -111,6 +110,7 @@
 	<Password>jongun</Password>
 	<ID>9</ID>
 	<FriendList>
+		<ID>7</ID>
 	</FriendList>
 	<BlockList>
 		<ID>7</ID>
