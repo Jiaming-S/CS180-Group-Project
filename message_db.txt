@@ -6,7 +6,7 @@
 	<Recipient>
 		<ID>2</ID>
 	</Recipient>
-	<Content>TextMessage|1|2|2024-12-07T18:30:56.938176|greeeetings</Content>
+	<Content>null</Content>
 </Message>
 <Message>
 	<Timestamp>18:45:51.684137</Timestamp>
@@ -16,5 +16,25 @@
 	<Recipient>
 		<ID>2</ID>
 	</Recipient>
-	<Content>PhotoMessage|1|2|2024-12-07T18:45:51.686521|./reel.png</Content>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>18:55:10.297364200</Timestamp>
+	<Sender>
+		<ID>2</ID>
+	</Sender>
+	<Recipient>
+		<ID>3</ID>
+	</Recipient>
+	<Content>null</Content>
+</Message>
+<Message>
+	<Timestamp>18:58:55.216152800</Timestamp>
+	<Sender>
+		<ID>6</ID>
+	</Sender>
+	<Recipient>
+		<ID>3</ID>
+	</Recipient>
+	<Content>PhotoMessage|6|3|2024-12-07T18:58:55.231784200|aol.jpg</Content>
 </Message>

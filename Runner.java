@@ -204,7 +204,6 @@ public class Runner extends JComponent implements Runnable {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == registerButton) {
                 addUser(uoos, uois);
-
             }
             if (e.getSource() == loginButton) {
                 currentUser = attemptLogin(uoos, uois);
