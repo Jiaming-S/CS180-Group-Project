@@ -48,7 +48,7 @@ public class MainPage extends JComponent {
 
         // Action Listeners for buttons
         profileButton.addActionListener(e -> {
-            ProfilePage profilePage = new ProfilePage(userThread);
+            ProfilePage profilePage = new ProfilePage(userThread, userThread.getCurrUser().userToEntry());
             profilePage.viewProfile();
             //userThread.viewProfile();
 

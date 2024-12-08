@@ -63,7 +63,7 @@ public class UserThread extends Thread implements UserThreadInt {
                             viewProfile();
                             break;
                         case 3:
-                            blockUser();
+                            //blockUser();
                             break;
                         case 4:
                             newConvo();
@@ -124,7 +124,8 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                     int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
-                        ProfilePage profilePage = new ProfilePage(new UserThread(searchedUser, userOut, userIn, msgOut, msgIn, frame));
+                        UserThread newUT = new UserThread(searchedUser, userOut, userIn, msgOut, msgIn, frame);
+                        ProfilePage profilePage = new ProfilePage(newUT, newUT.getCurrUser().userToEntry());
                         profilePage.viewProfile();
                     }
                 } else {
@@ -196,6 +197,39 @@ public class UserThread extends Thread implements UserThreadInt {
             } catch (Exception e) {
                 System.out.println("Error when blocking user.");
                 JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void friendUser(String friendUsername) {
+        synchronized (lock) {
+            Packet getUserPacket = new Packet("searchByName", friendUsername, null);
+            try {
+                userOut.writeObject(getUserPacket);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry friend = (UserEntry) response.content;
+                    currUser.addFriend(friend.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet friendPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(friendPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Friended user: " + friend.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error when friending user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
