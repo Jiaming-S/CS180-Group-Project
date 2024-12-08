@@ -21,6 +21,7 @@ public class User {
     private String profilePicture;
     private String region;
     private String bio;
+    private String privacyPreference;
 
     public User(String username, String password) {
         this.username = username;
@@ -32,7 +33,7 @@ public class User {
         this.password = password;
         this.ID = ID;
     }
-    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio) {
+    public User(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio, String privacyPreference) {
         this.username = username;
         this.password = password;
         this.ID = ID;
@@ -41,6 +42,7 @@ public class User {
         this.profilePicture = profilePicture;
         this.region = region;
         this.bio = bio;
+        this.privacyPreference = privacyPreference;
     }
     public User (UserEntry entry) {
         this.username = entry.getUsername();
@@ -51,6 +53,7 @@ public class User {
         this.profilePicture = entry.getProfilePicture();
         this.region = entry.getRegion();
         this.bio = entry.getBio();
+        this.privacyPreference = entry.getPrivacyPreference();
     }
 
     public User() {
@@ -59,7 +62,7 @@ public class User {
     }
 
     public UserEntry userToEntry() {
-        return new UserEntry(username, password, ID, friendList, blockList, profilePicture, region, bio);
+        return new UserEntry(username, password, ID, friendList, blockList, profilePicture, region, bio, privacyPreference);
     }
 
     public String getUsername() {
@@ -108,5 +111,9 @@ public class User {
 
     public String getBio() {
         return bio;
+    }
+    
+    public String getPrivacyPreference() {
+        return privacyPreference;
     }
 }

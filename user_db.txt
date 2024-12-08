@@ -9,6 +9,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>person2</Username>
@@ -21,6 +22,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>joebiden</Username>
@@ -33,6 +35,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>person1</Username>
@@ -45,6 +48,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>joebiden</Username>
@@ -57,6 +61,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>mikepence</Username>
@@ -69,6 +74,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>donald</Username>
@@ -85,6 +91,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>xingping</Username>
@@ -97,6 +104,7 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>
 <User>
 	<Username>kim</Username>
@@ -110,4 +118,18 @@
 	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>anotherone</Username>
+	<Password>sotruefr</Password>
+	<ID>10</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>USA</Region>
+	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
 </User>

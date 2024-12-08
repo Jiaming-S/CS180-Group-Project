@@ -44,13 +44,9 @@ public class Runner extends JComponent implements Runnable {
         try {
             //TODO: implement photo messaging using a pop-up? consider drop-down
             //TODO: look for and consider converting byte array to images
-            //TODO: show all of users conversations
-            //TODO: display a conversation
             //TODO: Delete messages
             //TODO: Be able to restrict messages to either all users or friends only
-            //TODO: Blocklist and friendlist
             //TODO: Edit profile
-            //TODO: Make sure searchuser is working
             //TODO: Do some bug-securing
             //TODO: Handle if user closes the frame
             //TODO: Report
@@ -119,7 +115,7 @@ public class Runner extends JComponent implements Runnable {
             addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "USA", "");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "USA", "", "All");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {
