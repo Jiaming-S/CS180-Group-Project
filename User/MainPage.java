@@ -30,7 +30,7 @@ public class MainPage extends JComponent {
         JTextField searchField = new JTextField(15);
         JButton profileButton = new JButton("View Profile");
         JButton sendTextButton = new JButton("Send Text Message");
-        JButton sendPhotoButton = new JButton("Send Photo Message");
+        // JButton sendPhotoButton = new JButton("Send Photo Message");
         JButton editProfileButton = new JButton("Edit Profile");
         JButton msgButton = new JButton("View Message");
         JButton logOutButton = new JButton("Log Out");
@@ -45,7 +45,7 @@ public class MainPage extends JComponent {
 //        panel.add(msgButton);
         panel.add(msgButton);
         panel.add(sendTextButton);
-        panel.add(sendPhotoButton);
+        // panel.add(sendPhotoButton);
         panel.add(logOutButton);
         panel.add(togglePrivacyButton);
 
@@ -90,9 +90,9 @@ public class MainPage extends JComponent {
             dmPage.viewDMPage();
         });
 
-        sendPhotoButton.addActionListener(_ -> {
-            userThread.sendPhotoMsg();
-        });
+        // sendPhotoButton.addActionListener(_ -> {
+        //     userThread.sendPhotoMsg();
+        // });
 
 
         logOutButton.addActionListener(_ -> {
@@ -108,8 +108,8 @@ public class MainPage extends JComponent {
 //        blockButton.addActionListener(_ -> System.out.println("Block User clicked"));
 //        convoButton.addActionListener(_ -> System.out.println("Start New Conversation clicked"));
 //        msgButton.addActionListener(_ -> System.out.println("View Message clicked"));
-        sendTextButton.addActionListener(_ -> System.out.println("Send Text Message clicked"));
-        sendPhotoButton.addActionListener(_ -> System.out.println("Send Photo Message clicked"));
+        // sendTextButton.addActionListener(_ -> System.out.println("Send Text Message clicked"));
+        // sendPhotoButton.addActionListener(_ -> System.out.println("Send Photo Message clicked"));
 
         frame.add(panel, BorderLayout.NORTH);
         frame.getContentPane().add(panel);
