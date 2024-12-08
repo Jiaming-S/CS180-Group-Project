@@ -29,7 +29,7 @@ public class MainPage extends JComponent {
 //        JButton msgButton = new JButton("View Message");
         JButton sendTextButton = new JButton("Send Text Message");
         JButton sendPhotoButton = new JButton("Send Photo Message");
-        JButton profileButton = new JButton("View Profile");
+//        JButton profileButton = new JButton("View Profile");
         JButton editProfileButton = new JButton("Edit Profile");
         JButton blockButton = new JButton("Block User");
         JButton convoButton = new JButton("Start New Conversation");
@@ -38,9 +38,8 @@ public class MainPage extends JComponent {
 
         panel.add(searchButton);
         panel.add(searchField);
-        panel.add(profileButton);
+//        panel.add(profileButton);
 
-        panel.add(profileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
         panel.add(msgButton);
@@ -71,11 +70,15 @@ public class MainPage extends JComponent {
             userThread.sendPhotoMsg();
         });
 
-//        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
-        profileButton.addActionListener(e -> {
-            ProfilePage profilePage = new ProfilePage(userThread);
-            profilePage.viewProfile();
+        editProfileButton.addActionListener(e -> {
+            //userThread.editProfile();
         });
+
+//        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
+        //profileButton.addActionListener(e -> {
+//            ProfilePage profilePage = new ProfilePage(userThread);
+//            profilePage.viewProfile();
+//        });
 //        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
 //        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));
 //        msgButton.addActionListener(e -> System.out.println("View Message clicked"));

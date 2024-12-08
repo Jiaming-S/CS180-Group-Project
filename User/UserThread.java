@@ -59,9 +59,6 @@ public class UserThread extends Thread implements UserThreadInt {
                         case 1:
                             //searchUser();
                             break;
-                        case 2:
-                            viewProfile();
-                            break;
                         case 3:
                             //blockUser();
                             break;
@@ -120,80 +117,111 @@ public class UserThread extends Thread implements UserThreadInt {
                 Packet response = (Packet) userIn.readObject(); //receive packet with UserEntry info from databaseserver
                 if (response.query.equals("success")) { //query == "success" if user found, "failure" if anything else occurs.
                     UserEntry userToFind = (UserEntry) response.content;
-                    System.out.println("User found: " + userToFind.getUsername());
-                    System.out.println("ID: " + userToFind.getID());
-                    System.out.println("Region: " + userToFind.getRegion());
-                    JOptionPane.showMessageDialog(null, String.format("%s\n%s\n%s", "User found: " + userToFind.getUsername(), "ID: " + userToFind.getID(), "Region: " + userToFind.getRegion()), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    ProfilePage profilePage = new ProfilePage(this, userToFind);
+                    profilePage.viewProfile();
                 } else {
-                    System.out.println("User was not found.");
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                System.out.println("Error when searching user.");
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error occured during search", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    public void viewProfile() {
-        synchronized (lock) {
-            Container content = new Container();
-            content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
-
-            JPanel leftPanel = new JPanel();
-            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-
-            leftPanel.add(new JLabel(currUser.getUsername()));
-
-            // ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
-
-            JLabel jLabel = new JLabel();
-            // jLabel.setIcon(image);
-            leftPanel.add(jLabel);
-
-            leftPanel.add(new JLabel("User bio:"));
-            leftPanel.add(new JLabel(currUser.getBio()));
-
-            content.add(leftPanel);
-
-            JPanel rightPanel = new JPanel();
-            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-            rightPanel.add(new JLabel("ID: " + currUser.getID()));
-            rightPanel.add(new JLabel("Location: " + currUser.getRegion()));
-
-            friendButton.setText("Add Friend");
-            blockButton.setText("Block User");
-            messageButton.setText("Message User");
-
-            rightPanel.add(friendButton);
-            rightPanel.add(blockButton);
-            rightPanel.add(messageButton);
-
-            content.add(rightPanel);
-
-            frame.add(content);
-        }
-    }
-
     public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            Packet packet = new Packet("searchByName", blockedUsername, null);
+            Packet getUserPacket = new Packet("searchByName", blockedUsername, null);
             try {
-                userOut.writeObject(packet);
+                userOut.writeObject(getUserPacket);
                 Packet response = (Packet) userIn.readObject();
                 if (response.query.equals("success")) {
                     UserEntry blocked = (UserEntry) response.content;
-                    currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
-                    System.out.println("Blocked user is: " + blocked.getUsername());
+                    currUser.addBlockedUser(blocked.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(blockPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    System.out.println("User not found.");
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
-                System.out.println("Error when blocking user.");
                 JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void unblockUser(String unBUsername) {
+        synchronized (lock) {
+            Packet getUserPacket = new Packet("searchByName", unBUsername, null);
+            try {
+                userOut.writeObject(getUserPacket);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry unB = (UserEntry) response.content;
+                    currUser.removeBlockedUser(unB.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(blockPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Unblocked user: " + unB.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error when unblocking user", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void friendUser(String friendUsername) {
+        synchronized (lock) {
+            Packet getUserPacket = new Packet("searchByName", friendUsername, null);
+            try {
+                userOut.writeObject(getUserPacket);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry friend = (UserEntry) response.content;
+                    currUser.addFriend(friend.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet friendPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(friendPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Friended user: " + friend.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error when friending user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -259,7 +287,7 @@ public class UserThread extends Thread implements UserThreadInt {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error occurred when searching messages from id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         return null;
     }
 
@@ -384,5 +412,19 @@ public class UserThread extends Thread implements UserThreadInt {
 
     public User getCurrUser() {
         return currUser;
+    }
+
+    public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
+        Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
+        try {
+            oos.writeObject(packet);
+            Packet response = (Packet) ois.readObject();
+            if (response.getContent() == null) {
+                return null;
+            }
+            return new UserEntry(response.getContent().toString()); //returns matching userentry if found.
+        } catch (Exception e) {
+            e.printStackTrace();
+        } return null;
     }
 }
