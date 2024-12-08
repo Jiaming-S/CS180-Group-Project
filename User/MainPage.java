@@ -58,9 +58,6 @@ public class MainPage extends JComponent {
         profileButton.addActionListener(e -> {
             ProfilePage profilePage = new ProfilePage(userThread, userThread.getCurrUser().userToEntry());
             profilePage.viewProfile();
-            //userThread.viewProfile();
-
-
         });
 
         searchButton.addActionListener(e -> {

@@ -61,7 +61,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                     int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
-                        ProfilePage profilePage = new ProfilePage(this, searchedUser.userToEntry());
+                        ProfilePage profilePage = new ProfilePage(this, userToFind);
                         profilePage.viewProfile();
                     }
                 } else {
@@ -156,6 +156,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error when unblocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
