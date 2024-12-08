@@ -77,25 +77,28 @@ public class UserThread extends Thread implements UserThreadInt {
     public void editProfile() {
         synchronized (lock) {
             String newBio = JOptionPane.showInputDialog(null, "Enter your new bio", currUser.getBio());
-            String newRegion = JOptionPane.showInputDialog(null, "Enter your new location", currUser.getRegion());
-            currUser.setBio(newBio);
-            currUser.setRegion(newRegion);
-            Packet packet = new Packet("updateEntry", new UserEntry(currUser), null);
-            try {
-                userOut.writeObject(packet);
-                Packet response = (Packet) userIn.readObject();
-                if (response.query.equals("success")) {
-                    JOptionPane.showMessageDialog(null, "Bio edited", "Successful", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(null, "Edit failed", "Error", JOptionPane.ERROR_MESSAGE);
+            if (newBio == null) {
+                frame.dispose();
+            } else {
+                String newRegion = JOptionPane.showInputDialog(null, "Enter your new location", currUser.getRegion());
+                currUser.setBio(newBio);
+                currUser.setRegion(newRegion);
+                Packet packet = new Packet("updateEntry", new UserEntry(currUser), null);
+                try {
+                    userOut.writeObject(packet);
+                    Packet response = (Packet) userIn.readObject();
+                    if (response.query.equals("success")) {
+                        JOptionPane.showMessageDialog(null, "Bio edited", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Edit failed", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error when blocking user.");
+                    JOptionPane.showMessageDialog(null, "Error when editing", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (Exception e) {
-                System.out.println("Error when blocking user.");
-                JOptionPane.showMessageDialog(null, "Error when editing", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-
     public void blockUser(String blockedUsername) {
         synchronized (lock) {
             Packet getUserPacket = new Packet("searchByName", blockedUsername, null);

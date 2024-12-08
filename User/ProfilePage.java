@@ -38,14 +38,16 @@ public class ProfilePage extends JComponent {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         leftPanel.add(new JLabel(profiledUser.getUsername()));
+        ImageIcon image;
+        JLabel jLabel;
         if (profiledUser.getProfilePicture() != null && !profiledUser.getProfilePicture().equals("")) {
-            ImageIcon image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
-            JLabel jLabel = new JLabel();
+            image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
+            jLabel = new JLabel();
             jLabel.setIcon(image);
             leftPanel.add(jLabel);
         } else {
-            ImageIcon image = scaleImageIcon(new ImageIcon("aol.jpg"), 100, 100);
-            JLabel jLabel = new JLabel();
+            image = scaleImageIcon(new ImageIcon("aol.jpg"), 100, 100);
+            jLabel = new JLabel();
             jLabel.setIcon(image);
             leftPanel.add(jLabel);
         }
