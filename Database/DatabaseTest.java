@@ -35,8 +35,8 @@ public class DatabaseTest {
                     <ID>44444444</ID>
                 </BlockList>
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
-                <Bio>BidenBlast</Bio>
                 <Region>USA/Midwest</Region>
+                <Bio>BidenBlast</Bio>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -52,7 +52,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormatUser() {
-        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n</User>\n";
+        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n\t<Bio>BidenBlast</Bio>\n</User>\n";
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -83,6 +83,7 @@ public class DatabaseTest {
                 </BlockList>
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
+                <Bio>BidenBlast</Bio>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         String username = "joebiden";
 
@@ -103,6 +104,8 @@ public class DatabaseTest {
 
         String region = "USA/Midwest";
 
+        String bio = "BidenBlast";
+
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -118,6 +121,7 @@ public class DatabaseTest {
         assertEquals("getBlockList returns wrong values!", blockList, ue.getBlockList());
         assertEquals("getProfilePicture returns wrong string!", profilePicture, ue.getProfilePicture());
         assertEquals("getRegion returns wrong value!", region, ue.getRegion());
+        assertEquals("getBio returns wrong value!", bio, ue.getBio());
     }
 
     //test searchers;

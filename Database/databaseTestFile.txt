@@ -13,6 +13,7 @@
   </BlockList>
   <ProfilePicture>/path/to/image.png</ProfilePicture>
   <Region>USA/Midwest</Region>
+  <Bio>BidenBlast</Bio>
 </User>
 <User>
   <Username>name1</Username>
@@ -29,6 +30,7 @@
   </BlockList>
   <ProfilePicture>/path/to/image.png</ProfilePicture>
   <Region>USA/Midwest</Region>
+  <Bio>1name</Bio>
 </User>
 <User>
   <Username>name2</Username>
@@ -45,6 +47,7 @@
   </BlockList>
   <ProfilePicture>/path/to/image.png</ProfilePicture>
   <Region>USA/Midwest</Region>
+  <Bio>2name</Bio>
 </User>
 <User>
   <Username>name3</Username>
@@ -61,4 +64,5 @@
   </BlockList>
   <ProfilePicture>/path/to/image.png</ProfilePicture>
   <Region>USA/Midwest</Region>
+  <Bio>3name</Bio>
 </User>
