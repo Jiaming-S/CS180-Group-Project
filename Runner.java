@@ -24,8 +24,6 @@ public class Runner extends JComponent implements Runnable {
 
     private JButton registerButton;
     private JButton loginButton;
-    private JTextField usernameTF;
-    private JTextField passwordTF;
 
     private static boolean loggedIn;
 

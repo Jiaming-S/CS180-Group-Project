@@ -310,6 +310,33 @@ public class UserThread extends Thread implements UserThreadInt {
         return null;
     }
 
+    public void sendDMTextMessage(String msg, UserEntry recipientUser) {
+        Packet dmMessage = new Packet(
+            "insertEntry", 
+            new MessageEntry(
+                LocalTime.now().toString(),
+                currUser.getID(),
+                recipientUser.getID(),
+                new TextMessage( 
+                    msg,
+                    currUser.getID(), 
+                    recipientUser.getID()
+                )
+            ),
+            null
+        );
+
+        try {
+            msgOut.writeObject(dmMessage);
+            Packet response = (Packet) msgIn.readObject();
+            if (response.content == null || !response.query.equals("success")) throw new IllegalArgumentException();
+        } catch (Exception e) {
+            System.out.println("Error when sending text message.");
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error occured sending text message to " + recipientUser.getUsername(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public void sendTextMsg() {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
