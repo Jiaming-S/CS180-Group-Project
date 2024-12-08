@@ -82,6 +82,7 @@ public class ConversationPage extends JComponent {
         String.format(
           "<html>%s<h1>Conversation with %s:</h1><p>ID: %d</p><span>Timezone: %s</span></html>",
           (currUser.getBlockList().contains(otherUserID) ? "<h2>[BLOCKED USER]</h2>" : ""),
+          (currUser.getPrivacyPreference().equals("Friends") && !currUser.getFriendList().contains(otherUserID) ? "<h2>[NON-FRIEND USER]</h2>" : ""),
           ue.getUsername(),
           ue.getID(),
           ue.getRegion()
@@ -98,12 +99,23 @@ public class ConversationPage extends JComponent {
         blockedContinueMsgButton.addActionListener(_ -> {
           JOptionPane.showMessageDialog(
             null, 
-            "This user is blocked. Update your privacy preferences from 'Friends' to 'All' to view.", 
+            "This user is blocked. Update your blocked list to view.", 
             "Info", 
             JOptionPane.INFORMATION_MESSAGE
           );
         });
         convo.add(blockedContinueMsgButton);
+      } else if (currUser.getPrivacyPreference().equals("Friends") && !currUser.getFriendList().contains(otherUserID)) {
+        JButton nonfriendContinueMsgButton = new JButton("NOT FRIENDED USER");
+        nonfriendContinueMsgButton.addActionListener(_ -> {
+          JOptionPane.showMessageDialog(
+            null, 
+            "This user is not a friend. Update your privacy preferences from 'Friends' to 'All' to view.", 
+            "Info", 
+            JOptionPane.INFORMATION_MESSAGE
+          );
+        });
+        convo.add(nonfriendContinueMsgButton);
       } else {
         JButton continueMsgButton = new JButton("Continue Messaging");
         continueMsgButton.addActionListener(_ -> {
