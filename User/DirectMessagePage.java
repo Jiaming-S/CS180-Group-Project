@@ -12,8 +12,7 @@ import javax.swing.border.EmptyBorder;
 import Database.*;
 import Message.TextMessage;
 
-public class DirectMessagePage {
-  private JFrame frame;
+public class DirectMessagePage extends JFrame {
   private UserThread userThread;
   private User currUser;
   private int otherUserID;
@@ -23,13 +22,13 @@ public class DirectMessagePage {
   private JButton sendMessageButton;
 
   public DirectMessagePage(UserThread userThread, int otherUserID) {
+    super("AOL TWO: DM With User ID" + otherUserID);
     this.userThread = userThread;
     this.currUser = userThread.getCurrUser();
     this.otherUserID = otherUserID;
-
-    frame = new JFrame("AOL TWO");
-    frame.setSize(600, 400);
-    frame.setLocationRelativeTo(null);
+    
+    setSize(600, 400);
+    setLocationRelativeTo(null);
   }
 
   private JPanel makeMessageTileNoPad(MessageEntry me) {
@@ -128,7 +127,15 @@ public class DirectMessagePage {
         )
       ));
 
-      new DirectMessagePage(userThread, otherUserID).viewDMPage();
+      DirectMessagePage newPage = new DirectMessagePage(userThread, otherUserID);
+      newPage.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {
+          DirectMessagePage.this.dispose();
+        }
+      });
+  
+      newPage.viewDMPage();
     });
 
     JScrollPane messageScroller = new JScrollPane(messageHistory);
@@ -138,7 +145,7 @@ public class DirectMessagePage {
     sendMessageFooter.add(sendMessageButton);
     content.add(sendMessageFooter, BorderLayout.SOUTH);
 
-    frame.add(content);
-    frame.setVisible(true);
+    this.add(content);
+    this.setVisible(true);
   }
 }
