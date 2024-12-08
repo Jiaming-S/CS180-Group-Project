@@ -48,7 +48,7 @@ public abstract class GenericDatabaseServer implements DatabaseServer, Runnable 
         System.out.println("[Server] *-- Responded With Packet: --*\n[Server] " + response.toString().replaceAll("\n", "\n[Server] "));
 
         if (response != null && response.query != null && !response.query.isEmpty()) oos.writeObject(response);
-      } catch (EOFException e) {
+      } catch (EOFException | SocketException e) {
         System.out.println("[Server] Received EOF. Exiting server.");
         break;
       } catch (Exception e) {

@@ -94,8 +94,9 @@ public class ConversationPage extends JComponent {
       if (messagesFromUser != null) combinedInvolvingUser.addAll(messagesFromUser);
 
       JButton continueMsgButton = new JButton("Continue Messaging");
-      continueMsgButton.addActionListener(e -> {
-        System.out.println("Pressed continue msg button");
+      continueMsgButton.addActionListener(_ -> {
+        DirectMessagePage dmp = new DirectMessagePage(userThread, otherUserID);
+        dmp.viewDMPage();
       });
 
       convo.add(continueMsgButton);
