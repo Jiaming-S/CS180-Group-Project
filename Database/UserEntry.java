@@ -15,6 +15,7 @@ public class UserEntry extends GenericEntry {
   private ArrayList<Integer> blockList;
   private String profilePicture;
   private String region;
+  private String bio;
 
   public static volatile int HIGHEST_ID = 0;
   public static synchronized int incrementAndGetID() {
@@ -23,7 +24,7 @@ public class UserEntry extends GenericEntry {
   }
 
   // Create entry given fields
-  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region) {
+  public UserEntry(String username, String password, int ID, ArrayList<Integer> friendList, ArrayList<Integer> blockList, String profilePicture, String region, String bio) {
     super();
     this.username = username;
     this.password = password;
@@ -32,6 +33,7 @@ public class UserEntry extends GenericEntry {
     this.blockList = blockList;
     this.profilePicture = profilePicture;
     this.region = region;
+    this.bio = bio;
   }
 
   // Create entry given XML
@@ -59,6 +61,8 @@ public class UserEntry extends GenericEntry {
       this.profilePicture = content;
     } else if (curTag.equals("Region")) {
       this.region = content;
+    } else if (curTag.equals("Bio")) {
+      this.bio = content;
     }
   }
 
@@ -84,6 +88,8 @@ public class UserEntry extends GenericEntry {
     result += String.format("\t<ProfilePicture>%s</ProfilePicture>\n", this.profilePicture);
 
     result += String.format("\t<Region>%s</Region>\n", this.region);
+
+    result += String.format("\t<Bio>%s</Bio>\n", this.bio);
 
     result += "</User>\n";
 
@@ -111,6 +117,9 @@ public class UserEntry extends GenericEntry {
   public String getRegion() {
     return this.region;
   }
+  public String getBio() {
+    return this.bio;
+  }
 
   public void setID(int ID) {
     this.ID = ID;
@@ -120,9 +129,5 @@ public class UserEntry extends GenericEntry {
     if (!(o instanceof UserEntry)) return false;
     UserEntry compare = (UserEntry) o;
     return (ID == compare.getID());
-  }
-
-  public static void main(String[] args) throws ParseExceptionXML {
-    System.out.println(new UserEntry("<User>\t<Username>joebiden</Username>\n\t<Password>password123</Password><ID>77889900</ID><FriendList><ID>11223344</ID><ID>55667788</ID><ID>12345678</ID></FriendList><BlockList><ID>10101010</ID><ID>44444444</ID></BlockList><ProfilePicture>/path/to/image.png</ProfilePicture><Region>USA/Midwest</Region></User>"));
   }
 }

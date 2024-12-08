@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Runner extends JComponent implements Runnable {
 
@@ -46,6 +44,7 @@ public class Runner extends JComponent implements Runnable {
         userThread = null;
 
         try {
+            //TODO Handle ConnectException
             //connect client to database of user information, begin streams
             userSocket = new Socket(hostName, portUDBS);
             uoos = new ObjectOutputStream(userSocket.getOutputStream());
@@ -59,15 +58,9 @@ public class Runner extends JComponent implements Runnable {
 
             SwingUtilities.invokeLater(new Runner());
 
-            try {
-                userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
-                //create new userthread, sending streams so userthread can access the same databaseservers.
-            } catch (ClassNotFoundException | IOException ex) {
-                ex.printStackTrace();
-            }
-
             while (true) {
                 if (loggedIn) {
+
                     if (userThread != null) {
                         userThread.start(); //begin userthread. full app functionality through run() method in userthread class.
                     }
@@ -111,7 +104,7 @@ public class Runner extends JComponent implements Runnable {
             addUser(oos, ois); //recursively prompts user to create valid user inputs until they actually do it
             return;
         }
-        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "./", "USA");
+        UserEntry userEntry = new UserEntry(username, password, 0, new ArrayList<>(), new ArrayList<>(), "", "USA", "");
         Packet packet = new Packet("insertEntry", userEntry, null);
         //sends packet with the new user's info to server to be written to the database.
         try {
@@ -145,7 +138,6 @@ public class Runner extends JComponent implements Runnable {
 
     public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
         Packet packet = new Packet("searchByName", username, null); //packet requesting the matching userentry to the username.
-        UserEntry userE = null;
         try {
             oos.writeObject(packet);
             Packet response = (Packet) ois.readObject();
@@ -189,7 +181,6 @@ public class Runner extends JComponent implements Runnable {
         bottomPanel.setLayout(new FlowLayout());
 
         ImageIcon aol = new ImageIcon(image);
-        JFrame frame = new JFrame();
         JLabel jLabel = new JLabel();
         jLabel.setIcon(aol);
 
@@ -198,10 +189,12 @@ public class Runner extends JComponent implements Runnable {
         content.add(bottomPanel, BorderLayout.SOUTH);
         frame.add(content);
 
-        frame.setSize(600, 400);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //sets frame to full screen
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setUndecorated(true);
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
     }
@@ -215,11 +208,20 @@ public class Runner extends JComponent implements Runnable {
             }
             if (e.getSource() == loginButton) {
                 currentUser = attemptLogin(uoos, uois);
+
+                try {
+                    userThread = new UserThread(currentUser, uoos, uois, moos, mois, frame);
+                    //create new userthread, sending streams so userthread can access the same databaseservers.
+                } catch (ClassNotFoundException | IOException ex) {
+                    ex.printStackTrace();
+                }
+
                 if (currentUser != null) {
                     loggedIn = true;
                     frame.setVisible(false);
                     MainPage mainPage = new MainPage(userThread);
                     mainPage.showPage();
+
                 }
             }
         }

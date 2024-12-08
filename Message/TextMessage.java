@@ -20,6 +20,21 @@ public class TextMessage implements Message, Serializable {
         this.timestamp = LocalDateTime.now(); //will allow for viewmessage implementation in phase 3
     }
 
+    public TextMessage(String content) {
+        String[] contentSplit = content.split("|");
+        if (!contentSplit[0].equals("TextMessage")) return;
+
+        this.senderID = Integer.parseInt(contentSplit[1]);
+        this.recipientID = Integer.parseInt(contentSplit[2]);
+        this.timestamp = LocalDateTime.parse(contentSplit[3]);
+        this.content = contentSplit[4];
+    }
+
+    @Override
+    public String toString() {
+        return String.format("TextMessage|%s|%s|%s|%s", senderID, recipientID, timestamp, content);
+    }
+
     public String getMessage() {
         return content;
     }
