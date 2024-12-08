@@ -10,8 +10,8 @@ Database Classes:
 - `UserDatabase` and `MessageDatabase` have ArrayLists of `UserEntry` and `MessageEntry` which parse XML to populate.
 
 Testing Classes:
-- We created basic JUnit tests to ensure that UserEntry, MessageEntry, UserDatabase, MessageDatabaseServer, UserDatabaseServer, and UserThread worked as expected. 
-- We did not test any "corner cases" or unconventional uses of the classes as we have not implemented the ability to handle those yet.
+- We created basic JUnit tests to ensure that UserEntry, MessageEntry, UserDatabase, MessageDatabaseServer, UserDatabaseServer, TextMessage, PhotoMessage, and UserThread worked as expected.
+- We created basic tests for Network IO
   
 Server Classes:
 - Both `UserDatabaseServer` and `MessageDatabaseServer` extend `GenericDatabaseServer` which implements `DatabaseServer'.
