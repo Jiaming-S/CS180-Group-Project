@@ -39,7 +39,6 @@ public class ProfilePage extends JComponent {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        leftPanel.add(new JLabel(profiledUser.getUsername()));
         if (profiledUser.getProfilePicture() != null && !profiledUser.getProfilePicture().equals("")) {
             ImageIcon image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
             JLabel jLabel = new JLabel();
@@ -64,8 +63,16 @@ public class ProfilePage extends JComponent {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
-        rightPanel.add(new JLabel("ID: " + profiledUser.getID()));
-        rightPanel.add(new JLabel("Location: " + profiledUser.getRegion()));
+        rightPanel.add(new JLabel(
+            String.format(
+                "<html><h1>%s</h1><h4>ID: %d</h4><p>Region: %s</p><p>Bio: %s</p><p>Privacy Preference: %s</p></html>",
+                profiledUser.getUsername(),
+                profiledUser.getID(),
+                profiledUser.getRegion(),
+                profiledUser.getBio(),
+                profiledUser.getPrivacyPreference()
+            )
+        ));
 
         messageButton.setText("Message User");
         System.out.println(currUser.getID());

@@ -21,10 +21,11 @@ public class MainPage extends JComponent {
     }
 
     public void showPage() {
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
+        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // frame.setUndecorated(true);
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JButton searchButton = new JButton("Search User");
         JTextField searchField = new JTextField(15);
@@ -32,8 +33,6 @@ public class MainPage extends JComponent {
         JButton sendTextButton = new JButton("Send Text Message");
         JButton sendPhotoButton = new JButton("Send Photo Message");
         JButton editProfileButton = new JButton("Edit Profile");
-        JButton blockButton = new JButton("Block User");
-        JButton convoButton = new JButton("Start New Conversation");
         JButton msgButton = new JButton("View Message");
         JButton logOutButton = new JButton("Log Out");
         togglePrivacyButton = new JButton();

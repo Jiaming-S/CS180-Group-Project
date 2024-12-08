@@ -21,6 +21,19 @@
 		<ID>7</ID>
 	</BlockList>
 	<ProfilePicture></ProfilePicture>
+	<Region>null</Region>
+	<Bio>null</Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>joebiden</Username>
+	<Password>secretpassword</Password>
+	<ID>3</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
 	<Region>USA</Region>
 	<Bio></Bio>
 	<PrivacyPreference>All</PrivacyPreference>
@@ -69,6 +82,7 @@
 	<Password>trump</Password>
 	<ID>7</ID>
 	<FriendList>
+		<ID>9</ID>
 		<ID>3</ID>
 	</FriendList>
 	<BlockList>

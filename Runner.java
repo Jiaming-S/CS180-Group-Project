@@ -4,6 +4,8 @@ import User.*;
 
 
 import java.awt.event.*;
+import java.awt.geom.Dimension2D;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -183,51 +185,41 @@ public class Runner extends JComponent implements Runnable {
 
     public void run() {
         frame = new JFrame("AOL Squared");
+        frame.setSize(640, 360);
 
-        Container content = new Container();
-        content.setLayout(new BorderLayout());
-
-        Panel topPanel = new Panel();
-        topPanel.setLayout(new FlowLayout());
-
-        registerButton = new JButton("Register");
-        registerButton.addActionListener(actionListener);
-        topPanel.add(registerButton);
-
-        loginButton = new JButton("Login");
-        loginButton.addActionListener(actionListener);
-        topPanel.add(loginButton);
-
-        content.add(topPanel, BorderLayout.CENTER);
+        JPanel content = new JPanel();
+        content.setLayout(new GridLayout(3, 1, 10, 10));
+        content.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         Image image = null;
         try {
             BufferedImage bufferedImage = ImageIO.read(new File("aol.jpg"));
-            image = bufferedImage.getScaledInstance(100, 50, Image.SCALE_DEFAULT);
+            image = bufferedImage.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Panel bottomPanel = new Panel();
-        bottomPanel.setLayout(new FlowLayout());
-
         ImageIcon aol = new ImageIcon(image);
         JLabel jLabel = new JLabel();
         jLabel.setIcon(aol);
+        JPanel wrapper = new JPanel();
+        wrapper.setSize(new Dimension(100, 200));
+        wrapper.setLayout(new FlowLayout(FlowLayout.CENTER));
+        wrapper.add(jLabel);
+        content.add(wrapper);
 
-        bottomPanel.add(jLabel);
+        registerButton = new JButton("Register");
+        registerButton.addActionListener(actionListener);
+        content.add(registerButton);
 
-        content.add(bottomPanel, BorderLayout.SOUTH);
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(actionListener);
+        content.add(loginButton);
+
         frame.add(content);
-
-        //sets frame to full screen
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
     }
 
     ActionListener actionListener = new ActionListener() {
