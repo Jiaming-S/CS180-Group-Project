@@ -36,6 +36,7 @@ public class MainPage extends JComponent {
         panel.add(searchButton);
         panel.add(searchField);
         panel.add(profileButton);
+        panel.add(editProfileButton);
 //        panel.add(blockButton);
 //        panel.add(convoButton);
 //        panel.add(msgButton);
@@ -84,6 +85,10 @@ public class MainPage extends JComponent {
         logOutButton.addActionListener(e -> {
             frame.dispose();
 
+        });
+
+        editProfileButton.addActionListener(e -> {
+            userThread.editProfile();
         });
 
 //        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));

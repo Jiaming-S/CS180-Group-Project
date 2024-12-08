@@ -60,7 +60,7 @@ public class UserThread extends Thread implements UserThreadInt {
                             //searchUser();
                             break;
                         case 2:
-                            viewProfile();
+                            //viewProfile();
                             break;
                         case 3:
                             //blockUser();
@@ -138,44 +138,25 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void viewProfile() {
+    public void editProfile() {
         synchronized (lock) {
-            Container content = new Container();
-            content.setLayout(new BoxLayout(content, BoxLayout.X_AXIS));
-
-            JPanel leftPanel = new JPanel();
-            leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-
-            leftPanel.add(new JLabel(currUser.getUsername()));
-
-            // ImageIcon image = scaleImageIcon(currUser.getProfilePicture(), 100, 100);
-
-            JLabel jLabel = new JLabel();
-            // jLabel.setIcon(image);
-            leftPanel.add(jLabel);
-
-            leftPanel.add(new JLabel("User bio:"));
-            leftPanel.add(new JLabel(currUser.getBio()));
-
-            content.add(leftPanel);
-
-            JPanel rightPanel = new JPanel();
-            rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-
-            rightPanel.add(new JLabel("ID: " + currUser.getID()));
-            rightPanel.add(new JLabel("Location: " + currUser.getRegion()));
-
-            friendButton.setText("Add Friend");
-            blockButton.setText("Block User");
-            messageButton.setText("Message User");
-
-            rightPanel.add(friendButton);
-            rightPanel.add(blockButton);
-            rightPanel.add(messageButton);
-
-            content.add(rightPanel);
-
-            frame.add(content);
+            String newBio = JOptionPane.showInputDialog(null, "Enter your new bio", currUser.getBio());
+            String newRegion = JOptionPane.showInputDialog(null, "Enter your new location", currUser.getRegion());
+            currUser.setBio(newBio);
+            currUser.setRegion(newRegion);
+            Packet packet = new Packet("updateEntry", new UserEntry(currUser), null);
+            try {
+                userOut.writeObject(packet);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    JOptionPane.showMessageDialog(null, "Bio edited", "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Edit failed", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                System.out.println("Error when blocking user.");
+                JOptionPane.showMessageDialog(null, "Error when editing", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -188,7 +169,6 @@ public class UserThread extends Thread implements UserThreadInt {
                 if (response.query.equals("success")) {
                     UserEntry blocked = (UserEntry) response.content;
                     currUser.getBlockList().add(blocked.getID()); //add to the userentry's arraylist of blocked users
-                    System.out.println("Blocked user is: " + blocked.getUsername());
                     JOptionPane.showMessageDialog(null, "Blocked user: " + blocked.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     System.out.println("User not found.");
@@ -197,6 +177,38 @@ public class UserThread extends Thread implements UserThreadInt {
             } catch (Exception e) {
                 System.out.println("Error when blocking user.");
                 JOptionPane.showMessageDialog(null, "Error when blocking user", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void unblockUser(String unBUsername) {
+        synchronized (lock) {
+            Packet getUserPacket = new Packet("searchByName", unBUsername, null);
+            try {
+                userOut.writeObject(getUserPacket);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry unB = (UserEntry) response.content;
+                    currUser.removeBlockedUser(unB.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet blockPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(blockPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Unblocked user: " + unB.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error when unblocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -230,6 +242,38 @@ public class UserThread extends Thread implements UserThreadInt {
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error when friending user", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    public void unfriendUser(String unFUsername) {
+        synchronized (lock) {
+            Packet getUserPacket = new Packet("searchByName", unFUsername, null);
+            try {
+                userOut.writeObject(getUserPacket);
+                Packet response = (Packet) userIn.readObject();
+                if (response.query.equals("success")) {
+                    UserEntry unF = (UserEntry) response.content;
+                    currUser.removeFriend(unF.getID()); //add to the userentry's arraylist of blocked users
+                    //sends packet with the new user's info to server to be written to the database.
+                    Packet friendPacket = new Packet("updateEntry", new UserEntry(currUser), null);
+                    try {
+                        userOut.writeObject(friendPacket);
+                        Packet resp = (Packet) userIn.readObject();
+                        boolean success = resp.getQuery().equals("success"); //checks if the user was successfully written to database. throws exception if not.
+                        if (!success) {
+                            System.out.println("Error writing to database.");
+                            throw new Exception();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Unfriended user: " + unF.getUsername(), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Error when unfriending user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
