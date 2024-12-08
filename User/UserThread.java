@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalTime;
 import java.util.Scanner;
+import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
 
@@ -119,13 +120,15 @@ public class UserThread extends Thread implements UserThreadInt {
                 Packet response = (Packet) userIn.readObject(); //receive packet with UserEntry info from databaseserver
                 if (response.query.equals("success")) { //query == "success" if user found, "failure" if anything else occurs.
                     UserEntry userToFind = (UserEntry) response.content;
-                    System.out.println("User found: " + userToFind.getUsername());
-                    System.out.println("ID: " + userToFind.getID());
-                    System.out.println("Region: " + userToFind.getRegion());
-                    JOptionPane.showMessageDialog(null, String.format("%s\n%s\n%s", "User found: " + userToFind.getUsername(), "ID: " + userToFind.getID(), "Region: " + userToFind.getRegion()), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    User searchedUser = new User(userToFind);
+                    JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
+                    int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
+                    if (input == JOptionPane.YES_OPTION) {
+                        ProfilePage profilePage = new ProfilePage(new UserThread(searchedUser, userOut, userIn, msgOut, msgIn, frame));
+                        profilePage.viewProfile();
+                    }
                 } else {
-                    System.out.println("User was not found.");
-                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "User was not found", "Failure", JOptionPane.INFORMATION_MESSAGE);
                 }
             } catch (Exception e) {
                 System.out.println("Error when searching user.");
@@ -175,10 +178,8 @@ public class UserThread extends Thread implements UserThreadInt {
         }
     }
 
-    public void blockUser() {
+    public void blockUser(String blockedUsername) {
         synchronized (lock) {
-            System.out.print("Enter username to block: ");
-            String blockedUsername = scanner.nextLine();
             Packet packet = new Packet("searchByName", blockedUsername, null);
             try {
                 userOut.writeObject(packet);
@@ -224,6 +225,65 @@ public class UserThread extends Thread implements UserThreadInt {
         //must be implemented after GUI is created
     }
 
+    @SuppressWarnings("unchecked")
+    public ArrayList<MessageEntry> getAllMessagesFromUser(int ID) {
+        ArrayList<MessageEntry> result = null;
+        Packet packet = new Packet("searchAllBySenderID", ID, null);
+        try {
+            msgOut.writeObject(packet);
+            Packet response = (Packet) msgIn.readObject();
+            if (response.query.equals("success")) {
+                result = (ArrayList<MessageEntry>) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any messages from " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred when searching messages from " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<MessageEntry> getAllMessagesToUser(int ID) {
+        ArrayList<MessageEntry> result = null;
+        Packet packet = new Packet("searchAllByRecipientID", ID, null);
+        try {
+            msgOut.writeObject(packet);
+            Packet response = (Packet) msgIn.readObject();
+            if (response.query.equals("success")) {
+                result = (ArrayList<MessageEntry>) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any messages from id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred when searching messages from id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
+    public UserEntry userFromID(int ID) {
+        UserEntry result = null;
+        Packet packet = new Packet("searchByID", ID, null);
+        try {
+            userOut.writeObject(packet);
+            Packet response = (Packet) userIn.readObject();
+            if (response.query.equals("success")) {
+                result = (UserEntry) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any users with id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred searching for user with id: " + ID, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
     public void sendTextMsg() {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
@@ -237,18 +297,18 @@ public class UserThread extends Thread implements UserThreadInt {
                     System.out.print("Enter your message: ");
                     String messageContent = scanner.nextLine();
                     Packet textMsgPacket = new Packet(
-                        "insertEntry", 
-                        new MessageEntry(
-                            LocalTime.now().toString(), 
-                            currUser.getID(), 
-                            recipient.getID(), 
-                            new TextMessage( 
-                                messageContent,
-                                currUser.getID(), 
-                                recipient.getID()
-                            )
-                        ),
-                        null
+                            "insertEntry",
+                            new MessageEntry(
+                                    LocalTime.now().toString(),
+                                    currUser.getID(),
+                                    recipient.getID(),
+                                    new TextMessage(
+                                            messageContent,
+                                            currUser.getID(),
+                                            recipient.getID()
+                                    )
+                            ),
+                            null
                     );
                     msgOut.writeObject(textMsgPacket); // Send the text message packet
                     Packet textResponse = (Packet) msgIn.readObject();
@@ -284,18 +344,18 @@ public class UserThread extends Thread implements UserThreadInt {
                     String photoPath = scanner.nextLine();
 
                     Packet photoMsgPacket = new Packet(
-                        "insertEntry", 
-                        new MessageEntry(
-                            LocalTime.now().toString(), 
-                            currUser.getID(), 
-                            recipient.getID(), 
-                            new PhotoMessage ( 
-                                photoPath,
-                                currUser.getID(), 
-                                recipient.getID()
-                            )
-                        ),
-                        null
+                            "insertEntry",
+                            new MessageEntry(
+                                    LocalTime.now().toString(),
+                                    currUser.getID(),
+                                    recipient.getID(),
+                                    new PhotoMessage (
+                                            photoPath,
+                                            currUser.getID(),
+                                            recipient.getID()
+                                    )
+                            ),
+                            null
                     );
                     msgOut.writeObject(photoMsgPacket); // Send the photo message packet
                     Packet photoResponse = (Packet) msgIn.readObject();
@@ -324,4 +384,7 @@ public class UserThread extends Thread implements UserThreadInt {
         return icon;
     }
 
+    public User getCurrUser() {
+        return currUser;
+    }
 }
