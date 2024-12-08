@@ -64,6 +64,7 @@ public class MainPage extends JComponent {
 //        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
         profileButton.addActionListener(e -> {
             ProfilePage profilePage = new ProfilePage(userThread);
+            profilePage.viewProfile();
         });
 //        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
 //        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));

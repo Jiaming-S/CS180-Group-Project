@@ -16,11 +16,14 @@ public class ProfilePage extends JComponent {
 
     public ProfilePage(UserThread userThread) {
         this.userThread = userThread;
-        User currUser = userThread.getCurrUser();
+        currUser = this.userThread.getCurrUser();
         frame = new JFrame("AOL TWO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
+        blockButton = new JButton();
+        friendButton = new JButton();
+        messageButton = new JButton();
     }
 
     public void viewProfile() {
