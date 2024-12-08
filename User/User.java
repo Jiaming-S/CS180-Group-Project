@@ -90,7 +90,7 @@ public class User {
     }
 
     public void removeBlockedUser(int user) {
-        blockList.remove(user);
+        blockList.remove(Integer.valueOf(user));
     }
 
     public void addFriend(int user) {
@@ -98,7 +98,7 @@ public class User {
     }
 
     public void removeFriend(int user) {
-        friendList.remove(user);
+        friendList.remove(Integer.valueOf(user));
     }
 
     public String getProfilePicture() {

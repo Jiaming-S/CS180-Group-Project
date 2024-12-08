@@ -4,12 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-/**
- * Main User Page that user interacts with to search for other users, send messages,
- * and edit their profile.
- * @author Nikita Sirandasu
- * @version 12/8/2024
- */
+
 public class MainPage extends JComponent {
     private JFrame frame;
     UserThread userThread;
@@ -26,10 +21,12 @@ public class MainPage extends JComponent {
     }
 
     public void showPage() {
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
+        // frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // frame.setUndecorated(true);
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4, 1, 10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         JButton searchButton = new JButton("Search User");
         JTextField searchField = new JTextField(15);
         JButton profileButton = new JButton("View Profile");
@@ -44,6 +41,9 @@ public class MainPage extends JComponent {
         panel.add(searchField);
         panel.add(profileButton);
         panel.add(editProfileButton);
+//        panel.add(blockButton);
+//        panel.add(convoButton);
+//        panel.add(msgButton);
         panel.add(msgButton);
         panel.add(sendTextButton);
         panel.add(sendPhotoButton);
@@ -57,8 +57,6 @@ public class MainPage extends JComponent {
         profileButton.addActionListener(e -> {
             ProfilePage profilePage = new ProfilePage(userThread, userThread.getCurrUser().userToEntry());
             profilePage.viewProfile();
-
-
         });
 
         searchButton.addActionListener(e -> {
@@ -107,6 +105,10 @@ public class MainPage extends JComponent {
             userThread.editProfile();
         });
 
+//        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
+//        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
+//        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));
+//        msgButton.addActionListener(e -> System.out.println("View Message clicked"));
         sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
         sendPhotoButton.addActionListener(e -> System.out.println("Send Photo Message clicked"));
 

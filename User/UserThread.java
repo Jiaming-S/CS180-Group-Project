@@ -61,7 +61,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                     int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
-                        ProfilePage profilePage = new ProfilePage(this, searchedUser.userToEntry());
+                        ProfilePage profilePage = new ProfilePage(this, userToFind);
                         profilePage.viewProfile();
                     }
                 } else {
@@ -159,6 +159,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Error when unblocking user", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
@@ -361,53 +362,15 @@ public class UserThread extends Thread implements UserThreadInt {
         return null;
     }
 
-    public void sendTextMsg() {
-        synchronized (lock) {
-            System.out.print("Enter recipient's username: ");
-            String recipientUsername = scanner.nextLine();
-            Packet packet = new Packet("searchByName", recipientUsername, null);
-            try {
-                userOut.writeObject(packet);
-                Packet response = (Packet) userIn.readObject();
-                if (response.query.equals("success")) {
-                    UserEntry recipient = (UserEntry) response.content;
-                    System.out.print("Enter your message: ");
-                    String messageContent = scanner.nextLine();
-                    Packet textMsgPacket = new Packet(
-                            "insertEntry",
-                            new MessageEntry(
-                                    LocalTime.now().toString(),
-                                    currUser.getID(),
-                                    recipient.getID(),
-                                    new TextMessage(
-                                            messageContent,
-                                            currUser.getID(),
-                                            recipient.getID()
-                                    )
-                            ),
-                            null
-                    );
-                    msgOut.writeObject(textMsgPacket); // Send the text message packet
-                    Packet textResponse = (Packet) msgIn.readObject();
-                    // if anything besides success of textmessage writing occurs throw exception
-                    if (textResponse == null || textResponse.query.isEmpty()) {
-                        throw new IllegalArgumentException();
-                    }
-                    System.out.println("Text message sent to " + recipientUsername);
-                    JOptionPane.showMessageDialog(null, "Text message sent to: " + recipientUsername, "Successful", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    System.out.println("User was not found.");
-                    JOptionPane.showMessageDialog(null, "User not found", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception e) {
-                System.out.println("Error when sending text message.");
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Error occured when sending text message", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-
     public void sendDMTextMessage(String msg, UserEntry recipientUser) {
+        if (recipientUser.getPrivacyPreference().equals("Friends") && !recipientUser.getFriendList().contains(currUser.getID())) {
+            JOptionPane.showMessageDialog(null, "" + recipientUser.getUsername() + " does not have you on their friend list.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        if (recipientUser.getBlockList().contains(currUser.getID())) {
+            JOptionPane.showMessageDialog(null, "" + recipientUser.getUsername() + " has you on their block list.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
         Packet dmMessage = new Packet(
                 "insertEntry",
                 new MessageEntry(

@@ -4,6 +4,8 @@ import Database.UserEntry;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 public class ProfilePage extends JComponent {
@@ -37,20 +39,21 @@ public class ProfilePage extends JComponent {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        leftPanel.add(new JLabel(profiledUser.getUsername()));
-        ImageIcon image;
-        JLabel jLabel;
         if (profiledUser.getProfilePicture() != null && !profiledUser.getProfilePicture().equals("")) {
-            image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
-            jLabel = new JLabel();
+            ImageIcon image = scaleImageIcon(new ImageIcon(profiledUser.getProfilePicture()), 100, 100);
+            JLabel jLabel = new JLabel();
             jLabel.setIcon(image);
             leftPanel.add(jLabel);
         } else {
-            image = scaleImageIcon(new ImageIcon("aol.jpg"), 100, 100);
-            jLabel = new JLabel();
+            ImageIcon image = scaleImageIcon(new ImageIcon("aol.jpg"), 100, 100);
+            JLabel jLabel = new JLabel();
             jLabel.setIcon(image);
             leftPanel.add(jLabel);
         }
+
+        checkStatuses();
+        blockButton.addActionListener(blockListener);
+        friendButton.addActionListener(friendListener);
 
         leftPanel.add(new JLabel("User bio:"));
         leftPanel.add(new JLabel(profiledUser.getBio()));
@@ -60,33 +63,20 @@ public class ProfilePage extends JComponent {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 
-        rightPanel.add(new JLabel("ID: " + profiledUser.getID()));
-        rightPanel.add(new JLabel("Location: " + profiledUser.getRegion()));
-
-        if (currUser.getBlockList().contains(profiledUser.getID())) {
-            blockButton.setText("Unblock user");
-            blockButton.addActionListener(e -> {
-                userThread.unblockUser(profiledUser.getUsername());
-            });
-        } else {
-            blockButton.setText("Block User");
-            blockButton.addActionListener(e -> {
-                userThread.blockUser(profiledUser.getUsername());
-            });
-        }
-        if (currUser.getFriendList().contains(profiledUser.getID())) {
-            friendButton.setText("Unfriend user");
-            friendButton.addActionListener(e -> {
-                userThread.unfriendUser(profiledUser.getUsername());
-            });
-        } else {
-            friendButton.setText("Friend User");
-            friendButton.addActionListener(e -> {
-                userThread.friendUser(profiledUser.getUsername());
-            });
-        }
+        rightPanel.add(new JLabel(
+            String.format(
+                "<html><h1>%s</h1><h4>ID: %d</h4><p>Region: %s</p><p>Bio: %s</p><p>Privacy Preference: %s</p></html>",
+                profiledUser.getUsername(),
+                profiledUser.getID(),
+                profiledUser.getRegion(),
+                profiledUser.getBio(),
+                profiledUser.getPrivacyPreference()
+            )
+        ));
 
         messageButton.setText("Message User");
+        System.out.println(currUser.getID());
+        System.out.println(profiledUser.getID());
         if (currUser.getID() != profiledUser.getID()) {
             rightPanel.add(friendButton);
             rightPanel.add(blockButton);
@@ -100,6 +90,49 @@ public class ProfilePage extends JComponent {
         frame.setVisible(true);
     }
 
+    public void checkStatuses() {
+        if (currUser.getBlockList().contains(profiledUser.getID())) {
+            blockButton.setText("Unblock user");
+        } else {
+            blockButton.setText("Block User");
+        }
+        if (currUser.getFriendList().contains(profiledUser.getID())) {
+            friendButton.setText("Unfriend User");
+        } else {
+            friendButton.setText("Friend user");
+        }
+    }
+
+    ActionListener blockListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (currUser.getBlockList().contains(profiledUser.getID())) {
+                userThread.unblockUser(profiledUser.getUsername());
+            } else {
+                if (currUser.getFriendList().contains(profiledUser.getID())) {
+                    userThread.unfriendUser(profiledUser.getUsername());
+                }
+                userThread.blockUser(profiledUser.getUsername());
+            }
+            checkStatuses();
+        }
+    };
+
+    ActionListener friendListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (currUser.getBlockList().contains(profiledUser.getID())) {
+                JOptionPane.showMessageDialog(null, "Cannot friend a blocked user!");
+            } else {
+                if (currUser.getFriendList().contains(profiledUser.getID())) {
+                    userThread.unfriendUser(profiledUser.getUsername());
+                } else {
+                    userThread.friendUser(profiledUser.getUsername());
+                }
+            }
+            checkStatuses();
+        }
+    };
 
     private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
         BufferedImage bimage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
