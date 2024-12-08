@@ -18,7 +18,7 @@ public abstract class GenericEntry implements Serializable {
   public GenericEntry() {}
 
   public GenericEntry(String xml) throws ParseExceptionXML{
-    xml = xml.replaceAll(" ", "");
+    // xml = xml.replaceAll(" ", "");
     xml = xml.replaceAll("\n", "");
     xml = xml.replaceAll("\t", "");
     this.parseXMLDocument(xml);
