@@ -3,6 +3,8 @@ package User;
 import java.awt.*;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -53,7 +55,7 @@ public class DirectMessagePage {
     wrapper.add(tileHeader);
 
     JLabel tileContent;
-    if (me.getContent() == null) tileContent = new JLabel("null Message");
+    if (me.getContent() == null) tileContent = new JLabel("[null MessageEntry]");
     else tileContent = new JLabel((String) (me.getContent().getMessage()));
     
     tileContent.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -61,7 +63,7 @@ public class DirectMessagePage {
     wrapper.add(tileContent);
 
     if (me.getSender() == currUser.getID()) {
-      JButton deleteMessageButton = new JButton("Delete Above Message");
+      JButton deleteMessageButton = new JButton("Delete Message");
       deleteMessageButton.addActionListener(_ -> {
         userThread.deleteMessageEntry(me);
         new DirectMessagePage(userThread, otherUserID).viewDMPage();
@@ -86,6 +88,15 @@ public class DirectMessagePage {
     ArrayList<MessageEntry> combinedInvolvingUser = new ArrayList<>();
     if (messagesToUser != null) combinedInvolvingUser.addAll(messagesToUser);
     if (messagesFromUser != null) combinedInvolvingUser.addAll(messagesFromUser);
+
+    Collections.sort(
+      combinedInvolvingUser, 
+      new Comparator<MessageEntry>() {
+        public int compare(MessageEntry o1, MessageEntry o2){
+          return o1.getTimestamp().compareTo(o2.getTimestamp()) <= 0 ? -1 : 1;
+        }
+      }
+    );
 
     for (MessageEntry me : combinedInvolvingUser) {
       if (me.getSender() == otherUserID || me.getRecipient() == otherUserID) {
