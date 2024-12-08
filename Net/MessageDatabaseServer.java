@@ -44,6 +44,10 @@ public class MessageDatabaseServer extends GenericDatabaseServer {
           mdb.insertEntry((MessageEntry) p.content);
           response = new Packet("success", true, null);
           break;
+        case "deleteEntry":
+          mdb.deleteMessage((MessageEntry) p.content);
+          response = new Packet("success", true, null);
+          break;
         default:
           response = new Packet("forbidden", null, null);
           break;

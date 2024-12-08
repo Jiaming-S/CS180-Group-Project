@@ -70,21 +70,3 @@
 	<Bio>3name</Bio>
 	<PrivacyPreference>All</PrivacyPreference>
 </User>
-<User>
-	<Username>name4</Username>
-	<Password>password123</Password>
-	<ID>21</ID>
-	<FriendList>
-		<ID>11223344</ID>
-		<ID>55667788</ID>
-		<ID>12345678</ID>
-	</FriendList>
-	<BlockList>
-		<ID>10101010</ID>
-		<ID>44444444</ID>
-	</BlockList>
-	<ProfilePicture>/path/to/image.png</ProfilePicture>
-	<Region>USA/Midwest</Region>
-	<Bio>4name</Bio>
-	<PrivacyPreference>All</PrivacyPreference>
-</User>

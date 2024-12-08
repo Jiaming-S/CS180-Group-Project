@@ -39,6 +39,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>BidenBlast</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -54,7 +55,7 @@ public class DatabaseTest {
     // Test for formatting
     @Test
     public void initialTestFormatUser() {
-        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n\t<Bio>BidenBlast</Bio>\n</User>\n";
+        String userStr = "<User>\n\t<Username>joebiden</Username>\n\t<Password>password123</Password>\n\t<ID>77889900</ID>\n\t<FriendList>\n\t\t<ID>11223344</ID>\n\t\t<ID>55667788</ID>\n\t\t<ID>12345678</ID>\n\t</FriendList>\n\t<BlockList>\n\t\t<ID>10101010</ID>\n\t\t<ID>44444444</ID>\n\t</BlockList>\n\t<ProfilePicture>/path/to/image.png</ProfilePicture>\n\t<Region>USA/Midwest</Region>\n\t<Bio>BidenBlast</Bio>\n\t<PrivacyPreference>All</PrivacyPreference>\n</User>\n";
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -86,6 +87,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>BidenBlast</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         String username = "joebiden";
 
@@ -108,6 +110,8 @@ public class DatabaseTest {
 
         String bio = "BidenBlast";
 
+        String privacyPreference = "All";
+
         UserEntry ue;
         try {
             ue = new UserEntry(userStr);
@@ -124,6 +128,7 @@ public class DatabaseTest {
         assertEquals("getProfilePicture returns wrong string!", profilePicture, ue.getProfilePicture());
         assertEquals("getRegion returns wrong value!", region, ue.getRegion());
         assertEquals("getBio returns wrong value!", bio, ue.getBio());
+        assertEquals("getPrivacyPreference returns wrong value!", privacyPreference, ue.getPrivacyPreference());
     }
 
     //test searchers;
@@ -143,6 +148,45 @@ public class DatabaseTest {
 
     @Test
     public void testSettersGettersUser() {
+        String tocopy = "./Database/copyDatabaseTestFile.txt";
+        String tosave = "./Database/databaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tocopy = "./Database/copyMessageDatabaseTestFile.txt";
+        tosave = "./Database/messageDatabaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         UserDatabase ud;
         try {
             ud = new UserDatabase("./Database/databaseTestFile.txt");
@@ -168,6 +212,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>3name</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;
         try {
@@ -183,7 +228,7 @@ public class DatabaseTest {
             <User>
                 <Username>name4</Username>
                 <Password>password123</Password>
-                <ID>00000004</ID>
+                <ID>00000021</ID>
                 <FriendList>
                     <ID>11223344</ID>
                     <ID>55667788</ID>
@@ -196,6 +241,7 @@ public class DatabaseTest {
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
                 <Region>USA/Midwest</Region>
                 <Bio>4name</Bio>
+                <PrivacyPreference>All</PrivacyPreference>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry nue;
         try {
@@ -290,6 +336,45 @@ public class DatabaseTest {
     //test setters and getters for messageDabatase
     @Test
     public void testSettersGettersMessages() {
+        String tocopy = "./Database/copyDatabaseTestFile.txt";
+        String tosave = "./Database/databaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        tocopy = "./Database/copyMessageDatabaseTestFile.txt";
+        tosave = "./Database/messageDatabaseTestFile.txt";
+
+        try (FileWriter writer = new FileWriter(tosave)) {
+            writer.write("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (BufferedReader bfr = new BufferedReader(new FileReader(tocopy));
+            PrintWriter pw = new PrintWriter(new FileWriter(tosave))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                pw.println(line);
+                line = bfr.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         MessageDatabase md;
         try {
             md = new MessageDatabase("./Database/messageDatabaseTestFile.txt");
@@ -360,14 +445,14 @@ public class DatabaseTest {
 
         String messageStr = """
             <Message>
-                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
+                <Timestamp>2023-12-07T18:58:55.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:58:55.216152800|Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Content>
             </Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me;
         try {
@@ -380,18 +465,18 @@ public class DatabaseTest {
 
         MessageEntry res = md.searchFirstByRecipientID(77889900);
 
-        assertEquals("searchFirstByRecipientID returns the wrong value!", me.toString(), res.toString());
+        assertEquals("searchFirstByRecipientID returns the wrong value!", me.toString(), res.toString().replace(" ", ""));
 
         String messageStr2 = """
             <Message>
-                <Timestamp>2023-12-07T18:59:59.216152800</Timestamp>
+                <Timestamp>2023-12-07T18:59:55.216152800</Timestamp>
                 <Sender>
                     <ID>12345678</ID>
                 </Sender>
                 <Recipient>
                     <ID>77889900</ID>
                 </Recipient>
-                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:59.216152800|blocked</Content>
+                <Content>TextMessage|12345678|77889900|2023-12-07T18:59:55.216152800|blocked</Content>
                 </Message>
             <Message>""".replaceAll(" ", "").replaceAll("\n", "");
         MessageEntry me2;
@@ -409,15 +494,15 @@ public class DatabaseTest {
 
         ArrayList<MessageEntry> resArr = md.searchAllByRecipientID(77889900);
         assertEquals("searchAllByRecipientID returns the wrong number of entries!", messageArr.size(), resArr.size());
-        assertEquals("searchAllByRecipientID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
+        assertEquals("searchAllByRecipientID returns the wrong contents!", messageArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + messageArr.get(1).toString().replaceAll(" ", ""), resArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + resArr.get(1).toString().replaceAll(" ", ""));
 
         res = md.searchFirstBySenderID(12345678);
 
-        assertEquals("searchFirstBySenderID returns the wrong value!", me.toString(), res.toString());
+        assertEquals("searchFirstBySenderID returns the wrong value!", me.toString().replaceAll(" ", ""), res.toString().replaceAll(" ", ""));
 
         resArr = md.searchAllBySenderID(12345678);
         assertEquals("searchAllBySenderID returns the wrong number of entries!", messageArr.size(), resArr.size());
-        assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString() + "<compareBlock>" + messageArr.get(1).toString(), resArr.get(0).toString() + "<compareBlock>" + resArr.get(1).toString());
+        assertEquals("searchAllBySenderID returns the wrong contents!", messageArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + messageArr.get(1).toString().replaceAll(" ", ""), resArr.get(0).toString().replaceAll(" ", "") + "<compareBlock>" + resArr.get(1).toString().replaceAll(" ", ""));
     }
 }
 

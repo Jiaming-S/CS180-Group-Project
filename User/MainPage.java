@@ -3,13 +3,17 @@ package User;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 public class MainPage extends JComponent {
     private JFrame frame;
     UserThread userThread;
+    User currUser;
+    JButton togglePrivacyButton;
 
     public MainPage(UserThread userThread) {
         this.userThread = userThread;
+        currUser = userThread.getCurrUser();
         frame = new JFrame("AOL Squared");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
@@ -32,6 +36,7 @@ public class MainPage extends JComponent {
         JButton convoButton = new JButton("Start New Conversation");
         JButton msgButton = new JButton("View Message");
         JButton logOutButton = new JButton("Log Out");
+        togglePrivacyButton = new JButton();
 
         panel.add(searchButton);
         panel.add(searchField);
@@ -44,8 +49,10 @@ public class MainPage extends JComponent {
         panel.add(sendTextButton);
         panel.add(sendPhotoButton);
         panel.add(logOutButton);
+        panel.add(togglePrivacyButton);
 
-
+        checkPrivPref();
+        togglePrivacyButton.addActionListener(toggleActionListener);
 
         // Action Listeners for buttons
         profileButton.addActionListener(e -> {
@@ -64,9 +71,8 @@ public class MainPage extends JComponent {
                 searchUser = searchField.getText();
                 userThread.searchUser(searchUser);
             }
-
-
         });
+
 
         msgButton.addActionListener(e -> {
             ConversationPage convoPage = new ConversationPage(userThread);
@@ -114,4 +120,24 @@ public class MainPage extends JComponent {
         frame.getContentPane().add(panel);
         frame.setVisible(true);
     }
+
+    public void checkPrivPref() {
+        if (currUser.getPrivacyPreference().equals("Friends")) {
+            togglePrivacyButton.setText("Allow messages from everyone");
+        } else if (currUser.getPrivacyPreference().equals("All")) {
+            togglePrivacyButton.setText("Allow messages from only friends");
+        }
+    }
+
+    ActionListener toggleActionListener = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (currUser.getPrivacyPreference().equals("All")) {
+                userThread.updateUserPrivacy("Friends");
+            } else if (currUser.getPrivacyPreference().equals("Friends")){
+                userThread.updateUserPrivacy("All");
+            }
+            checkPrivPref();
+        }
+    };
 }
