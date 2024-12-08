@@ -83,8 +83,6 @@ public class ProfilePage extends JComponent {
             )
         ));
 
-        System.out.println(currUser.getID());
-        System.out.println(profiledUser.getID());
         if (currUser.getID() != profiledUser.getID()) {
             rightPanel.add(friendButton);
             rightPanel.add(blockButton);
