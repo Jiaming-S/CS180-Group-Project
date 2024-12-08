@@ -133,39 +133,20 @@ public class Runner extends JComponent implements Runnable {
     public static User attemptLogin(ObjectOutputStream oos, ObjectInputStream ois) {
         String username = JOptionPane.showInputDialog(null, "Enter your username",
                 "Login", JOptionPane.QUESTION_MESSAGE);
-        String pw = JOptionPane.showInputDialog(null, "Enter your password",
-                "Login", JOptionPane.QUESTION_MESSAGE);
-        UserEntry ue = fetchUser(username, oos, ois); //login method handles server packet fetching.
-        if (ue == null) return null;
-        if (ue.getPassword().equals(pw)) {
-            return new User(ue);
-        } else {
-            System.out.println("Incorrect!");
-            attemptLogin(oos, ois);
+        if (username != null) {
+            String pw = JOptionPane.showInputDialog(null, "Enter your password",
+                    "Login", JOptionPane.QUESTION_MESSAGE);
+            UserEntry ue = fetchUser(username, oos, ois); //login method handles server packet fetching.
+            if (ue == null) return null;
+            if (ue.getPassword().equals(pw)) {
+                return new User(ue);
+            } else {
+                System.out.println("Incorrect!");
+                attemptLogin(oos, ois);
+            }
+
         }
         return null;
-
-//        String username = JOptionPane.showInputDialog(null, "Enter your username",
-//                "Login", JOptionPane.QUESTION_MESSAGE);
-//        String pw;
-//
-//
-//        if (username == null) {
-//            SwingUtilities.invokeLater(new Runner());
-//        } else {
-//            pw = JOptionPane.showInputDialog(null, "Enter your password",
-//                    "Login", JOptionPane.QUESTION_MESSAGE);
-//            UserEntry ue = fetchUser(username, oos, ois); //login method handles server packet fetching.
-//            if (ue == null) return null;
-//            if (ue.getPassword().equals(pw)) {
-//                return new User(ue);
-//            } else {
-//                System.out.println("Incorrect!");
-//                attemptLogin(oos, ois);
-//            }
-//            return null;
-//        }
-//        return null;
     }
 
     public static UserEntry fetchUser(String username, ObjectOutputStream oos, ObjectInputStream ois) {
