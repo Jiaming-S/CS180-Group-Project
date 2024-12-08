@@ -10,7 +10,6 @@ public interface UserThreadInt {
     void blockUser(String blockedUsername);
     void newConvo();
     void viewMsg();
-    void sendTextMsg();
     void sendPhotoMsg();
     User getCurrUser();
 }
