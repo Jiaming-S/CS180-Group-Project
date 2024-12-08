@@ -35,6 +35,7 @@ public class DatabaseTest {
                     <ID>44444444</ID>
                 </BlockList>
                 <ProfilePicture>/path/to/image.png</ProfilePicture>
+                <Bio>BidenBlast</Bio>
                 <Region>USA/Midwest</Region>
             </User>""".replaceAll(" ", "").replaceAll("\n", "");
         UserEntry ue;

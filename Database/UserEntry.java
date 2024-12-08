@@ -1,8 +1,7 @@
 package Database;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.*;
 
 /**
  * This class represents a UserEntry for use in the UserDatabase.
@@ -89,7 +88,7 @@ public class UserEntry extends GenericEntry {
 
     result += String.format("\t<Region>%s</Region>\n", this.region);
 
-    result += String.format("\t<Bio>%s</Bio>\n");
+    result += String.format("\t<Bio>%s</Bio>\n", this.bio);
 
     result += "</User>\n";
 
