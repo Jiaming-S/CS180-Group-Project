@@ -80,7 +80,8 @@ public class ConversationPage extends JComponent {
 
       JLabel convoUser = new JLabel(
         String.format(
-          "<html><h1>Conversation with %s:</h1><p>ID: %d</p><span>Timezone: %s</span></html>",
+          "<html>%s<h1>Conversation with %s:</h1><p>ID: %d</p><span>Timezone: %s</span></html>",
+          (currUser.getBlockList().contains(otherUserID) ? "<h2>[BLOCKED USER]</h2>" : ""),
           ue.getUsername(),
           ue.getID(),
           ue.getRegion()
@@ -92,13 +93,26 @@ public class ConversationPage extends JComponent {
       if (messagesToUser != null) combinedInvolvingUser.addAll(messagesToUser);
       if (messagesFromUser != null) combinedInvolvingUser.addAll(messagesFromUser);
 
-      JButton continueMsgButton = new JButton("Continue Messaging");
-      continueMsgButton.addActionListener(_ -> {
-        DirectMessagePage dmp = new DirectMessagePage(userThread, otherUserID);
-        dmp.viewDMPage();
-      });
+      if (currUser.getBlockList().contains(otherUserID)) {
+        JButton blockedContinueMsgButton = new JButton("BLOCKED USER");
+        blockedContinueMsgButton.addActionListener(_ -> {
+          JOptionPane.showMessageDialog(
+            null, 
+            "This user is blocked. Update your privacy preferences from 'Friends' to 'All' to view.", 
+            "Info", 
+            JOptionPane.INFORMATION_MESSAGE
+          );
+        });
+        convo.add(blockedContinueMsgButton);
+      } else {
+        JButton continueMsgButton = new JButton("Continue Messaging");
+        continueMsgButton.addActionListener(_ -> {
+          DirectMessagePage dmp = new DirectMessagePage(userThread, otherUserID);
+          dmp.viewDMPage();
+        });
+        convo.add(continueMsgButton);
+      }
 
-      convo.add(continueMsgButton);
       messageDisplays.add(convo);
 
       for (MessageEntry me : combinedInvolvingUser.reversed()) {

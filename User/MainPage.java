@@ -73,7 +73,19 @@ public class MainPage extends JComponent {
         });
 
         sendTextButton.addActionListener(e -> {
-            userThread.sendTextMsg();
+            String otherUserName = JOptionPane.showInputDialog(
+                null, 
+                "Enter a username.", 
+                "Search", 
+                JOptionPane.QUESTION_MESSAGE
+            );
+
+            DirectMessagePage dmPage = new DirectMessagePage(
+                userThread, 
+                userThread.userFromUsername(otherUserName).getID()
+            );
+            
+            dmPage.viewDMPage();
         });
 
         sendPhotoButton.addActionListener(e -> {

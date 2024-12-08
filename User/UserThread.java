@@ -318,6 +318,25 @@ public class UserThread extends Thread implements UserThreadInt {
         return null;
     }
 
+    public UserEntry userFromUsername(String username) {
+        UserEntry result = null;
+        Packet packet = new Packet("searchByName", username, null);
+        try {
+            userOut.writeObject(packet);
+            Packet response = (Packet) userIn.readObject();
+            if (response.query.equals("success")) {
+                result = (UserEntry) response.content;
+                return result;
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to find any users with username: " + username, "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error occurred searching for user with username: " + username, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return null;
+    }
+
     public void sendTextMsg() {
         synchronized (lock) {
             System.out.print("Enter recipient's username: ");
