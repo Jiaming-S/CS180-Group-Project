@@ -1,3 +1,4 @@
+
 package User;
 
 import Database.MessageEntry;
@@ -60,8 +61,7 @@ public class UserThread extends Thread implements UserThreadInt {
                     JOptionPane.showMessageDialog(null, String.format("%s\n", "User found: " + userToFind.getUsername()), "Successful", JOptionPane.INFORMATION_MESSAGE);
                     int input = JOptionPane.showConfirmDialog(null, "Do you want to view this user's profile?", "Successful", JOptionPane.YES_NO_OPTION);
                     if (input == JOptionPane.YES_OPTION) {
-                        UserThread newUT = new UserThread(searchedUser, userOut, userIn, msgOut, msgIn, frame);
-                        ProfilePage profilePage = new ProfilePage(newUT, newUT.getCurrUser().userToEntry());
+                        ProfilePage profilePage = new ProfilePage(this, searchedUser.userToEntry());
                         profilePage.viewProfile();
                     }
                 } else {
