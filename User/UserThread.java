@@ -17,9 +17,8 @@ import java.awt.*;
 
 /**
  * UserThread class with several methods related to User actions and will work with GUI
- * (Some methods may need to be altered during Phase 3 to work with GUI)
  * @author Nikita Sirandasu
- * @version 11/17/2024
+ * @version 12/8/2024
  */
 public class UserThread extends Thread implements UserThreadInt {
     private User currUser;
