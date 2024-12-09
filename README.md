@@ -1,4 +1,6 @@
-Jane Bazzell - Submitted Vocareum workspace.
+Nikita Sirandasu - Submitted Vocareum workspace.
+Nikita Sirandasu - Submitted Report.
+Jane Bazzell - Submitted Presentation.
 How to use the app:
 Starting ServerRunner.java sets up the server-side environment by initializing UserDatabase and MessageDatabase,Runner.java. Starting the Runner class for the ports to work with UserDatabaseServer and MessageDatabaseServer. In the window that pops up, the user will be asked to either log in or create an account. After entering username and password, the user is logged in. They can perform actions like searching for users, sending text messages, editing their profile, privacy settings, viewing messages, and logging out.
 
