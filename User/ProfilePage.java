@@ -17,7 +17,6 @@ public class ProfilePage extends JComponent {
     private UserThread userThread;
     private UserEntry profiledUser;
     private UserEntry currUser;
-    private final Object lock = new Object();
     private JButton blockButton;
     private JButton friendButton;
 
@@ -138,13 +137,4 @@ public class ProfilePage extends JComponent {
             checkStatuses();
         }
     };
-
-    private ImageIcon scaleImageIcon(ImageIcon icon, int width, int height) {
-        BufferedImage bimage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D bGr = bimage.createGraphics();
-        icon = new ImageIcon(bimage.getScaledInstance(100, 50, Image.SCALE_DEFAULT));
-        bGr.drawImage(icon.getImage(), 0, 0, null);
-        bGr.dispose();
-        return icon;
-    }
 }

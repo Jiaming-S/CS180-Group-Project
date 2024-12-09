@@ -1,6 +1,6 @@
 Jane Bazzell - Submitted Vocareum workspace.
 How to use the app:
-Start the servers UserDatabaseServer and MessageDatabaseServer. The Runner class should be run to start the servers and runs them in separate threads. Users can interact with the app by connecting to the server on the appropriate ports (port 12345). The user will be asked to either log in or create an account. They can perform actions like searching for users, sending messages, and managing conversations. Once the user chooses to log out, the app will terminate.
+Starting ServerRunner.java sets up the server-side environment by initializing UserDatabase and MessageDatabase,Runner.java. Starting the Runner class for the ports to work with UserDatabaseServer and MessageDatabaseServer. In the window that pops up, the user will be asked to either log in or create an account. After entering username and password, the user is logged in. They can perform actions like searching for users, sending text messages, editing their profile, privacy settings, viewing messages, and logging out.
 
 
 Database Classes:
@@ -11,9 +11,10 @@ Database Classes:
 
 Testing Classes:
 - We created basic JUnit tests to ensure that UserEntry, MessageEntry, UserDatabase, MessageDatabaseServer, UserDatabaseServer, TextMessage, PhotoMessage, and UserThread worked as expected.
-- We created basic tests for Network IO
+- There are also test text files to ensure that the database is properly recording the users and messages.
+- We created basic tests for Network IO.
   
-Server Classes:
+Network Classes:
 - Both `UserDatabaseServer` and `MessageDatabaseServer` extend `GenericDatabaseServer` which implements `DatabaseServer'.
 - `UserDatabaseServer` is a thread-safe web API for interacting with a UserDatabase and handles queries like searching by name or ID and inserting new entries.
 - `MessageDatabaseServer`is a thread-safe web API for managing message data, handling queries related to searching and inserting message entries in a MessageDatabase.
@@ -23,4 +24,12 @@ Runner.java is the program's main method that allows for client-database interac
 
 User.java and Message.java act as a framework and method holder for users and messages that can be used by the client-side classes like Runner and UserThread without touching database classes such as UserEntry and MessageEntry.
 TextMessage.java is a class that handles messages that contain a string of text and records the senderID number and the recipientID number.
-UserThread.java handles client-server communication in order for the server to have a multi-threaded environment, for a User Database server and Message Database Server. It runs on a separate thread for each client connection, which allows for multiple clients to interact with the server simultaneously. The class creates input and output streams for communication between the server and the client using ObjectInputStream and ObjectOutputStream. It processes incoming requests from clients, handles various query types, and sends appropriate responses back. This class implements the UserThreadInt interface, which defines essential methods for user interaction such as searchUser, viewProfile, and blockUser. The viewMsg method is currently not implemented and will be developed in a later phase, as it requires searching the message database for a user's conversations. The sendPhotoMsg() methods use assumed implementations of the PhotoMessage classes, which may be modified as the project evolves.
+PhotoMessage.java is a class that allows for messages that contain a filepath for a photo to be shared between users.
+UserThread.java handles client-server communication in order for the server to have a multi-threaded environment, for a User Database server and Message Database Server. It runs on a separate thread for each client connection, which allows for multiple clients to interact with the server simultaneously. The class creates input and output streams for communication between the server and the client using ObjectInputStream and ObjectOutputStream. It processes incoming requests from clients, handles various query types, and sends appropriate responses back. This class implements the UserThreadInt interface, which defines essential methods for user interaction such as searchUser, friendUser, and blockUser. 
+
+GUI Classes:
+
+Conversation.java displays a list of conversations with users, allowing the current user to view message histories, continue messaging, and handle blocked or non-friend users based on their privacy settings.
+DirectMessagePage.java handles the user functionality for viewing and sending direct messages between users, displaying message history and allowing message deletion or sending new messages.
+ProfilePage.java allows the user to view and edit their profile information, such as username, password, and privacy preferences, in a GUI.
+MainPage.java is the main interface for the user which allows them to navigate through different functionalities like viewing messages, managing profiles, and interacting with other users.

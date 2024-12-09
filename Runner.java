@@ -4,7 +4,6 @@ import User.*;
 
 
 import java.awt.event.*;
-import java.awt.geom.Dimension2D;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -44,14 +43,6 @@ public class Runner extends JComponent implements Runnable {
         userThread = null;
 
         try {
-            //TODO: implement photo messaging using a pop-up? consider drop-down
-            //TODO: Condense edit profile and toggle privacy into a single user settings page?
-            //TODO: Do some bug-securing
-            //TODO: Handle if user closes the frame
-            //TODO: Report
-            //TODO: Slides
-            //TODO: Demo and presentation
-            //connect client to database of user information, begin streams
             try {
                 userSocket = new Socket(hostName, portUDBS);
                 uoos = new ObjectOutputStream(userSocket.getOutputStream());

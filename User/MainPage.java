@@ -3,7 +3,6 @@ package User;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
 
 public class MainPage extends JComponent {
     private JFrame frame;
@@ -31,14 +30,21 @@ public class MainPage extends JComponent {
         JTextField searchField = new JTextField(15);
         JButton profileButton = new JButton("View Profile");
         JButton sendTextButton = new JButton("Send Text Message");
-        JButton sendPhotoButton = new JButton("Send Photo Message");
+        // JButton sendPhotoButton = new JButton("Send Photo Message");
         JButton editProfileButton = new JButton("Edit Profile");
         JButton msgButton = new JButton("View Message");
         JButton logOutButton = new JButton("Log Out");
         togglePrivacyButton = new JButton();
 
         panel.add(searchButton);
-        panel.add(searchField);
+
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.add(new JLabel("Enter user to search"));
+        searchPanel.add(searchField);
+
+        panel.add(searchPanel);
+
         panel.add(profileButton);
         panel.add(editProfileButton);
 //        panel.add(blockButton);
@@ -46,7 +52,7 @@ public class MainPage extends JComponent {
 //        panel.add(msgButton);
         panel.add(msgButton);
         panel.add(sendTextButton);
-        panel.add(sendPhotoButton);
+        // panel.add(sendPhotoButton);
         panel.add(logOutButton);
         panel.add(togglePrivacyButton);
 
@@ -54,12 +60,12 @@ public class MainPage extends JComponent {
         togglePrivacyButton.addActionListener(toggleActionListener);
 
         // Action Listeners for buttons
-        profileButton.addActionListener(e -> {
+        profileButton.addActionListener(_ -> {
             ProfilePage profilePage = new ProfilePage(userThread, userThread.getCurrUser().userToEntry());
             profilePage.viewProfile();
         });
 
-        searchButton.addActionListener(e -> {
+        searchButton.addActionListener(_ -> {
             String searchUser;
             if (searchField.getText().equals("")) {
                 JOptionPane.showMessageDialog(frame, "Please enter a user name");
@@ -70,12 +76,12 @@ public class MainPage extends JComponent {
         });
 
 
-        msgButton.addActionListener(e -> {
+        msgButton.addActionListener(_ -> {
             ConversationPage convoPage = new ConversationPage(userThread);
             convoPage.viewMessagePage();
         });
 
-        sendTextButton.addActionListener(e -> {
+        sendTextButton.addActionListener(_ -> {
             String otherUserName = JOptionPane.showInputDialog(
                 null, 
                 "Enter a username.", 
@@ -91,26 +97,26 @@ public class MainPage extends JComponent {
             dmPage.viewDMPage();
         });
 
-        sendPhotoButton.addActionListener(e -> {
-            userThread.sendPhotoMsg();
-        });
+        // sendPhotoButton.addActionListener(_ -> {
+        //     userThread.sendPhotoMsg();
+        // });
 
 
-        logOutButton.addActionListener(e -> {
+        logOutButton.addActionListener(_ -> {
             frame.dispose();
 
         });
 
-        editProfileButton.addActionListener(e -> {
+        editProfileButton.addActionListener(_ -> {
             userThread.editProfile();
         });
 
-//        profileButton.addActionListener(e -> System.out.println("View Profile clicked"));
-//        blockButton.addActionListener(e -> System.out.println("Block User clicked"));
-//        convoButton.addActionListener(e -> System.out.println("Start New Conversation clicked"));
-//        msgButton.addActionListener(e -> System.out.println("View Message clicked"));
-        sendTextButton.addActionListener(e -> System.out.println("Send Text Message clicked"));
-        sendPhotoButton.addActionListener(e -> System.out.println("Send Photo Message clicked"));
+//        profileButton.addActionListener(_ -> System.out.println("View Profile clicked"));
+//        blockButton.addActionListener(_ -> System.out.println("Block User clicked"));
+//        convoButton.addActionListener(_ -> System.out.println("Start New Conversation clicked"));
+//        msgButton.addActionListener(_ -> System.out.println("View Message clicked"));
+        // sendTextButton.addActionListener(_ -> System.out.println("Send Text Message clicked"));
+        // sendPhotoButton.addActionListener(_ -> System.out.println("Send Photo Message clicked"));
 
         frame.add(panel, BorderLayout.NORTH);
         frame.getContentPane().add(panel);

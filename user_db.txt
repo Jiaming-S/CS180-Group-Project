@@ -1,0 +1,66 @@
+<User>
+	<Username>person1</Username>
+	<Password>pass1</Password>
+	<ID>1</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>USA</Region>
+	<Bio>This is person1's bio.</Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>person2</Username>
+	<Password>pass2</Password>
+	<ID>2</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>EUR</Region>
+	<Bio>I have a very uninteresting bio.</Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>joebiden</Username>
+	<Password>secretpassword</Password>
+	<ID>3</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>USA</Region>
+	<Bio>eepy</Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>donald</Username>
+	<Password>trump</Password>
+	<ID>4</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+		<ID>3</ID>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>USA</Region>
+	<Bio>orange</Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
+<User>
+	<Username>kim</Username>
+	<Password>jongun</Password>
+	<ID>5</ID>
+	<FriendList>
+	</FriendList>
+	<BlockList>
+	</BlockList>
+	<ProfilePicture></ProfilePicture>
+	<Region>KOR</Region>
+	<Bio></Bio>
+	<PrivacyPreference>All</PrivacyPreference>
+</User>
