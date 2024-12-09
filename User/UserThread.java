@@ -357,10 +357,12 @@ public class UserThread extends Thread implements UserThreadInt {
     public void sendDMTextMessage(String msg, UserEntry recipientUser) {
         if (recipientUser.getPrivacyPreference().equals("Friends") && !recipientUser.getFriendList().contains(currUser.getID())) {
             JOptionPane.showMessageDialog(null, "" + recipientUser.getUsername() + " does not have you on their friend list.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         
         if (recipientUser.getBlockList().contains(currUser.getID())) {
             JOptionPane.showMessageDialog(null, "" + recipientUser.getUsername() + " has you on their block list.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
         Packet dmMessage = new Packet(
