@@ -4,6 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+/**
+ * MainPage provides GUi for user interactions, providing navigation options to
+ * access key features such as messaging, profile management
+ * @author Nikita Sirandasu
+ * @version 12/8/2024
+ */
 public class MainPage extends JComponent {
     private JFrame frame;
     UserThread userThread;

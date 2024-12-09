@@ -24,7 +24,7 @@ public class ProfilePage extends JComponent {
         this.profiledUser = user;
         this.userThread = userThread;
         this.currUser = new UserEntry(userThread.getCurrUser());
-        frame = new JFrame("AOL TWO");
+        frame = new JFrame("AOL Squared");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(600, 400);
         frame.setLocationRelativeTo(null);
