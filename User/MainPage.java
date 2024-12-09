@@ -37,7 +37,14 @@ public class MainPage extends JComponent {
         togglePrivacyButton = new JButton();
 
         panel.add(searchButton);
-        panel.add(searchField);
+
+        JPanel searchPanel = new JPanel();
+        searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+        searchPanel.add(new JLabel("Enter user to search"));
+        searchPanel.add(searchField);
+
+        panel.add(searchPanel);
+
         panel.add(profileButton);
         panel.add(editProfileButton);
 //        panel.add(blockButton);
